@@ -5,6 +5,7 @@ function init() {
 var long_literal_counter = 0;
 var long_literal_spans = {};
 var long_literal_texts = {};
+
 function init_long_literals() {
     var spans = document.getElementsByTagName('span');
     for (i = 0; i < spans.length; i++) {

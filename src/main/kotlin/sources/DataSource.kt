@@ -14,12 +14,12 @@ interface DataSource : Closeable {
     fun init()
 
     /**
-     * Returns a subgraph describing one resource based on a relative IRI
+     * Returns a subgraph describing one resource based on a IRI
      */
     fun describe(relativeIRI: String): Model
 }
 
-class EmptyDataSource(): DataSource {
+class EmptyDataSource() : DataSource {
     override fun close() {
         TODO("not implemented")
     }

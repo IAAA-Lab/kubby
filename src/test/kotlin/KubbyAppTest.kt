@@ -16,15 +16,13 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-
-
 class ApplicationTest {
 
-    val dao = mockk<DataSource>(relaxed = true)
+    private val dao = mockk<DataSource>(relaxed = true)
 
 
     @Test
-    fun testIndex() = testApp{
+    fun testIndex() = testApp {
         handleRequest(HttpMethod.Get, "/").apply {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("index", response.content)
@@ -71,8 +69,8 @@ class ApplicationTest {
             m.add(it, m.createProperty(ns, "name"), "Jane Doe")
             m.add(it, RDF.type, person)
             m.add(it, RDFS.seeAlso, m.createResource("http://www.ex.com/janedoe/moreinfo"))
-            m.add(it, m.createProperty(ns , "url"), "http://www.janedoe.com")
-            m.add(it, m.createProperty(ns , "jobTitle"), "Professor")
+            m.add(it, m.createProperty(ns, "url"), "http://www.janedoe.com")
+            m.add(it, m.createProperty(ns, "jobTitle"), "Professor")
         }
         return m
     }

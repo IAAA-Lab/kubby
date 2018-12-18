@@ -11,9 +11,9 @@
         #end
     </title>
     #if ($rdf_link)
-        <link rel="alternate" type="application/rdf+xml" href="$rdf_link" title="RDF" />
+        <link rel="alternate" type="application/rdf+xml" href="$rdf_link" title="RDF"/>
     #end
-    <link rel="stylesheet" type="text/css" href="/static/style.css" />
+    <link rel="stylesheet" type="text/css" href="/static/style.css"/>
     <script type="text/javascript" src="/static/script.js"></script>
 </head>
 <body onLoad="init();">
@@ -32,6 +32,7 @@
         <div class="page-resource-uri"><a href="$uri">$uri</a></div>
     #end
     #if ($rdf_link)
-        <div id="rdficon"><a href="$rdf_link" title="RDF data"><img src="${server_base}static/rdf-icon.gif" alt="[This page as RDF]" /></a></div>
+        <div id="rdficon"><a href="$rdf_link" title="RDF data"><img src="${server_base}static/rdf-icon.gif"
+                                                                    alt="[This page as RDF]"/></a></div>
     #end
 </div>

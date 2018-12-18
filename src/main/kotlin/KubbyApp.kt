@@ -34,9 +34,6 @@ import org.apache.velocity.runtime.resource.util.StringResourceRepository
 import java.io.StringWriter
 
 
-
-
-
 val dao: DataSource = EmptyDataSource()
 
 /**
@@ -56,7 +53,8 @@ fun Application.mainWithDependencies(dao: DataSource) {
     // This uses the logger to log every request/response
     install(CallLogging)
     // This install Velocity and configure the Velocity Engine
-    install(Velocity) { // this: VelocityEngine
+    install(Velocity) {
+        // this: VelocityEngine
         templates {
             resource("404.vm")
             resource("header.vm")
@@ -74,15 +72,15 @@ fun Application.mainWithDependencies(dao: DataSource) {
     }
 }
 
-fun VelocityEngine.templates(configure: VelocityEngine.() -> Unit)  {
-    setProperty("resource.loader", "string");
+fun VelocityEngine.templates(configure: VelocityEngine.() -> Unit) {
+    setProperty("resource.loader", "string")
     addProperty("string.resource.loader.class", StringResourceLoader::class.java.name)
     addProperty("string.resource.loader.repository.static", "false")
     init() // need to call `init` before trying to retrieve string repository
     this.configure()// (configure)
 }
 
-fun VelocityEngine.resource(name: String)  {
+fun VelocityEngine.resource(name: String) {
     val repository = getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT) as StringResourceRepository
     repository.putStringResource(name, Application::class.java.getResource("/templates/$name").readText())
 }
@@ -116,7 +114,7 @@ fun Route.data(dao: DataSource) {
                 w.write(out, g, pm, null, ctx)
                 call.respondText(
                     text = out.toString(),
-                    contentType = ContentType("application","ld+json")
+                    contentType = ContentType("application", "ld+json")
                 )
             }
         }
@@ -135,7 +133,9 @@ fun Route.page() {
 }
 
 fun main(args: Array<String>) {
-    embeddedServer(Netty,
+    embeddedServer(
+        Netty,
         port = 8080,
-        module = Application::main).start()
+        module = Application::main
+    ).start()
 }
