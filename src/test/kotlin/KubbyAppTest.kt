@@ -1,62 +1,72 @@
 package es.iaaa.kubby
 
-import es.iaaa.kubby.sources.DataSource
+//import io.mockk.every
+//import io.mockk.mockk
+import es.iaaa.kubby.repository.DataSource
+import io.ktor.application.Application
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
-import io.mockk.every
-import io.mockk.mockk
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.vocabulary.RDF
 import org.apache.jena.vocabulary.RDFS
+import org.junit.Before
+import org.koin.standalone.StandAloneContext
+import org.koin.standalone.inject
+import org.koin.test.AutoCloseKoinTest
+import org.koin.test.declareMock
+import org.mockito.BDDMockito.given
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+class ApplicationTest : AutoCloseKoinTest() {
 
-class ApplicationTest {
+    private val dao: DataSource by inject()
 
-    private val dao = mockk<DataSource>(relaxed = true)
+    @Before
+    fun before() {
+        StandAloneContext.startKoin(listOf(kubbyModule))
+        declareMock<DataSource>()
+    }
+
+
+//    private val dao = mockk<DataSource>(relaxed = true)
+//    private val dao = EmptyDataSource()
 
 
     @Test
-    fun testIndex() = testApp {
-        handleRequest(HttpMethod.Get, "/").apply {
+    fun testIndex() = withTestApplication (Application::main) {
+        with(handleRequest(HttpMethod.Get, "/")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("index", response.content)
         }
     }
 
     @Test
-    fun testResource() = testApp {
-        handleRequest(HttpMethod.Get, "/resource/1").apply {
+    fun testResource() = withTestApplication (Application::main) {
+        with(handleRequest(HttpMethod.Get, "/resource/1")) {
             assertEquals(HttpStatusCode.Found, response.status())
             assertEquals("/data/1", response.headers["Location"])
         }
     }
 
     @Test
-    fun testData() = testApp {
-        every { dao.describe("1") } returns aSimpleModel()
-
-        handleRequest(HttpMethod.Get, "/data/1").apply {
+    fun testData() = withTestApplication (Application::main) {
+        given(dao.describe("1")).will { aSimpleModel() }
+        with(handleRequest(HttpMethod.Get, "/data/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("data", response.content)
         }
     }
 
     @Test
-    fun testPage() = testApp {
-        handleRequest(HttpMethod.Get, "/page/1").apply {
+    fun testPage() = withTestApplication (Application::main) {
+        with(handleRequest(HttpMethod.Get, "/page/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("page", response.content)
         }
-    }
-
-    private fun testApp(callback: TestApplicationEngine.() -> Unit) {
-        withTestApplication({ mainWithDependencies(dao) }) { callback() }
     }
 
     private fun aSimpleModel(): Model {

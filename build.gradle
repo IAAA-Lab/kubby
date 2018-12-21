@@ -37,12 +37,14 @@ dependencies {
     compile "io.ktor:ktor-server-core:$ktor_version"
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "io.ktor:ktor-velocity:$ktor_version"
-    compile "org.apache.jena:apache-jena-libs:$jena_version"
+    compile "org.koin:koin-ktor:$koin_version"
 
+    compile "org.apache.jena:apache-jena-libs:$jena_version"
     compile "ch.qos.logback:logback-classic:1.2.3"
 
     testCompile "io.ktor:ktor-server-test-host:$ktor_version"
-    testCompile "io.mockk:mockk:$mockk_version"
+    testCompile "org.koin:koin-test:$koin_version"
+//    testCompile "io.mockk:mockk:$mockk_version"
 
 }
 

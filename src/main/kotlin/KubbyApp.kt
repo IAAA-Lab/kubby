@@ -1,8 +1,8 @@
 package es.iaaa.kubby
 
 import com.github.jsonldjava.core.JsonLdOptions
-import es.iaaa.kubby.sources.DataSource
-import es.iaaa.kubby.sources.EmptyDataSource
+import es.iaaa.kubby.repository.DataSource
+import es.iaaa.kubby.repository.EmptyDataSource
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -31,23 +31,22 @@ import org.apache.jena.riot.system.RiotLib
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader
 import org.apache.velocity.runtime.resource.util.StringResourceRepository
+import org.koin.dsl.module.module
+import org.koin.ktor.ext.inject
+import org.koin.standalone.StandAloneContext.startKoin
 import java.io.StringWriter
 
 
-val dao: DataSource = EmptyDataSource()
+val kubbyModule = module {
+    single<DataSource> { EmptyDataSource() }
+}
 
 /**
  * Entry Point of the application.
  * This function is referenced in the resources/application.conf
  */
 fun Application.main() {
-    mainWithDependencies(dao)
-}
-
-/**
- * This function is called from the entry point and tests to configure an application.
- */
-fun Application.mainWithDependencies(dao: DataSource) {
+    // Install Ktor features
     // This adds automatically Date and Server headers.
     install(DefaultHeaders)
     // This uses the logger to log every request/response
@@ -61,6 +60,12 @@ fun Application.mainWithDependencies(dao: DataSource) {
             resource("footer.vm")
         }
     }
+
+    // Lazy inject DataSource
+    val dao: DataSource by inject()
+
+
+    // Routing section
     // Register all the routes of the application
     routing {
         static("static") {
@@ -71,6 +76,7 @@ fun Application.mainWithDependencies(dao: DataSource) {
         page()
     }
 }
+
 
 fun VelocityEngine.templates(configure: VelocityEngine.() -> Unit) {
     setProperty("resource.loader", "string")
@@ -133,6 +139,9 @@ fun Route.page() {
 }
 
 fun main(args: Array<String>) {
+    // Start Koin
+    startKoin(listOf(kubbyModule))
+    // Start Ktor
     embeddedServer(
         Netty,
         port = 8080,

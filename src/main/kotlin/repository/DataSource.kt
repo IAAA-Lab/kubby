@@ -1,4 +1,4 @@
-package es.iaaa.kubby.sources
+package es.iaaa.kubby.repository
 
 import org.apache.jena.rdf.model.Model
 import java.io.Closeable
