@@ -1,10 +1,11 @@
 package es.iaaa.kubby.datasource
 
-import org.apache.jena.dboe.base.file.Location
+import org.apache.jena.dboe.base.file.Location.create
 import org.apache.jena.query.Dataset
-import org.apache.jena.riot.RDFDataMgr
-import org.apache.jena.system.Txn
-import org.apache.jena.tdb2.TDB2Factory
+import org.apache.jena.riot.RDFDataMgr.read
+import org.apache.jena.system.Txn.calculateRead
+import org.apache.jena.system.Txn.executeWrite
+import org.apache.jena.tdb2.TDB2Factory.connectDataset
 import org.junit.Before
 import org.junit.Test
 import java.nio.file.Files
@@ -64,20 +65,19 @@ class Tdb2DataSourceTest {
 
     @Test
     fun `Connect to an existing TDB2 dataset`() {
-        val existing = TDB2Factory.connectDataset(Location.create(target))
-        val statements = loadFile(existing)
+        val existing = connectDataset(create(target))
+        loadFile(existing)
+        val statements = countStatements(existing)
 
         val config = Tdb2DataSourceConfiguration(target)
         val ds = Tdb2DataSource(config)
         ds.init()
 
-        Txn.executeRead(existing) {
-            assertEquals(statements, existing.defaultModel.listStatements().toList().size)
-        }
+        assertEquals(statements, countStatements(existing))
     }
 
     @Test
-    fun `Describe an existing resource`() {
+    fun `Describe an existing resource in the TB2 dataset`() {
         initializeDataset()
 
         val config = Tdb2DataSourceConfiguration(target)
@@ -90,7 +90,7 @@ class Tdb2DataSourceTest {
     }
 
     @Test
-    fun `Describe a non existing resource`() {
+    fun `Describe a non existing resource in the TB2 dataset`() {
         initializeDataset()
 
         val config = Tdb2DataSourceConfiguration(target)
@@ -103,18 +103,15 @@ class Tdb2DataSourceTest {
     }
 
 
-    private fun initializeDataset(): Dataset {
-        val ds = TDB2Factory.connectDataset(Location.create(target))
-        loadFile(ds)
-        return ds
+    private fun initializeDataset() = connectDataset(create(target)).also { loadFile(it) }
+
+    private fun countStatements(existing: Dataset) = calculateRead(existing) {
+        existing.defaultModel.listStatements().toList().size
     }
 
-    private fun loadFile(existing: Dataset): Int {
-        var size = 0
-        Txn.executeWrite(existing) {
-            RDFDataMgr.read(existing, data.toString())
-            size = existing.defaultModel.listStatements().toList().size
-        }
-        return size
+    private fun loadFile(existing: Dataset) = executeWrite(existing) {
+        read(existing, data.toString())
     }
+
+
 }

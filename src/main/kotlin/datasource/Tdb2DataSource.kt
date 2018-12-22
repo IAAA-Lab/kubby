@@ -1,32 +1,33 @@
 package es.iaaa.kubby.datasource
 
+import es.iaaa.kubby.datasource.DatasourceDefinition.CONNECT
+import es.iaaa.kubby.datasource.DatasourceDefinition.CREATE
 import org.apache.jena.dboe.base.file.Location
 import org.apache.jena.query.Dataset
-import org.apache.jena.query.QueryExecutionFactory
+import org.apache.jena.query.QueryExecutionFactory.create
 import org.apache.jena.query.QueryFactory
 import org.apache.jena.rdf.model.Model
-import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.RDFNode
 import org.apache.jena.rdf.model.Resource
-import org.apache.jena.riot.RDFDataMgr
+import org.apache.jena.riot.RDFDataMgr.read
 import org.apache.jena.sparql.ARQConstants
 import org.apache.jena.sparql.core.Quad
 import org.apache.jena.sparql.core.describe.DescribeHandler
 import org.apache.jena.sparql.core.describe.DescribeHandlerFactory
 import org.apache.jena.sparql.core.describe.DescribeHandlerRegistry
 import org.apache.jena.sparql.util.Context
-import org.apache.jena.system.Txn
+import org.apache.jena.system.Txn.calculateRead
+import org.apache.jena.system.Txn.executeWrite
 import org.apache.jena.tdb2.TDB2Factory.assembleDataset
 import org.apache.jena.tdb2.TDB2Factory.connectDataset
 import org.apache.jena.vocabulary.RDFS
-import java.nio.file.Files
-import java.nio.file.Files.isRegularFile
+import java.nio.file.Files.*
 import java.nio.file.Path
 import java.nio.file.Paths
 
 class Tdb2DataSourceConfiguration(
     val path: Path,
-    val definition: DatasourceDefinition = DatasourceDefinition.CONNECT,
+    val definition: DatasourceDefinition = CONNECT,
     val data: Path = Paths.get("data.ttl")
 )
 
@@ -40,8 +41,8 @@ class Tdb2DataSource(private val config: Tdb2DataSourceConfiguration) : DataSour
             add(BackwardForwardDescribeFactory())
         }
         dataset = when (config.definition) {
-            DatasourceDefinition.CREATE -> createDataset()
-            DatasourceDefinition.CONNECT -> connectDataset()
+            CREATE -> createDataset()
+            CONNECT -> connectDataset()
         }
     }
 
@@ -55,21 +56,19 @@ class Tdb2DataSource(private val config: Tdb2DataSourceConfiguration) : DataSour
     private fun createDataset(): Dataset {
         deleteRecursivelyIfExists(config.path)
         val newDataset = connectDataset()
-        Txn.executeWrite(newDataset) {
-            RDFDataMgr.read(newDataset, config.data.toString())
+        executeWrite(newDataset) {
+            read(newDataset, config.data.toString())
         }
         return newDataset
     }
 
     override fun describe(iri: String): Model {
         val query = QueryFactory.create("DESCRIBE <$iri>")
-        var model: Model? = null
-        Txn.executeRead(dataset) {
-            QueryExecutionFactory.create(query, dataset).use {
-                model = it.execDescribe()
+        return calculateRead(dataset) {
+            create(query, dataset).use {
+                it.execDescribe()
             }
         }
-        return model ?: ModelFactory.createDefaultModel()
     }
 
     override fun close() {
@@ -82,10 +81,10 @@ class Tdb2DataSource(private val config: Tdb2DataSourceConfiguration) : DataSour
  * Deletes recursively a directory.
  */
 fun deleteRecursivelyIfExists(path: Path) {
-    if (Files.exists(path)) {
-        Files.walk(path)
+    if (exists(path)) {
+        walk(path)
             .sorted(Comparator.reverseOrder())
-            .forEach { it -> Files.deleteIfExists(it) }
+            .forEach { it -> deleteIfExists(it) }
     }
 }
 
