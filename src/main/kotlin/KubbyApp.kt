@@ -1,8 +1,8 @@
 package es.iaaa.kubby
 
 import com.github.jsonldjava.core.JsonLdOptions
-import es.iaaa.kubby.repository.DataSource
-import es.iaaa.kubby.repository.EmptyDataSource
+import es.iaaa.kubby.datasource.DataSource
+import es.iaaa.kubby.datasource.EmptyDataSource
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install

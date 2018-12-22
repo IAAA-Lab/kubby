@@ -1,0 +1,289 @@
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix yago:	<http://dbpedia.org/class/yago/> .
+dbr:Tetris	rdf:type	yago:WikicatIOSGames ,
+		yago:WikicatSegaGenesisGames ,
+		yago:Abstraction100002137 .
+@prefix wikidata:	<http://www.wikidata.org/entity/> .
+dbr:Tetris	rdf:type	wikidata:Q386724 ,
+		yago:WikicatCD-iGames ,
+		yago:LanguageUnit106284225 ,
+		yago:WikicatNP-completeProblems ,
+		yago:PsychologicalFeature100023100 ,
+		yago:WikicatNECPC-9801Games ,
+		yago:WikicatAndroidGames ,
+		yago:WikicatWindowsPhoneGames ,
+		yago:Diversion100426928 ,
+		yago:Game100430606 ,
+		yago:WikicatNintendoEntertainmentSystemGames ,
+		yago:WikicatGameBoyAdvanceGames ,
+		yago:WikicatPuzzleVideoGames ,
+		wikidata:Q7397 ,
+		<http://dbpedia.org/class/yago/WikicatNintendoVs.SeriesGames> ,
+		yago:WikicatMobileGames ,
+		yago:WikicatAmigaGames ,
+		yago:Part113809207 ,
+		yago:WikicatArcadeGames ,
+		yago:WikicatCommodore64Games ,
+		yago:WikicatAtariSTGames ,
+		yago:WikicatIPodGames ,
+		yago:WikicatDreamcastGames ,
+		yago:Event100029378 ,
+		yago:SocialEvent107288639 ,
+		yago:WikicatZXSpectrumGames ,
+		yago:WikicatAmstradCPCGames ,
+		yago:Invention105633385 ,
+		yago:Problem114410605 ,
+		yago:Creativity105624700 ,
+		yago:Ability105616246 ,
+		yago:WikicatSovietBrands ,
+		wikidata:Q7889 ,
+		yago:WikicatN-GageServiceGames ,
+		yago:WikicatNECPC-8801Games ,
+		yago:WikicatPlayStationGames ,
+		yago:WikicatSharpX1Games ,
+		yago:YagoPermanentlyLocatedEntity ,
+		yago:WikicatMSXGames ,
+		yago:WikicatMacOSGames ,
+		yago:WikicatDOSGames ,
+		yago:Wikicat1984VideoGames ,
+		yago:WikicatAmstradPCWGames ,
+		yago:WikicatAppleIIGames ,
+		yago:Activity100407535 ,
+		yago:Attribute100024264 ,
+		yago:Condition113920835 .
+@prefix schema:	<http://schema.org/> .
+dbr:Tetris	rdf:type	schema:CreativeWork ,
+		yago:Name106333653 ,
+		yago:TradeName106845599 ,
+		<http://dbpedia.org/class/yago/WikicatGame&WatchGames> ,
+		yago:WikicatVideoGamesOfTheMuseumOfModernArt ,
+		yago:Difficulty114408086 ,
+		yago:Game100456199 ,
+		yago:WikicatN-GageGames ,
+		yago:WikicatHandheldElectronicGames ,
+		yago:WikicatRussianInventions ,
+		yago:Wikicat1985VideoGames ,
+		yago:WikicatSovietGames ,
+		yago:WikicatVideoGamesDevelopedInRussia ,
+		yago:WikicatSovietInventions ,
+		yago:WikicatSuperNESGames ,
+		yago:WikicatGameBoyGames ,
+		<http://dbpedia.org/class/yago/WikicatSAMCoup\u00E9Games> ,
+		yago:WikicatNintendoDSGames ,
+		yago:WikicatAlexeyPajitnovGames ,
+		yago:WikicatPlayStation2Games ,
+		yago:WikicatLinuxGames ,
+		yago:Cognition100023271 ,
+		yago:WikicatWonderSwanColorGames ,
+		yago:WikicatCommodoreVIC-20Games ,
+		yago:WikicatTRS-80ColorComputerGames ,
+		yago:State100024720 ,
+		yago:WikicatXboxGames .
+@prefix owl:	<http://www.w3.org/2002/07/owl#> .
+dbr:Tetris	rdf:type	owl:Thing ,
+		yago:WikicatWindowsGames ,
+		yago:Relation100031921 ,
+		yago:WikicatAppleIIGSGames ,
+		yago:Act100030358 .
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+dbr:Tetris	rdf:type	dbo:Work ,
+		dbo:Software ,
+		dbo:VideoGame ,
+		yago:ComputerGame100458890 ,
+		yago:Contest107456188 .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+dbr:Tetris	rdfs:label	"Tetris"@pl ,
+		"Tetris"@nl ,
+		"\u30C6\u30C8\u30EA\u30B9"@ja ,
+		"Tetris"@pt ,
+		"\u4FC4\u7F85\u65AF\u65B9\u584A"@zh ,
+		"Tetris"@fr ,
+		"Tetris"@en ,
+		"\u062A\u062A\u0631\u064A\u0633"@ar ,
+		"Tetris"@es ,
+		"Tetris"@de ,
+		"Tetris"@it ,
+		"\u0422\u0435\u0442\u0440\u0438\u0441"@ru ;
+	rdfs:comment	"\u300A\u4FC4\u7F85\u65AF\u65B9\u584A\u300B\uFF08\u4FC4\u8BED\uFF1A\u0422\u0435\u0442\u0440\u0438\u0441\uFF0C\u82F1\u8BED\uFF1ATetris\uFF09\uFF0C\u662F1980\u5E74\u672B\u671F\u81F31990\u5E74\u4EE3\u521D\u671F\u98A8\u9761\u5168\u4E16\u754C\u7684\u96FB\u8166\u904A\u6232\uFF0C\u662F\u843D\u4E0B\u578B\u76CA\u667A\u904A\u6232\u7684\u59CB\u7956\uFF0C\u70BA\u8607\u806F\u9996\u500B\u5728\u7F8E\u570B\u767C\u4F48\u7684\u5A1B\u6A02\u8EDF\u4EF6\u3002\u6B64\u904A\u6232\u6700\u521D\u662F\u7531\u963F\u5217\u514B\u8B1D\u00B7\u5E15\u57FA\u7279\u8AFE\u592B\u5728\u8607\u806F\u8A2D\u8A08\u548C\u7DE8\u7A0B\uFF0C\u65BC1984\u5E746\u67086\u65E5\u9996\u6B21\u767C\u4F48\uFF0C\u7576\u6642\u5E15\u57FA\u7279\u8AFE\u592B\u6B63\u5728\u8607\u806F\u79D1\u5B78\u9662\u96FB\u7B97\u4E2D\u5FC3\u5DE5\u4F5C\u3002\u6B64\u904A\u6232\u7684\u540D\u7A31\u662F\u7531\u5E0C\u81D8\u8BED\u6578\u5B57\u56DB\u524D\u7DB4\u300Ctetra-\u300D\uFF08\u56E0\u6240\u6709\u843D\u4E0B\u65B9\u5757\u7686\u7531\u56DB\u5757\u7EC4\u6210\uFF09\u548C\u5E15\u57FA\u7279\u8AFE\u592B\u6700\u559C\u6B61\u7684\u904B\u52D5\u7DB2\u7403\uFF08\u300Ctennis\u300D\uFF09\u62FC\u63A5\u800C\u6210\u3002 \u6B64\u904A\u6232\u548C\u5176\u7E8C\u4F5C\u53EF\u65BC\u5E7E\u4E4E\u6240\u6709\u96FB\u5B50\u904A\u6232\u6A5F\u548C\u96FB\u8166\u4F5C\u696D\u7CFB\u7D71\u4E0A\u904A\u73A9\uFF0C\u4EA6\u53EF\u65BC\u56FE\u5F62\u8BA1\u7B97\u5668\u3001\u624B\u63D0\u96FB\u8A71\u3001\u53EF\u651C\u5F0F\u5A92\u9AD4\u64AD\u653E\u5668\u3001\u500B\u4EBA\u6578\u78BC\u52A9\u7406\u3001\u4E92\u806F\u7DB2\u7121\u7DDA\u96FB\u8A2D\u5099\u4E0A\u904A\u73A9\uFF0C\u751A\u81F3\u80FD\u4EE5\u5F69\u86CB\u7684\u5F62\u5F0F\u5728\u975E\u5A92\u9AD4\u7522\u54C1\u4E0A\u904A\u73A9\uFF0C\u5982\u793A\u6CE2\u5668\u3002\u6B64\u904A\u6232\u751A\u81F3\u555F\u767C\u4E86\u300A\u4FC4\u7F85\u65AF\u65B9\u584A\u300B\u9910\u5177\u3002\u751A\u81F3\u5728\u5927\u697C\u5916\u5899\u5B9E\u73B0\u4E86\u76F8\u5E94\u7684\u6A21\u5F0F\u3002 \u65BC1980\u5E74\u4EE3\uFF0C\u6B64\u904A\u6232\u9664\u4E86\u6210\u70BA\u4E00\u500B\u71B1\u9580\u7684\u5BB6\u7528\u7535\u8111\u548C\u8857\u6A5F\u904A\u6232\u5916\uFF0C\u9084\u6210\u70BAGame Boy\u53F2\u4E0A\u6700\u53D7\u6B61\u8FCE\u7684\u904A\u6232\u4E4B\u4E00\u3002\u300A\u96FB\u5B50\u904A\u6232\u6708\u520A\u300B\u57282007\u5E74\u5C07\u6B64\u904A\u6232\u5217\u70BA\u300C\u6700\u5049\u5927\u7684100\u500B\u904A\u6232\u300D\u4E2D\u7684\u7B2C1\u4F4D\uFF0C\u4E26\u7372IGN\u5217\u70BA\u300C\u6700\u5049\u5927\u7684100\u500B\u904A\u6232\u300D\u4E2D\u7684\u7B2C2\u4F4D\u3002\u622A\u81F32009\u5E74\uFF0C\u6B64\u904A\u6232\u5DF2\u552E\u51FA\u903E7000\u842C\u5957\u904A\u6232\u3002\u65BC2010\u5E741\u6708\uFF0C\u6B64\u904A\u6232\u65BC\u624B\u63D0\u96FB\u8A71\u4E0A\u5DF2\u552E\u51FA\u903E1\u5104\u5957\u904A\u6232\u3002"@zh ,
+		"\u30C6\u30C8\u30EA\u30B9\uFF08\u30ED\u30B7\u30A2\u8A9E\uFF1A\u0422\u0435\u0442\u0440\u0438\u0441\uFF09\u306F\u30011980\u5E74\u4EE3\u672B\u304B\u30891990\u5E74\u4EE3\u521D\u3081\u306B\u304B\u3051\u3001\u4E16\u754C\u5404\u56FD\u3067\u5927\u6D41\u884C\u3057\u305F\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF\u30FC\u30B2\u30FC\u30E0\u3002\u843D\u3061\u7269\u30D1\u30BA\u30EB\u306E\u5143\u7956\u3067\u3042\u308B\u3002"@ja ,
+		"Tetris \u2013 komputerowa gra logiczna stworzona przez Aleksieja Pa\u017Cytnowa i jego wsp\u00F3\u0142pracownik\u00F3w, Dimitrija Paw\u0142owskiego i Wadima Geriasimowa. Pojawi\u0142a si\u0119 na rynku po raz pierwszy 6 czerwca 1984 roku w Zwi\u0105zku Radzieckim. Oryginalna wersja powsta\u0142a podczas pracy zespo\u0142u Pa\u017Cytnowa w Akademii Nauk ZSRR w Moskwie na komputerze Elektronika 60. Jest to jedna z najbardziej znanych gier komputerowych, posiadaj\u0105ca du\u017C\u0105 liczb\u0119 r\u00F3\u017Cnorodnych wariacji i wariant\u00F3w. Do powstania gry zainspirowa\u0142a Pa\u017Cytnowa gra Pentomino."@pl ,
+		"Tetris est un jeu vid\u00E9o de puzzle con\u00E7u par Alekse\u00EF Pajitnov \u00E0 partir de juin 1984 sur Elektronika 60. Lors de la cr\u00E9ation du concept, Pajitnov est aid\u00E9 de Dmitri Pavlovski et Vadim Guerassimov pour le d\u00E9veloppement. Le jeu est \u00E9dit\u00E9 par plusieurs soci\u00E9t\u00E9s au cours du temps, \u00E0 la suite d'une guerre pour l'appropriation des droits \u00E0 la fin des ann\u00E9es 1980. Le d\u00E9roulement pr\u00E9cis du d\u00E9veloppement et des premi\u00E8res commercialisations est encore d\u00E9battu dans les ann\u00E9es 2010. Apr\u00E8s une exploitation importante par Nintendo, les droits appartiennent depuis 1996 \u00E0 la soci\u00E9t\u00E9 The Tetris Company. Cette soci\u00E9t\u00E9 a vendu les droits d'exploitation sur mobiles \u00E0 Electronic Arts et sur consoles \u00E0 Ubisoft."@fr ,
+		"Tetris (em russo: \u0422\u0435\u0442\u0440\u0438\u0441) \u00E9 um jogo electr\u00F4nico muito popular, desenvolvido por Alexey Pajitnov, Dmitry Pavlovsky e Vadim Gerasimov, e lan\u00E7ado em Junho de 1984. Pajitnov e Pavlovsky eram engenheiros inform\u00E1ticos no Centro de Computadores da Academia Russa das Ci\u00EAncias e Vadim era um aluno com 16 anos. Tetris foi um dos primeiros itens de exporta\u00E7\u00E3o de sucesso da Uni\u00E3o Sovi\u00E9tica e um dos primeiros a ser visto como um tipo de v\u00EDcio. Atingiu um p\u00FAblico alvo in\u00E9dito na hist\u00F3ria dos videogames."@pt ,
+		"25\u0628\u0643 \u0627\u0644\u0645\u062D\u062A\u0648\u0649 \u0647\u0646\u0627 \u064A\u0646\u0642\u0635\u0647 \u0627\u0644\u0627\u0633\u062A\u0634\u0647\u0627\u062F \u0628\u0645\u0635\u0627\u062F\u0631. \u064A\u0631\u062C\u0649 \u0625\u064A\u0631\u0627\u062F \u0645\u0635\u0627\u062F\u0631 \u0645\u0648\u062B\u0648\u0642 \u0628\u0647\u0627. \u0623\u064A \u0645\u0639\u0644\u0648\u0645\u0627\u062A \u063A\u064A\u0631 \u0645\u0648\u062B\u0642\u0629 \u064A\u0645\u0643\u0646 \u0627\u0644\u062A\u0634\u0643\u064A\u0643 \u0628\u0647\u0627 \u0648\u0625\u0632\u0627\u0644\u062A\u0647\u0627. (\u0641\u0628\u0631\u0627\u064A\u0631 2016) \u062A\u064E\u062A\u0631\u064A\u0633 (\u0628\u0627\u0644\u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629: Tetris)\u061B \u0648(\u0628\u0627\u0644\u0631\u0648\u0633\u064A\u0629: \u0422\u0435\u0442\u0440\u0438\u0441)\u060C \u0647\u064A \u0644\u0639\u0628\u0629 \u0641\u064A\u062F\u064A\u0648 \u0639\u0644\u0649 \u0634\u0643\u0644 \u0623\u062D\u062C\u064A\u0629 \u062A\u0645 \u062A\u0635\u0645\u064A\u0645\u0647\u0627 \u0645\u0646 \u0642\u0628\u0644 \u0623\u0644\u064A\u0643\u0633\u064A \u0628\u0627\u062C\u064A\u062A\u0646\u0648\u0641 \u0641\u064A \u064A\u0648\u0646\u064A\u0648 1985\u060C \u0648\u0630\u0644\u0643 \u0623\u062B\u0646\u0627\u0621 \u0639\u0645\u0644\u0647 \u0641\u064A \u0627\u0644\u0623\u0643\u0627\u062F\u064A\u0645\u064A\u0629 \u0627\u0644\u0631\u0648\u0633\u064A\u0629 \u0644\u0644\u0639\u0644\u0648\u0645 \u0641\u064A \u0645\u0648\u0633\u0643\u0648. \u062A\u0645 \u0623\u062E\u0630 \u0627\u0633\u0645 \u0627\u0644\u0644\u0639\u0628\u0629 \u0645\u0646 \u0627\u0644\u0625\u063A\u0631\u064A\u0642\u064A\u0629 \"\u062A\u064A\u062A\u0631\u0627\" \u0648\u062A\u0639\u0646\u064A (\u0631\u0628\u0627\u0639\u064A) \u0648\u0630\u0644\u0643 \u0644\u0623\u0646 \u062C\u0645\u064A\u0639 \u0627\u0644\u0623\u062D\u062C\u0627\u0631 \u062A\u062D\u0648\u064A \u0623\u0631\u0628\u0639 \u0642\u0637\u0639\u060C \u0648\"\u062A\u064A\u0646\u0633\" \u062D\u064A\u062B \u0643\u0627\u0646\u062A \u0643\u0631\u0629 \u0627\u0644\u0645\u0636\u0631\u0628 \u0647\u064A \u0644\u0639\u0628\u0629 \u0628\u0627\u062C\u064A\u062A\u0646\u0648\u0641 \u0627\u0644\u0645\u0641\u0636\u0644\u0629. \u062A\u0648\u062C\u062F \u0627\u0644\u0644\u0639\u0628\u0629 \u062A\u0642\u0631\u064A\u0628\u0627\u064B \u0639\u0644\u0649 \u0643\u0644 \u0623\u062C\u0647\u0632\u0629 \u0627\u0644\u0623\u0644\u0639\u0627\u0628 \u0648\u0623\u0646\u0638\u0645\u0629 \u062A\u0634\u063A\u064A\u0644 \u0627\u0644\u062D\u0648\u0627\u0633\u064A\u0628\u060C \u0628\u0627\u0644\u0625\u0636\u0627\u0641\u0629 \u0625\u0644\u0649 \u0627\u0644\u0639\u062F\u064A\u062F \u0645\u0646 \u0623\u062C\u0647\u0632\u0629 \u0627\u0644\u0647\u0627\u062A\u0641 \u0627\u0644\u0645\u062D\u0645\u0648\u0644\u060C \u0648\u0623\u062C\u0647\u0632\u0629 \u0627\u0644\u0648\u0633\u0627\u0626\u0637 \u0627\u0644\u0645\u062A\u0639\u062F\u062F\u0629 \u0627\u0644\u0645\u062E\u062A\u0644\u0641\u0629."@ar ,
+		"\u0422\u0435\u0301\u0442\u0440\u0438\u0441 (\u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u043D\u043E\u0435 \u043E\u0442 \u00AB\u0442\u0435\u0442\u0440\u0430\u043C\u0438\u043D\u043E\u00BB \u0438 \u00AB\u0442\u0435\u043D\u043D\u0438\u0441\u00BB) \u2014 \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440\u043D\u0430\u044F \u0438\u0433\u0440\u0430, \u0438\u0437\u043E\u0431\u0440\u0435\u0442\u0451\u043D\u043D\u0430\u044F \u0432 \u0421\u0421\u0421\u0420 \u0410\u043B\u0435\u043A\u0441\u0435\u0435\u043C \u041F\u0430\u0436\u0438\u0442\u043D\u043E\u0432\u044B\u043C \u0438 \u043F\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043D\u0430\u044F \u043E\u0431\u0449\u0435\u0441\u0442\u0432\u0435\u043D\u043D\u043E\u0441\u0442\u0438 6 \u0438\u044E\u043D\u044F 1984 \u0433\u043E\u0434\u0430. \u0418\u0434\u0435\u044E \u00AB\u0422\u0435\u0442\u0440\u0438\u0441\u0430\u00BB \u0435\u043C\u0443 \u043F\u043E\u0434\u0441\u043A\u0430\u0437\u0430\u043B\u0430 \u043A\u0443\u043F\u043B\u0435\u043D\u043D\u0430\u044F \u0438\u043C \u0438\u0433\u0440\u0430 \u0432 \u043F\u0435\u043D\u0442\u0430\u043C\u0438\u043D\u043E. \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0438\u0433\u0440\u044B \u043F\u0440\u043E\u0438\u0441\u0445\u043E\u0434\u0438\u0442 \u043E\u0442 \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u0430 \u043A\u043B\u0435\u0442\u043E\u043A, \u0438\u0437 \u043A\u043E\u0442\u043E\u0440\u044B\u0445 \u0441\u043E\u0441\u0442\u043E\u0438\u0442 \u043A\u0430\u0436\u0434\u0430\u044F \u0444\u0438\u0433\u0443\u0440\u0430."@ru ,
+		"(This article is about the 1984 video game. For other uses, see Tetris (disambiguation).) Tetris (Russian: \u0422\u0435\u0301\u0442\u0440\u0438\u0441, pronounced [\u02C8t\u025Btr\u02B2\u026As]) is a tile-matching puzzle video game, originally designed and programmed by Russian game designer Alexey Pajitnov. It was released on June 6, 1984, while he was working for the Dorodnicyn Computing Centre of the Academy of Science of the USSR in Moscow. He derived its name from the Greek numerical prefix tetra- (all of the game's pieces contain four segments) and tennis, Pajitnov's favorite sport."@en ,
+		"Tetris is een puzzel-computerspel ontworpen door Alexey Pajitnov. De eerste speelbare versie kwam uit op 6 juni 1984. Het spel kreeg algemene bekendheid doordat het meegeleverd werd bij het spelletjesplatform Game Boy van Nintendo in 1989. De kampioenschappen van het spel worden echter vaak gespeeld op Nintendo Entertainment System (NES). De naam is afgeleid van het woord tetromino, omdat ieder blokje uit vier vierkantjes bestaat en zo een tetromino is, en tennis, de favoriete sport van Pajitnov."@nl ,
+		"Tetris (in russo \u0422\u0435\u0442\u0440\u0438\u0441, sincrasi di \u0442\u0435\u0442\u0440\u0430\u043C\u0438\u043D\u043E (\"tetramino\") e \u0442\u0435\u043D\u043D\u0438\u0441 (\"tennis\") \u00E8 un videogioco di logica e ragionamento inventato da Aleksej Leonidovi\u010D Pa\u017Eitnov il 6 giugno 1984, mentre lavorava per l'Accademia delle Scienze dell'URSS di Mosca. Pa\u017Eitnov ha affermato che i pentamini sono stati la sua fonte d'ispirazione per questo gioco.Non essendo stato brevettato, il gioco \u00E8 diventato disponibile praticamente per qualunque dispositivo. Il gioco e molte sue varianti sono disponibili per qualunque console e sistema operativo, addirittura per alcune calcolatrici grafiche, telefonini, PDA, iPod, Set-top box e per l'editor di testo GNU Emacs; ne esiste perfino una versione \"stand alone\" da collegare a un televisore, e le cui racchette ricordano i pezzi del Tetris."@it ,
+		"Tetris (russisch \u0422\u0435\u0442\u0440\u0438\u0441) ist ein puzzleartiges Computerspiel des russischen Programmierers Alexei Paschitnow, der die erste spielbare Version am 6. Juni 1984 auf einem Elektronika-60-Rechner fertigstellte. Tetris gilt heute als Computerspiel-Klassiker, hat sich inzwischen \u00FCber 100 Millionen Mal verkauft, wurde vielfach ausgezeichnet und ist f\u00FCr mehr als 65 Computerplattformen erschienen."@de ,
+		"Tetris (en ruso, \u0422\u0435\u0301\u0442\u0440\u0438\u0441) es un videojuego de puzzle originalmente dise\u00F1ado y programado por Aleks\u00E9i P\u00E1zhitnov en la Uni\u00F3n Sovi\u00E9tica. Fue lanzado el 6 de junio de 1984, mientras trabajaba para el Centro de Computaci\u00F3n Dorodnitsyn de la Academia de Ciencias de la Uni\u00F3n Sovi\u00E9tica en Mosc\u00FA, RSFS de Rusia. Su nombre deriva del prefijo num\u00E9rico griego tetra- (todas las piezas del juego, conocidas como Tetromin\u00F3s que contienen cuatro segmentos) y del tenis, el deporte favorito de P\u00E1zhitnov."@es ;
+	rdfs:seeAlso	dbr:Modern_cover_versions ,
+		dbr:Tetris_effect ,
+		dbr:Korobeiniki .
+@prefix dbpedia-es:	<http://es.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-es:Tetris ,
+		<http://ko.dbpedia.org/resource/\uD14C\uD2B8\uB9AC\uC2A4> .
+@prefix ns9:	<http://sw.cyc.com/concept/> .
+dbr:Tetris	owl:sameAs	ns9:Mx4rvWHuv5wpEbGdrcN5Y29ycA .
+@prefix dbpedia-de:	<http://de.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-de:Tetris ,
+		<http://rdf.freebase.com/ns/m.07gl9> .
+@prefix dbpedia-pt:	<http://pt.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-pt:Tetris .
+@prefix dbpedia-fr:	<http://fr.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-fr:Tetris ,
+		wikidata:Q71910 ,
+		<http://ja.dbpedia.org/resource/\u30C6\u30C8\u30EA\u30B9> .
+@prefix dbpedia-wikidata:	<http://wikidata.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-wikidata:Q71910 ,
+		dbr:Tetris .
+@prefix dbpedia-id:	<http://id.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-id:Tetris .
+@prefix dbpedia-nl:	<http://nl.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-nl:Tetris .
+@prefix yago-res:	<http://yago-knowledge.org/resource/> .
+dbr:Tetris	owl:sameAs	yago-res:Tetris .
+@prefix dbpedia-it:	<http://it.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-it:Tetris .
+@prefix dbpedia-cs:	<http://cs.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-cs:Tetris .
+@prefix dbpedia-pl:	<http://pl.dbpedia.org/resource/> .
+dbr:Tetris	owl:sameAs	dbpedia-pl:Tetris .
+@prefix dct:	<http://purl.org/dc/terms/> .
+@prefix dbc:	<http://dbpedia.org/resource/Category:> .
+dbr:Tetris	dct:subject	dbc:ZX_Spectrum_games ,
+		dbc:NP-complete_problems ,
+		dbc:Amstrad_CPC_games ,
+		dbc:Tetris ,
+		dbc:MSX_games ,
+		<http://dbpedia.org/resource/Category:1984_in_the_Soviet_Union> ,
+		dbc:Falling_block_puzzle_games ,
+		dbc:Soviet_games ,
+		<http://dbpedia.org/resource/Category:SAM_Coup\u00E9_games> ,
+		dbc:Soviet_inventions ,
+		dbc:WonderSwan_Color_games ,
+		dbc:Mac_OS_games ,
+		dbc:Mobile_games ,
+		dbc:Amstrad_PCW_games ,
+		dbc:Amiga_games ,
+		dbc:Arcade_games ,
+		dbc:Microsoft_Entertainment_Pack ,
+		dbc:BBC_Micro_and_Acorn_Electron_games ,
+		dbc:Sharp_X1_games ,
+		dbc:Soviet_brands ,
+		<http://dbpedia.org/resource/Category:Game_&_Watch_games> ,
+		dbc:Alexey_Pajitnov_games ,
+		dbc:NEC_PC-8801_games ,
+		dbc:Video_games_developed_in_Russia ,
+		dbc:Spectrum_Holobyte_games ,
+		dbc:Handheld_electronic_games ,
+		dbc:Russian_inventions ,
+		dbc:Apple_IIGS_games ,
+		dbc:CD-i_games ,
+		<http://dbpedia.org/resource/Category:1984_video_games> ,
+		dbc:NEC_PC-9801_games ,
+		dbc:N-Gage_service_games ,
+		<http://dbpedia.org/resource/Category:Nintendo_Vs._Series_games> ,
+		dbc:Game_Boy_Advance_games ,
+		dbc:Nintendo_Entertainment_System_games .
+@prefix foaf:	<http://xmlns.com/foaf/0.1/> .
+dbr:Tetris	foaf:name	"Tetris"@en ;
+	foaf:depiction	<http://commons.wikimedia.org/wiki/Special:FilePath/Tetris_basic_game.gif> .
+@prefix wikipedia-en:	<http://en.wikipedia.org/wiki/> .
+dbr:Tetris	foaf:isPrimaryTopicOf	wikipedia-en:Tetris .
+@prefix xsd:	<http://www.w3.org/2001/XMLSchema#> .
+@prefix dbp:	<http://dbpedia.org/property/> .
+dbr:Tetris	dbp:released	"--06-06"^^xsd:gMonthDay ;
+	dbp:rev	"Zzap!64"^^rdf:langString ,
+		"ACE"^^rdf:langString ;
+	dbp:cabinet	"Upright"^^rdf:langString ;
+	dbp:arcadeSystem	dbr:System_16 ,
+		"System E"^^rdf:langString ;
+	dbp:award	"Gold Medal"^^rdf:langString ,
+		"SU Classic"^^rdf:langString ;
+	dbp:award1pub	"Zzap!64"^^rdf:langString ;
+	dbp:expiry	"--10-20"^^xsd:gMonthDay .
+@prefix prov:	<http://www.w3.org/ns/prov#> .
+dbr:Tetris	prov:wasDerivedFrom	<http://en.wikipedia.org/wiki/Tetris?oldid=744198657> .
+@prefix ns27:	<http://dbpedia.org/datatype/> .
+dbr:Tetris	dbp:cvg	"94.0"^^ns27:perCent ;
+	dbp:ysinclair	9 ;
+	dbp:crash	"77.0"^^ns27:perCent ;
+	dbp:rev1score	"98.0"^^ns27:perCent ;
+	dbp:rev2score	"95.0"^^ns27:perCent ;
+	dbp:modes	dbr:Single-player_video_game ,
+		dbr:Multiplayer_video_game ;
+	dbp:small	"yes"^^rdf:langString .
+@prefix ns28:	<http://www.bbc.co.uk/programmes/> .
+dbr:Tetris	dbo:wikiPageExternalLink	ns28:p00mdqf8 ,
+		<http://vadim.oversigma.com/Tetris.htm> ,
+		<http://www.scientificamerican.com/article/mathematicians-prove-tetr/> ,
+		<http://www.tetris.com> ;
+	dbo:genre	dbr:Puzzle_video_game ;
+	dbp:caption	"North American NES cover art"^^rdf:langString ;
+	dbo:abstract	"25\u0628\u0643 \u0627\u0644\u0645\u062D\u062A\u0648\u0649 \u0647\u0646\u0627 \u064A\u0646\u0642\u0635\u0647 \u0627\u0644\u0627\u0633\u062A\u0634\u0647\u0627\u062F \u0628\u0645\u0635\u0627\u062F\u0631. \u064A\u0631\u062C\u0649 \u0625\u064A\u0631\u0627\u062F \u0645\u0635\u0627\u062F\u0631 \u0645\u0648\u062B\u0648\u0642 \u0628\u0647\u0627. \u0623\u064A \u0645\u0639\u0644\u0648\u0645\u0627\u062A \u063A\u064A\u0631 \u0645\u0648\u062B\u0642\u0629 \u064A\u0645\u0643\u0646 \u0627\u0644\u062A\u0634\u0643\u064A\u0643 \u0628\u0647\u0627 \u0648\u0625\u0632\u0627\u0644\u062A\u0647\u0627. (\u0641\u0628\u0631\u0627\u064A\u0631 2016) \u062A\u064E\u062A\u0631\u064A\u0633 (\u0628\u0627\u0644\u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629: Tetris)\u061B \u0648(\u0628\u0627\u0644\u0631\u0648\u0633\u064A\u0629: \u0422\u0435\u0442\u0440\u0438\u0441)\u060C \u0647\u064A \u0644\u0639\u0628\u0629 \u0641\u064A\u062F\u064A\u0648 \u0639\u0644\u0649 \u0634\u0643\u0644 \u0623\u062D\u062C\u064A\u0629 \u062A\u0645 \u062A\u0635\u0645\u064A\u0645\u0647\u0627 \u0645\u0646 \u0642\u0628\u0644 \u0623\u0644\u064A\u0643\u0633\u064A \u0628\u0627\u062C\u064A\u062A\u0646\u0648\u0641 \u0641\u064A \u064A\u0648\u0646\u064A\u0648 1985\u060C \u0648\u0630\u0644\u0643 \u0623\u062B\u0646\u0627\u0621 \u0639\u0645\u0644\u0647 \u0641\u064A \u0627\u0644\u0623\u0643\u0627\u062F\u064A\u0645\u064A\u0629 \u0627\u0644\u0631\u0648\u0633\u064A\u0629 \u0644\u0644\u0639\u0644\u0648\u0645 \u0641\u064A \u0645\u0648\u0633\u0643\u0648. \u062A\u0645 \u0623\u062E\u0630 \u0627\u0633\u0645 \u0627\u0644\u0644\u0639\u0628\u0629 \u0645\u0646 \u0627\u0644\u0625\u063A\u0631\u064A\u0642\u064A\u0629 \"\u062A\u064A\u062A\u0631\u0627\" \u0648\u062A\u0639\u0646\u064A (\u0631\u0628\u0627\u0639\u064A) \u0648\u0630\u0644\u0643 \u0644\u0623\u0646 \u062C\u0645\u064A\u0639 \u0627\u0644\u0623\u062D\u062C\u0627\u0631 \u062A\u062D\u0648\u064A \u0623\u0631\u0628\u0639 \u0642\u0637\u0639\u060C \u0648\"\u062A\u064A\u0646\u0633\" \u062D\u064A\u062B \u0643\u0627\u0646\u062A \u0643\u0631\u0629 \u0627\u0644\u0645\u0636\u0631\u0628 \u0647\u064A \u0644\u0639\u0628\u0629 \u0628\u0627\u062C\u064A\u062A\u0646\u0648\u0641 \u0627\u0644\u0645\u0641\u0636\u0644\u0629. \u062A\u0648\u062C\u062F \u0627\u0644\u0644\u0639\u0628\u0629 \u062A\u0642\u0631\u064A\u0628\u0627\u064B \u0639\u0644\u0649 \u0643\u0644 \u0623\u062C\u0647\u0632\u0629 \u0627\u0644\u0623\u0644\u0639\u0627\u0628 \u0648\u0623\u0646\u0638\u0645\u0629 \u062A\u0634\u063A\u064A\u0644 \u0627\u0644\u062D\u0648\u0627\u0633\u064A\u0628\u060C \u0628\u0627\u0644\u0625\u0636\u0627\u0641\u0629 \u0625\u0644\u0649 \u0627\u0644\u0639\u062F\u064A\u062F \u0645\u0646 \u0623\u062C\u0647\u0632\u0629 \u0627\u0644\u0647\u0627\u062A\u0641 \u0627\u0644\u0645\u062D\u0645\u0648\u0644\u060C \u0648\u0623\u062C\u0647\u0632\u0629 \u0627\u0644\u0648\u0633\u0627\u0626\u0637 \u0627\u0644\u0645\u062A\u0639\u062F\u062F\u0629 \u0627\u0644\u0645\u062E\u062A\u0644\u0641\u0629."@ar ,
+		"Tetris \u2013 komputerowa gra logiczna stworzona przez Aleksieja Pa\u017Cytnowa i jego wsp\u00F3\u0142pracownik\u00F3w, Dimitrija Paw\u0142owskiego i Wadima Geriasimowa. Pojawi\u0142a si\u0119 na rynku po raz pierwszy 6 czerwca 1984 roku w Zwi\u0105zku Radzieckim. Oryginalna wersja powsta\u0142a podczas pracy zespo\u0142u Pa\u017Cytnowa w Akademii Nauk ZSRR w Moskwie na komputerze Elektronika 60. Jest to jedna z najbardziej znanych gier komputerowych, posiadaj\u0105ca du\u017C\u0105 liczb\u0119 r\u00F3\u017Cnorodnych wariacji i wariant\u00F3w. Do powstania gry zainspirowa\u0142a Pa\u017Cytnowa gra Pentomino. We wrze\u015Bniu 2014 roku firmy Threshold Entertainment oraz Tetris Company og\u0142osi\u0142y plany nakr\u0119cenia filmu na podstawie Tetrisa."@pl ,
+		"(This article is about the 1984 video game. For other uses, see Tetris (disambiguation).) Tetris (Russian: \u0422\u0435\u0301\u0442\u0440\u0438\u0441, pronounced [\u02C8t\u025Btr\u02B2\u026As]) is a tile-matching puzzle video game, originally designed and programmed by Russian game designer Alexey Pajitnov. It was released on June 6, 1984, while he was working for the Dorodnicyn Computing Centre of the Academy of Science of the USSR in Moscow. He derived its name from the Greek numerical prefix tetra- (all of the game's pieces contain four segments) and tennis, Pajitnov's favorite sport. Tetris was the first entertainment software to be exported from the USSR to the US, where it was published by Spectrum HoloByte for Commodore 64 and IBM PC. The Tetris game is a popular use of tetrominoes, the four-element special case of polyominoes. Polyominoes have been used in popular puzzles since at least 1907, and the name was given by the mathematician Solomon W. Golomb in 1953. However, even the enumeration of pentominoes is dated to antiquity. The game (or one of its many variants) is available for nearly every video game console and computer operating system, as well as on devices such as graphing calculators, mobile phones, portable media players, PDAs, Network music players and even as an Easter egg on non-media products like oscilloscopes. It has even inspired Tetris serving dishes and been played on the sides of various buildings. While versions of Tetris were sold for a range of 1980s home computer platforms as well as arcades, it was the hugely successful handheld version for the Game Boy launched in 1989 that established the game as one of the most popular ever. Electronic Gaming Monthly's 100th issue had Tetris in first place as \"Greatest Game of All Time\". In 2007, Tetris came in second place in IGN's \"100 Greatest Video Games of All Time\". In January 2010, it was announced that the Tetris franchise had sold more than 170 million copies, approximately 70 million physical copies and over 100 million copies for cell phones, making it the best selling paid-downloaded game of all time. On 14 March 2014, The Tetris Company announced a deal to bring Tetris to two of the latest hardware platforms, the Xbox One and PlayStation 4, in partnership with Ubisoft (publishing) and SoMa Play (development), to coincide with the franchise's 30th anniversary."@en ,
+		"Tetris est un jeu vid\u00E9o de puzzle con\u00E7u par Alekse\u00EF Pajitnov \u00E0 partir de juin 1984 sur Elektronika 60. Lors de la cr\u00E9ation du concept, Pajitnov est aid\u00E9 de Dmitri Pavlovski et Vadim Guerassimov pour le d\u00E9veloppement. Le jeu est \u00E9dit\u00E9 par plusieurs soci\u00E9t\u00E9s au cours du temps, \u00E0 la suite d'une guerre pour l'appropriation des droits \u00E0 la fin des ann\u00E9es 1980. Le d\u00E9roulement pr\u00E9cis du d\u00E9veloppement et des premi\u00E8res commercialisations est encore d\u00E9battu dans les ann\u00E9es 2010. Apr\u00E8s une exploitation importante par Nintendo, les droits appartiennent depuis 1996 \u00E0 la soci\u00E9t\u00E9 The Tetris Company. Cette soci\u00E9t\u00E9 a vendu les droits d'exploitation sur mobiles \u00E0 Electronic Arts et sur consoles \u00E0 Ubisoft. Tetris met le joueur au d\u00E9fi de r\u00E9aliser des lignes compl\u00E8tes en d\u00E9pla\u00E7ant des pi\u00E8ces de formes diff\u00E9rentes, les t\u00E9triminos, qui d\u00E9filent depuis le haut jusqu'au bas de l'\u00E9cran. Les lignes compl\u00E9t\u00E9es disparaissent tout en rapportant des points et le joueur peut de nouveau remplir les cases lib\u00E9r\u00E9es. Le jeu n'a pas de fin : le joueur perd la partie lorsqu'un t\u00E9trimino reste bloqu\u00E9 en haut. Il doit donc r\u00E9sister le plus longtemps \u00E0 la chute continue des t\u00E9triminos, afin de r\u00E9aliser le meilleur score. Dans le cas d'une partie \u00E0 plusieurs, le but est de r\u00E9sister plus longtemps que son adversaire, sachant qu'il est possible de s'envoyer des malus en r\u00E9alisant des combinaisons de lignes. Selon le journaliste Bill Kunkel, \u00AB Tetris r\u00E9pond parfaitement \u00E0 la d\u00E9finition du meilleur en mati\u00E8re de jeu : une minute pour l'apprendre, une vie enti\u00E8re pour le ma\u00EEtriser \u00BB. B\u00E2ti sur des r\u00E8gles simples et exigeant intelligence et adresse, il est consid\u00E9r\u00E9 comme un des grands classiques de l'histoire du jeu vid\u00E9o aux c\u00F4t\u00E9s de Pong, Space Invaders ou encore Pac-Man. Le jeu est adapt\u00E9 sur la plupart des supports de jeu, aussi bien sur ordinateurs que sur consoles de jeux et t\u00E9l\u00E9phones mobiles. Certaines versions apportent des variantes comme un affichage 3D, un syst\u00E8me de r\u00E9serve ou encore du jeu multijoueur. En 2010, Tetris compte plus de 170 millions d'exemplaires vendus dans le monde depuis 1984. Disponible sur plus de 65 plates-formes, sa version la plus m\u00E9morable est sur Game Boy, class\u00E9e comme \u00E9tant le 4e jeu vid\u00E9o le plus vendu de l'histoire, avec 30 260 000 unit\u00E9s \u00E9coul\u00E9es. Dans le m\u00EAme temps, en avril 2014, il est annonc\u00E9 que la franchise a atteint plus de 425 millions de t\u00E9l\u00E9chargements payants sur t\u00E9l\u00E9phone mobile depuis 2005, le classant 1er des jeux vid\u00E9o les plus vendus. Tetris est ancr\u00E9 dans la culture populaire et sa notori\u00E9t\u00E9 d\u00E9passe celle de la sph\u00E8re vid\u00E9oludique, avec des imitations du jeu sur des b\u00E2timents, de nombreuses reprises du th\u00E8me original ou encore des costumes de t\u00E9triminos. Le jeu fait \u00E9galement l'objet de diff\u00E9rents travaux de recherches : plusieurs chercheurs ont analys\u00E9 sa complexit\u00E9 th\u00E9orique, alors que d'autres ont montr\u00E9 les effets sur le cerveau apr\u00E8s une session de jeu, notamment l'effet Tetris."@fr ,
+		"Tetris (russisch \u0422\u0435\u0442\u0440\u0438\u0441) ist ein puzzleartiges Computerspiel des russischen Programmierers Alexei Paschitnow, der die erste spielbare Version am 6. Juni 1984 auf einem Elektronika-60-Rechner fertigstellte. Tetris gilt heute als Computerspiel-Klassiker, hat sich inzwischen \u00FCber 100 Millionen Mal verkauft, wurde vielfach ausgezeichnet und ist f\u00FCr mehr als 65 Computerplattformen erschienen."@de ,
+		"Tetris (in russo \u0422\u0435\u0442\u0440\u0438\u0441, sincrasi di \u0442\u0435\u0442\u0440\u0430\u043C\u0438\u043D\u043E (\"tetramino\") e \u0442\u0435\u043D\u043D\u0438\u0441 (\"tennis\") \u00E8 un videogioco di logica e ragionamento inventato da Aleksej Leonidovi\u010D Pa\u017Eitnov il 6 giugno 1984, mentre lavorava per l'Accademia delle Scienze dell'URSS di Mosca. Pa\u017Eitnov ha affermato che i pentamini sono stati la sua fonte d'ispirazione per questo gioco.Non essendo stato brevettato, il gioco \u00E8 diventato disponibile praticamente per qualunque dispositivo. Il gioco e molte sue varianti sono disponibili per qualunque console e sistema operativo, addirittura per alcune calcolatrici grafiche, telefonini, PDA, iPod, Set-top box e per l'editor di testo GNU Emacs; ne esiste perfino una versione \"stand alone\" da collegare a un televisore, e le cui racchette ricordano i pezzi del Tetris. Il gioco ha iniziato ad avere popolarit\u00E0 alla fine degli anni ottanta, e ulteriore popolarit\u00E0 deriv\u00F2 dall'essere venduto in bundle con la prima versione del Game Boy.Inoltre \u00E8 stato dichiarato uno dei dieci videogiochi pi\u00F9 importanti di sempre da Henry Lowood della Stanford University, nel marzo 2007. Nel 2014 il gioco viene pubblicato anche per le console Xbox One e PlayStation 4 da Ubisoft."@it ,
+		"\u30C6\u30C8\u30EA\u30B9\uFF08\u30ED\u30B7\u30A2\u8A9E\uFF1A\u0422\u0435\u0442\u0440\u0438\u0441\uFF09\u306F\u30011980\u5E74\u4EE3\u672B\u304B\u30891990\u5E74\u4EE3\u521D\u3081\u306B\u304B\u3051\u3001\u4E16\u754C\u5404\u56FD\u3067\u5927\u6D41\u884C\u3057\u305F\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF\u30FC\u30B2\u30FC\u30E0\u3002\u843D\u3061\u7269\u30D1\u30BA\u30EB\u306E\u5143\u7956\u3067\u3042\u308B\u3002"@ja ,
+		"\u0422\u0435\u0301\u0442\u0440\u0438\u0441 (\u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u043D\u043E\u0435 \u043E\u0442 \u00AB\u0442\u0435\u0442\u0440\u0430\u043C\u0438\u043D\u043E\u00BB \u0438 \u00AB\u0442\u0435\u043D\u043D\u0438\u0441\u00BB) \u2014 \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440\u043D\u0430\u044F \u0438\u0433\u0440\u0430, \u0438\u0437\u043E\u0431\u0440\u0435\u0442\u0451\u043D\u043D\u0430\u044F \u0432 \u0421\u0421\u0421\u0420 \u0410\u043B\u0435\u043A\u0441\u0435\u0435\u043C \u041F\u0430\u0436\u0438\u0442\u043D\u043E\u0432\u044B\u043C \u0438 \u043F\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043D\u0430\u044F \u043E\u0431\u0449\u0435\u0441\u0442\u0432\u0435\u043D\u043D\u043E\u0441\u0442\u0438 6 \u0438\u044E\u043D\u044F 1984 \u0433\u043E\u0434\u0430. \u0418\u0434\u0435\u044E \u00AB\u0422\u0435\u0442\u0440\u0438\u0441\u0430\u00BB \u0435\u043C\u0443 \u043F\u043E\u0434\u0441\u043A\u0430\u0437\u0430\u043B\u0430 \u043A\u0443\u043F\u043B\u0435\u043D\u043D\u0430\u044F \u0438\u043C \u0438\u0433\u0440\u0430 \u0432 \u043F\u0435\u043D\u0442\u0430\u043C\u0438\u043D\u043E. \u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0438\u0433\u0440\u044B \u043F\u0440\u043E\u0438\u0441\u0445\u043E\u0434\u0438\u0442 \u043E\u0442 \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u0430 \u043A\u043B\u0435\u0442\u043E\u043A, \u0438\u0437 \u043A\u043E\u0442\u043E\u0440\u044B\u0445 \u0441\u043E\u0441\u0442\u043E\u0438\u0442 \u043A\u0430\u0436\u0434\u0430\u044F \u0444\u0438\u0433\u0443\u0440\u0430."@ru ,
+		"Tetris (en ruso, \u0422\u0435\u0301\u0442\u0440\u0438\u0441) es un videojuego de puzzle originalmente dise\u00F1ado y programado por Aleks\u00E9i P\u00E1zhitnov en la Uni\u00F3n Sovi\u00E9tica. Fue lanzado el 6 de junio de 1984, mientras trabajaba para el Centro de Computaci\u00F3n Dorodnitsyn de la Academia de Ciencias de la Uni\u00F3n Sovi\u00E9tica en Mosc\u00FA, RSFS de Rusia. Su nombre deriva del prefijo num\u00E9rico griego tetra- (todas las piezas del juego, conocidas como Tetromin\u00F3s que contienen cuatro segmentos) y del tenis, el deporte favorito de P\u00E1zhitnov. En el Tetris se juega con los tetromin\u00F3s, el caso especial de cuatro elementos de poliomin\u00F3s. Los poliomin\u00F3s se han utilizado en los rompecabezas populares por lo menos desde 1907, y el nombre fue dado por el matem\u00E1tico Solomon W. Golomb en 1953. Sin embargo, incluso la enumeraci\u00F3n de los pentomin\u00F3s data de la antig\u00FCedad. El juego (o una de sus muchas variantes) est\u00E1 disponible para casi cada consola de videojuegos y sistemas operativos de PC, as\u00ED como en dispositivos tales como las calculadoras gr\u00E1ficas, tel\u00E9fonos m\u00F3viles, reproductores de multimedia port\u00E1tiles, PDAs, reproductores de m\u00FAsica en red e incluso como huevo de pascua en productos no medi\u00E1ticos como los osciloscopios. Tambi\u00E9n ha inspirado servicios de mesa y ha sido jugado en los costados de varios edificios, manteniendo el r\u00E9cord de ser el juego completamente funcional m\u00E1s grande del mundo gracias al esfuerzo de estudiantes holandeses en 1995 que iluminaron 15 pisos del Departamento de Ingenier\u00EDa El\u00E9ctrica en la Universidad T\u00E9cnica de Delft. Mientras que las versiones de Tetris se vendieron para una amplia gama de plataformas de ordenadores dom\u00E9sticos de los a\u00F1os 1980, fue la muy exitosa versi\u00F3n port\u00E1til para la Game Boy lanzada en 1989 que estableci\u00F3 al juego como uno de los m\u00E1s populares de todos los tiempos. La edici\u00F3n n\u00FAmero 100 del Electronic Gaming Monthly tuvo al Tetris en el primer lugar como el \"mejor juego de todos los tiempos\". En 2007, Tetris ocup\u00F3 el segundo lugar en los \"100 mejores videojuegos de todos los tiempos\" para IGN. Ha vendido m\u00E1s de 170 millones de copias para el a\u00F1o 2016. En enero de 2010, se anunci\u00F3 que el Tetris ha vendido m\u00E1s de 100 millones de unidades para tel\u00E9fonos celulares (m\u00F3viles) s\u00F3lo desde el a\u00F1o 2005."@es ,
+		"Tetris is een puzzel-computerspel ontworpen door Alexey Pajitnov. De eerste speelbare versie kwam uit op 6 juni 1984. Het spel kreeg algemene bekendheid doordat het meegeleverd werd bij het spelletjesplatform Game Boy van Nintendo in 1989. De kampioenschappen van het spel worden echter vaak gespeeld op Nintendo Entertainment System (NES). De naam is afgeleid van het woord tetromino, omdat ieder blokje uit vier vierkantjes bestaat en zo een tetromino is, en tennis, de favoriete sport van Pajitnov."@nl ,
+		"\u300A\u4FC4\u7F85\u65AF\u65B9\u584A\u300B\uFF08\u4FC4\u8BED\uFF1A\u0422\u0435\u0442\u0440\u0438\u0441\uFF0C\u82F1\u8BED\uFF1ATetris\uFF09\uFF0C\u662F1980\u5E74\u672B\u671F\u81F31990\u5E74\u4EE3\u521D\u671F\u98A8\u9761\u5168\u4E16\u754C\u7684\u96FB\u8166\u904A\u6232\uFF0C\u662F\u843D\u4E0B\u578B\u76CA\u667A\u904A\u6232\u7684\u59CB\u7956\uFF0C\u70BA\u8607\u806F\u9996\u500B\u5728\u7F8E\u570B\u767C\u4F48\u7684\u5A1B\u6A02\u8EDF\u4EF6\u3002\u6B64\u904A\u6232\u6700\u521D\u662F\u7531\u963F\u5217\u514B\u8B1D\u00B7\u5E15\u57FA\u7279\u8AFE\u592B\u5728\u8607\u806F\u8A2D\u8A08\u548C\u7DE8\u7A0B\uFF0C\u65BC1984\u5E746\u67086\u65E5\u9996\u6B21\u767C\u4F48\uFF0C\u7576\u6642\u5E15\u57FA\u7279\u8AFE\u592B\u6B63\u5728\u8607\u806F\u79D1\u5B78\u9662\u96FB\u7B97\u4E2D\u5FC3\u5DE5\u4F5C\u3002\u6B64\u904A\u6232\u7684\u540D\u7A31\u662F\u7531\u5E0C\u81D8\u8BED\u6578\u5B57\u56DB\u524D\u7DB4\u300Ctetra-\u300D\uFF08\u56E0\u6240\u6709\u843D\u4E0B\u65B9\u5757\u7686\u7531\u56DB\u5757\u7EC4\u6210\uFF09\u548C\u5E15\u57FA\u7279\u8AFE\u592B\u6700\u559C\u6B61\u7684\u904B\u52D5\u7DB2\u7403\uFF08\u300Ctennis\u300D\uFF09\u62FC\u63A5\u800C\u6210\u3002 \u6B64\u904A\u6232\u548C\u5176\u7E8C\u4F5C\u53EF\u65BC\u5E7E\u4E4E\u6240\u6709\u96FB\u5B50\u904A\u6232\u6A5F\u548C\u96FB\u8166\u4F5C\u696D\u7CFB\u7D71\u4E0A\u904A\u73A9\uFF0C\u4EA6\u53EF\u65BC\u56FE\u5F62\u8BA1\u7B97\u5668\u3001\u624B\u63D0\u96FB\u8A71\u3001\u53EF\u651C\u5F0F\u5A92\u9AD4\u64AD\u653E\u5668\u3001\u500B\u4EBA\u6578\u78BC\u52A9\u7406\u3001\u4E92\u806F\u7DB2\u7121\u7DDA\u96FB\u8A2D\u5099\u4E0A\u904A\u73A9\uFF0C\u751A\u81F3\u80FD\u4EE5\u5F69\u86CB\u7684\u5F62\u5F0F\u5728\u975E\u5A92\u9AD4\u7522\u54C1\u4E0A\u904A\u73A9\uFF0C\u5982\u793A\u6CE2\u5668\u3002\u6B64\u904A\u6232\u751A\u81F3\u555F\u767C\u4E86\u300A\u4FC4\u7F85\u65AF\u65B9\u584A\u300B\u9910\u5177\u3002\u751A\u81F3\u5728\u5927\u697C\u5916\u5899\u5B9E\u73B0\u4E86\u76F8\u5E94\u7684\u6A21\u5F0F\u3002 \u65BC1980\u5E74\u4EE3\uFF0C\u6B64\u904A\u6232\u9664\u4E86\u6210\u70BA\u4E00\u500B\u71B1\u9580\u7684\u5BB6\u7528\u7535\u8111\u548C\u8857\u6A5F\u904A\u6232\u5916\uFF0C\u9084\u6210\u70BAGame Boy\u53F2\u4E0A\u6700\u53D7\u6B61\u8FCE\u7684\u904A\u6232\u4E4B\u4E00\u3002\u300A\u96FB\u5B50\u904A\u6232\u6708\u520A\u300B\u57282007\u5E74\u5C07\u6B64\u904A\u6232\u5217\u70BA\u300C\u6700\u5049\u5927\u7684100\u500B\u904A\u6232\u300D\u4E2D\u7684\u7B2C1\u4F4D\uFF0C\u4E26\u7372IGN\u5217\u70BA\u300C\u6700\u5049\u5927\u7684100\u500B\u904A\u6232\u300D\u4E2D\u7684\u7B2C2\u4F4D\u3002\u622A\u81F32009\u5E74\uFF0C\u6B64\u904A\u6232\u5DF2\u552E\u51FA\u903E7000\u842C\u5957\u904A\u6232\u3002\u65BC2010\u5E741\u6708\uFF0C\u6B64\u904A\u6232\u65BC\u624B\u63D0\u96FB\u8A71\u4E0A\u5DF2\u552E\u51FA\u903E1\u5104\u5957\u904A\u6232\u3002"@zh ,
+		"Tetris (em russo: \u0422\u0435\u0442\u0440\u0438\u0441) \u00E9 um jogo electr\u00F4nico muito popular, desenvolvido por Alexey Pajitnov, Dmitry Pavlovsky e Vadim Gerasimov, e lan\u00E7ado em Junho de 1984. Pajitnov e Pavlovsky eram engenheiros inform\u00E1ticos no Centro de Computadores da Academia Russa das Ci\u00EAncias e Vadim era um aluno com 16 anos. Tetris foi um dos primeiros itens de exporta\u00E7\u00E3o de sucesso da Uni\u00E3o Sovi\u00E9tica e um dos primeiros a ser visto como um tipo de v\u00EDcio. Atingiu um p\u00FAblico alvo in\u00E9dito na hist\u00F3ria dos videogames. Alexey Pajitnov conheceu o quebra-cabe\u00E7as Pentamin\u00F3 e decidiu criar uma vers\u00E3o virtual dele para seu computador Electronica 60. Removeu um dos blocos do jogo e nomeou com o prefixo quatro em grego: Tetris O jogo consiste em empilhar tetramin\u00F3s que descem a tela de forma que completem linhas horizontais. Quando uma linha se forma, ela se desintegra, as camadas superiores descem, e o jogador ganha pontos. Quando a pilha de pe\u00E7as chega ao topo da tela, a partida se encerra. Pajitnov percebeu o potencial do jogo por n\u00E3o conseguir parar de jogar antes mesmo de terminar o programa, bem como dois colegas de trabalho que ajudaram a finalizar o jogo e todos os colegas do centro de computa\u00E7\u00E3o, que haviam recebido c\u00F3pias em disquetes gravados pelo pr\u00F3prio Pajitnov. Para n\u00E3o ser acusado de viciar os pesquisadores num passatempo eletr\u00F4nico, destruiu todos os discos ao fim do expediente. Entretanto, o jogo continuou sendo distribu\u00EDdo, de maneira informal, at\u00E9 chegar a pessoas interessadas em comercializ\u00E1-lo."@pt ;
+	dbo:thumbnail	<http://commons.wikimedia.org/wiki/Special:FilePath/Tetris_basic_game.gif?width=300> ;
+	dbo:wikiPageRevisionID	744198657 ;
+	dbo:wikiPageID	30339 ;
+	dbp:allgame	"Macintosh:"^^rdf:langString ,
+		"NES :"^^rdf:langString ,
+		"Arcade:"^^rdf:langString ,
+		"C64:"^^rdf:langString ;
+	dbo:designer	dbr:Alexey_Pajitnov ,
+		dbr:Vladimir_Pokhilko .
+@prefix ns29:	<http://purl.org/linguistics/gold/> .
+dbr:Tetris	ns29:hypernym	dbr:Game ;
+	dbp:award2pub	"Sinclair User"^^rdf:langString .
+dbr:Tetris_Party	dbo:series	dbr:Tetris .
+dbr:Tetris_Ultimate	dbo:series	dbr:Tetris .
+<http://dbpedia.org/resource/DragonLord_Enterprises,_Inc.>	dbo:product	dbr:Tetris .
+wikipedia-en:Tetris	foaf:primaryTopic	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_2_(1993_video_game)>	dbo:genre	dbr:Tetris .
+dbr:Tetris_Mania	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/TET\u042FIS>	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/Tet\u044Fis>	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Emlith	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Tetiais	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Bastard_tetris	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/Quinn_(computer_game)>	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_(Nintendo)>	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Microsoft_Tetris	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_(video_game)>	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_\u2013_From_Russia_With_Love>	dbo:wikiPageRedirects	dbr:Tetris .
+@prefix ns30:	<http://dbpedia.org/resource/Tetris:> .
+ns30:_From_Russia_With_Love	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:L-BIock	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:L-Block	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:L_Block	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Tetris_-_From_Russia_With_Love	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Infinite_rotation	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Infinite_spin	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:TETIaIS	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/\u0422\u0435\u0442\u0440\u0438\u0441>	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Tetris_Classic	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Tetris_Gold	dbo:wikiPageRedirects	dbr:Tetris .
+dbr:Tetris_for_Windows	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/T\u00E9tris>	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/\u0422\u0435\u0301\u0442\u0440\u0438\u0441>	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_(Famicom)>	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_(film)>	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_jr.>	dbo:wikiPageRedirects	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_(disambiguation)>	dbo:wikiPageDisambiguates	dbr:Tetris .
+ns30:_Axis	dbo:series	dbr:Tetris .
+dbr:Puyo_Puyo_Tetris	dbo:series	dbr:Tetris .
+dbr:Magical_Tetris_Challenge	dbo:series	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_(Electronic_Arts)>	rdfs:seeAlso	dbr:Tetris ;
+	dbo:series	dbr:Tetris .
+<http://dbpedia.org/resource/Tetris_(Atari)>	dbo:series	dbr:Tetris .
+dbr:Korobeiniki	rdfs:seeAlso	dbr:Tetris .

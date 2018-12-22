@@ -1,8 +1,6 @@
 package es.iaaa.kubby
 
-//import io.mockk.every
-//import io.mockk.mockk
-import es.iaaa.kubby.repository.DataSource
+import es.iaaa.kubby.datasource.DataSource
 import io.ktor.application.Application
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -31,13 +29,8 @@ class ApplicationTest : AutoCloseKoinTest() {
         declareMock<DataSource>()
     }
 
-
-//    private val dao = mockk<DataSource>(relaxed = true)
-//    private val dao = EmptyDataSource()
-
-
     @Test
-    fun testIndex() = withTestApplication (Application::main) {
+    fun testIndex() = withTestApplication(Application::main) {
         with(handleRequest(HttpMethod.Get, "/")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("index", response.content)
@@ -45,7 +38,7 @@ class ApplicationTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun testResource() = withTestApplication (Application::main) {
+    fun testResource() = withTestApplication(Application::main) {
         with(handleRequest(HttpMethod.Get, "/resource/1")) {
             assertEquals(HttpStatusCode.Found, response.status())
             assertEquals("/data/1", response.headers["Location"])
@@ -53,7 +46,7 @@ class ApplicationTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun testData() = withTestApplication (Application::main) {
+    fun testData() = withTestApplication(Application::main) {
         given(dao.describe("1")).will { aSimpleModel() }
         with(handleRequest(HttpMethod.Get, "/data/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
@@ -62,7 +55,7 @@ class ApplicationTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun testPage() = withTestApplication (Application::main) {
+    fun testPage() = withTestApplication(Application::main) {
         with(handleRequest(HttpMethod.Get, "/page/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("page", response.content)

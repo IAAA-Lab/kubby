@@ -1,4 +1,4 @@
-package es.iaaa.kubby.repository
+package es.iaaa.kubby.datasource
 
 import org.apache.jena.rdf.model.Model
 import java.io.Closeable
@@ -16,8 +16,13 @@ interface DataSource : Closeable {
     /**
      * Returns a subgraph describing one resource based on a IRI
      */
-    fun describe(relativeIRI: String): Model
+    fun describe(iri: String): Model
 }
+
+enum class DatasourceDefinition {
+    CONNECT, CREATE
+}
+
 
 class EmptyDataSource() : DataSource {
     override fun close() {
