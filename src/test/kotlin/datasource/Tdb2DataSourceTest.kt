@@ -31,8 +31,7 @@ class Tdb2DataSourceTest {
     fun `Create an empty new TDB2 dataset by default`() {
 
         val config = Tdb2DataSourceConfiguration(target)
-        val ds = Tdb2DataSource(config)
-        ds.init()
+        Tdb2DataSource(config)
 
         assertTrue { Files.isDirectory(target) }
     }
@@ -41,8 +40,7 @@ class Tdb2DataSourceTest {
     fun `Create an empty new TDB2 dataset with an assembler`() {
 
         val config = Tdb2DataSourceConfiguration(assembler)
-        val ds = Tdb2DataSource(config)
-        ds.init()
+        Tdb2DataSource(config)
 
         assertTrue { Files.isDirectory(target) }
     }
@@ -56,7 +54,6 @@ class Tdb2DataSourceTest {
             data = data
         )
         val ds = Tdb2DataSource(config)
-        ds.init()
         val result = ds.describe("http://dbpedia.org/resource/Tetris")
 
         assertFalse { result.isEmpty }
@@ -70,8 +67,7 @@ class Tdb2DataSourceTest {
         val statements = countStatements(existing)
 
         val config = Tdb2DataSourceConfiguration(target)
-        val ds = Tdb2DataSource(config)
-        ds.init()
+        Tdb2DataSource(config)
 
         assertEquals(statements, countStatements(existing))
     }
@@ -82,7 +78,6 @@ class Tdb2DataSourceTest {
 
         val config = Tdb2DataSourceConfiguration(target)
         val ds = Tdb2DataSource(config)
-        ds.init()
 
         val result = ds.describe("http://dbpedia.org/resource/Tetris")
 
@@ -95,7 +90,6 @@ class Tdb2DataSourceTest {
 
         val config = Tdb2DataSourceConfiguration(target)
         val ds = Tdb2DataSource(config)
-        ds.init()
 
         val result = ds.describe("http://example.com/resource/Tetris")
 

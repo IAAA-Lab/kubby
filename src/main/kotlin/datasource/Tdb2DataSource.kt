@@ -33,17 +33,16 @@ class Tdb2DataSourceConfiguration(
 
 class Tdb2DataSource(private val config: Tdb2DataSourceConfiguration) : DataSource {
 
-    private var dataset: Dataset? = null
-
-    override fun init() {
+    init {
         with(DescribeHandlerRegistry.get()) {
             clear()
             add(BackwardForwardDescribeFactory())
         }
-        dataset = when (config.definition) {
+    }
+
+    private val dataset: Dataset = when (config.definition) {
             CREATE -> createDataset()
             CONNECT -> connectDataset()
-        }
     }
 
     private fun connectDataset() = if (isRegularFile(config.path)) {
@@ -72,7 +71,7 @@ class Tdb2DataSource(private val config: Tdb2DataSourceConfiguration) : DataSour
     }
 
     override fun close() {
-        dataset?.close()
+        dataset.close()
     }
 
 }

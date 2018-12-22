@@ -8,10 +8,6 @@ import java.io.Closeable
  * This allows to provide several implementations.
  */
 interface DataSource : Closeable {
-    /**
-     * Initializes the source.
-     */
-    fun init()
 
     /**
      * Returns a subgraph describing one resource based on a IRI
@@ -30,10 +26,6 @@ class EmptyDataSource() : DataSource {
     }
 
     override fun describe(relativeIRI: String): Model {
-        TODO("not implemented")
-    }
-
-    override fun init() {
         TODO("not implemented")
     }
 }
