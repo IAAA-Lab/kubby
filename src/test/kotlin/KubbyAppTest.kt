@@ -47,7 +47,7 @@ class ApplicationTest : AutoCloseKoinTest() {
 
     @Test
     fun testData() = withTestApplication(Application::main) {
-        given(dao.describe("1")).will { aSimpleModel() }
+        given(dao.describe("", "1")).will { aSimpleModel() }
         with(handleRequest(HttpMethod.Get, "/data/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("data", response.content)

@@ -12,7 +12,7 @@ interface DataSource : Closeable {
     /**
      * Returns a subgraph describing one resource based on a IRI
      */
-    fun describe(iri: String): Model
+    fun describe(namespace: String, localId: String): Model
 }
 
 enum class DatasourceDefinition {
@@ -25,7 +25,7 @@ class EmptyDataSource() : DataSource {
         TODO("not implemented")
     }
 
-    override fun describe(relativeIRI: String): Model {
+    override fun describe(namespace: String, localId: String): Model {
         TODO("not implemented")
     }
 }

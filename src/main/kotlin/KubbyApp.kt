@@ -106,7 +106,7 @@ fun Route.data(dao: DataSource) {
     route("/") {
         route("data") {
             get("{id}") {
-                val model = dao.describe(call.parameters["id"]!!)
+                val model = dao.describe("", call.parameters["id"]!!)
                 val out = StringWriter()
                 val opts = JsonLdOptions()
                 opts.processingMode = JsonLdOptions.JSON_LD_1_1

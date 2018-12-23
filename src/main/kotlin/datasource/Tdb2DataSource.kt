@@ -41,8 +41,8 @@ class Tdb2DataSource(private val config: Tdb2DataSourceConfiguration) : DataSour
     }
 
     private val dataset: Dataset = when (config.definition) {
-            CREATE -> createDataset()
-            CONNECT -> connectDataset()
+        CREATE -> createDataset()
+        CONNECT -> connectDataset()
     }
 
     private fun connectDataset() = if (isRegularFile(config.path)) {
@@ -61,8 +61,8 @@ class Tdb2DataSource(private val config: Tdb2DataSourceConfiguration) : DataSour
         return newDataset
     }
 
-    override fun describe(iri: String): Model {
-        val query = QueryFactory.create("DESCRIBE <$iri>")
+    override fun describe(namespace: String, localId: String): Model {
+        val query = QueryFactory.create("DESCRIBE <$namespace$localId>")
         return calculateRead(dataset) {
             create(query, dataset).use {
                 it.execDescribe()
@@ -95,32 +95,32 @@ class BackwardForwardDescribeFactory : DescribeHandlerFactory {
 
 class BackwardForwardDescribe : DescribeHandler {
 
-    private var dataset: Dataset? = null
-    private var result: Model? = null
-    private var defaultModel: Model? = null
-    private var unionModel: Model? = null
+    private lateinit var dataset: Dataset
+    private lateinit var result: Model
+    private lateinit var defaultModel: Model
+    private lateinit var unionModel: Model
 
     override fun start(accumulateResultModel: Model, qContext: Context) {
         result = accumulateResultModel
         dataset = qContext.get(ARQConstants.sysCurrentDataset)
-        defaultModel = dataset!!.defaultModel
-        unionModel = dataset!!.getNamedModel(Quad.unionGraph.uri)
+        defaultModel = dataset.defaultModel
+        unionModel = dataset.getNamedModel(Quad.unionGraph.uri)
     }
 
     override fun describe(resource: Resource) {
-        with(result!!) {
-            add(defaultModel!!.listStatements(resource, null, null as RDFNode?))
-            add(unionModel!!.listStatements(resource, null, null as RDFNode?))
+        with(result) {
+            add(defaultModel.listStatements(resource, null, null as RDFNode?))
+            add(unionModel.listStatements(resource, null, null as RDFNode?))
 
-            add(defaultModel!!.listStatements(null, null, resource))
-            add(unionModel!!.listStatements(null, null, resource))
+            add(defaultModel.listStatements(null, null, resource))
+            add(unionModel.listStatements(null, null, resource))
 
             listObjects()
                 .andThen<Resource>(listSubjects())
                 .filterDrop { node -> node.isLiteral || resource == node }
                 .forEachRemaining { node ->
-                    add(defaultModel!!.listStatements(node as Resource, RDFS.label, null as RDFNode?))
-                    add(unionModel!!.listStatements(node, RDFS.label, null as RDFNode?))
+                    add(defaultModel.listStatements(node as Resource, RDFS.label, null as RDFNode?))
+                    add(unionModel.listStatements(node, RDFS.label, null as RDFNode?))
                 }
 
         }
