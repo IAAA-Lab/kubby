@@ -1,5 +1,6 @@
 package es.iaaa.kubby
 
+import es.iaaa.kubby.config.KubbyConfig
 import es.iaaa.kubby.datasource.DataSource
 import io.ktor.application.Application
 import io.ktor.http.HttpMethod
@@ -39,16 +40,16 @@ class ApplicationTest : AutoCloseKoinTest() {
 
     @Test
     fun testResource() = withTestApplication(Application::main) {
-        with(handleRequest(HttpMethod.Get, "/resource/1")) {
+        with(handleRequest(HttpMethod.Get, "${KubbyConfig.route.resource}/1")) {
             assertEquals(HttpStatusCode.Found, response.status())
-            assertEquals("/data/1", response.headers["Location"])
+            assertEquals("${KubbyConfig.route.data}/1", response.headers["Location"])
         }
     }
 
     @Test
     fun testData() = withTestApplication(Application::main) {
         given(dao.describe("", "1")).will { aSimpleModel() }
-        with(handleRequest(HttpMethod.Get, "/data/1")) {
+        with(handleRequest(HttpMethod.Get, "${KubbyConfig.route.data}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals(
                 """
@@ -74,7 +75,7 @@ class ApplicationTest : AutoCloseKoinTest() {
 
     @Test
     fun testPage() = withTestApplication(Application::main) {
-        with(handleRequest(HttpMethod.Get, "/page/1")) {
+        with(handleRequest(HttpMethod.Get, "${KubbyConfig.route.page}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("page", response.content)
         }

@@ -1,5 +1,6 @@
 package es.iaaa.kubby.datasource
 
+import io.mockk.every
 import io.mockk.mockk
 import org.apache.jena.datatypes.TypeMapper
 import org.apache.jena.rdf.model.Literal
@@ -157,6 +158,14 @@ class RewriterDataSourceTest {
     fun `Rewrite a simple model`() {
         val rdw = RewriterDataSource(anyDs, "http://source/")
         val result = rdw.rewrite("http://target/", aSimpleModel())
+        assertTrue(result.contains(result.createResource("http://target/JohnSmith"), VCARD.FN, "John Smith"))
+    }
+
+    @Test
+    fun `Describe and rewrite a simple model`() {
+        every { anyDs.describe("http://source/", "JohnSmith") } returns aSimpleModel()
+        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val result = rdw.describe("http://target/", "JohnSmith")
         assertTrue(result.contains(result.createResource("http://target/JohnSmith"), VCARD.FN, "John Smith"))
     }
 

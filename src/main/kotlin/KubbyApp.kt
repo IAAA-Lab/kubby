@@ -1,5 +1,6 @@
 package es.iaaa.kubby
 
+import es.iaaa.kubby.config.KubbyConfig
 import es.iaaa.kubby.datasource.DataSource
 import es.iaaa.kubby.datasource.EmptyDataSource
 import es.iaaa.kubby.features.riot
@@ -33,6 +34,7 @@ import org.koin.standalone.StandAloneContext.startKoin
 val kubbyModule = module {
     single<DataSource> { EmptyDataSource() }
 }
+
 
 /**
  * Entry Point of the application.
@@ -86,36 +88,30 @@ fun VelocityEngine.resource(name: String) {
 
 
 fun Route.resource() {
-    route("/") {
-        route("resource") {
-            get("{id}") {
-                call.respondRedirect("/data/${call.parameters["id"]}")
-            }
+    route(KubbyConfig.route.resource) {
+        get("{id}") {
+            call.respondRedirect("${KubbyConfig.route.data}/${call.parameters["id"]}")
         }
     }
 }
 
 fun Route.data(dao: DataSource) {
-    route("/") {
-        route("data") {
-            install(ContentNegotiation) {
-                riot()
-            }
-            get("{id}") {
-                val model = dao.describe("", call.parameters["id"]!!)
-                call.respond(model)
-            }
+    route(KubbyConfig.route.data) {
+        install(ContentNegotiation) {
+            riot()
+        }
+        get("{id}") {
+            val model = dao.describe("", call.parameters["id"]!!)
+            call.respond(model)
         }
     }
 }
 
 fun Route.page() {
-    route("/") {
-        route("page") {
-            val model = mutableMapOf("a" to 1)
-            get("{id}") {
-                call.respond(HttpStatusCode.NotFound, VelocityContent("404.vm", model))
-            }
+    route(KubbyConfig.route.page) {
+        val model = mutableMapOf("a" to 1)
+        get("{id}") {
+            call.respond(HttpStatusCode.NotFound, VelocityContent("404.vm", model))
         }
     }
 }
