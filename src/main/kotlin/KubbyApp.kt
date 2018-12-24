@@ -1,6 +1,5 @@
 package es.iaaa.kubby
 
-import com.github.jsonldjava.core.JsonLdOptions
 import es.iaaa.kubby.datasource.DataSource
 import es.iaaa.kubby.datasource.EmptyDataSource
 import es.iaaa.kubby.features.riot
@@ -23,7 +22,6 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.velocity.Velocity
 import io.ktor.velocity.VelocityContent
-import org.apache.jena.riot.RDFFormat
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader
 import org.apache.velocity.runtime.resource.util.StringResourceRepository
@@ -101,13 +99,7 @@ fun Route.data(dao: DataSource) {
     route("/") {
         route("data") {
             install(ContentNegotiation) {
-                riot {
-                    options {
-                        processingMode = JsonLdOptions.JSON_LD_1_1
-                        explicit = true
-                    }
-                    format = RDFFormat.JSONLD_COMPACT_PRETTY
-                }
+                riot()
             }
             get("{id}") {
                 val model = dao.describe("", call.parameters["id"]!!)
