@@ -3,18 +3,18 @@ package es.iaaa.kubby
 import com.github.jsonldjava.core.JsonLdOptions
 import es.iaaa.kubby.datasource.DataSource
 import es.iaaa.kubby.datasource.EmptyDataSource
+import es.iaaa.kubby.features.riot
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
+import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.response.respond
 import io.ktor.response.respondRedirect
-import io.ktor.response.respondText
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.route
@@ -23,18 +23,13 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.velocity.Velocity
 import io.ktor.velocity.VelocityContent
-import org.apache.jena.query.DatasetFactory
-import org.apache.jena.riot.JsonLDWriteContext
-import org.apache.jena.riot.RDFDataMgr
 import org.apache.jena.riot.RDFFormat
-import org.apache.jena.riot.system.RiotLib
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader
 import org.apache.velocity.runtime.resource.util.StringResourceRepository
 import org.koin.dsl.module.module
 import org.koin.ktor.ext.inject
 import org.koin.standalone.StandAloneContext.startKoin
-import java.io.StringWriter
 
 
 val kubbyModule = module {
@@ -105,23 +100,18 @@ fun Route.resource() {
 fun Route.data(dao: DataSource) {
     route("/") {
         route("data") {
+            install(ContentNegotiation) {
+                riot {
+                    options {
+                        processingMode = JsonLdOptions.JSON_LD_1_1
+                        explicit = true
+                    }
+                    format = RDFFormat.JSONLD_COMPACT_PRETTY
+                }
+            }
             get("{id}") {
                 val model = dao.describe("", call.parameters["id"]!!)
-                val out = StringWriter()
-                val opts = JsonLdOptions()
-                opts.processingMode = JsonLdOptions.JSON_LD_1_1
-                opts.explicit = true
-                val ctx = JsonLDWriteContext()
-                ctx.setOptions(opts)
-                val g = DatasetFactory.wrap(model).asDatasetGraph()
-                val w = RDFDataMgr.createDatasetWriter(RDFFormat.JSONLD_COMPACT_PRETTY)
-                val pm = RiotLib.prefixMap(g)
-                println(pm)
-                w.write(out, g, pm, null, ctx)
-                call.respondText(
-                    text = out.toString(),
-                    contentType = ContentType("application", "ld+json")
-                )
+                call.respond(model)
             }
         }
     }

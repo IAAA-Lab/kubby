@@ -50,7 +50,23 @@ class ApplicationTest : AutoCloseKoinTest() {
         given(dao.describe("", "1")).will { aSimpleModel() }
         with(handleRequest(HttpMethod.Get, "/data/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
-            assertEquals("data", response.content)
+            assertEquals("""
+                |{
+                |  "@id" : "http://www.ex.com/janedoe",
+                |  "@type" : "schema:Person",
+                |  "schema:jobTitle" : "Professor",
+                |  "schema:name" : "Jane Doe",
+                |  "schema:url" : "http://www.janedoe.com",
+                |  "rdfs:seeAlso" : {
+                |    "@id" : "http://www.ex.com/janedoe/moreinfo"
+                |  },
+                |  "@context" : {
+                |    "rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
+                |    "schema" : "http://schema.org/"
+                |  }
+                |}
+                |
+            """.trimMargin(), response.content)
         }
     }
 
