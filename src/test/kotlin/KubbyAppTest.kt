@@ -50,7 +50,8 @@ class ApplicationTest : AutoCloseKoinTest() {
         given(dao.describe("", "1")).will { aSimpleModel() }
         with(handleRequest(HttpMethod.Get, "/data/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
-            assertEquals("""
+            assertEquals(
+                """
                 |{
                 |  "@id" : "http://www.ex.com/janedoe",
                 |  "@type" : "schema:Person",
@@ -66,7 +67,8 @@ class ApplicationTest : AutoCloseKoinTest() {
                 |  }
                 |}
                 |
-            """.trimMargin(), response.content)
+            """.trimMargin(), response.content
+            )
         }
     }
 

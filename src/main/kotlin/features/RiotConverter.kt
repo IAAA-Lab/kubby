@@ -9,7 +9,6 @@ import io.ktor.request.ApplicationReceiveRequest
 import io.ktor.util.pipeline.PipelineContext
 import org.apache.jena.query.DatasetFactory
 import org.apache.jena.rdf.model.Model
-import org.apache.jena.rdf.model.ResourceFactory.createResource
 import org.apache.jena.riot.JsonLDWriteContext
 import org.apache.jena.riot.RDFDataMgr
 import org.apache.jena.riot.RDFFormat
@@ -30,7 +29,7 @@ class RiotConverter(private val config: RiotConverterConfiguration) : ContentCon
         contentType: ContentType,
         value: Any
     ): Any? {
-        return when(value) {
+        return when (value) {
             is Model -> convertModelForSend(value)
             else -> null
         }
@@ -52,16 +51,18 @@ class RiotConverter(private val config: RiotConverterConfiguration) : ContentCon
 class RiotConverterConfiguration {
     var format = RDFFormat.JSONLD!!
     val options = JsonLdOptions()
-    fun options(block: JsonLdOptions.()->Unit) {
-       options.apply(block)
+    fun options(block: JsonLdOptions.() -> Unit) {
+        options.apply(block)
     }
 }
 
 /**
  * Register Riot converter into [ContentNegotiation] feature
  */
-fun ContentNegotiation.Configuration.riot(contentType: ContentType = Rdf.JsonLd,
-                                          block: RiotConverterConfiguration.() -> Unit = {}) {
+fun ContentNegotiation.Configuration.riot(
+    contentType: ContentType = Rdf.JsonLd,
+    block: RiotConverterConfiguration.() -> Unit = {}
+) {
     val config = RiotConverterConfiguration()
     config.apply(block)
     val converter = RiotConverter(config)
@@ -80,19 +81,13 @@ class JsonLDContext(prefixes: PrefixMap) {
         putPrefixes(prefixes)
     }
 
-    fun putPrefixes(prefixes: PrefixMap): JsonLDContext {
+    private fun putPrefixes(prefixes: PrefixMap): JsonLDContext {
         prefixes.mapping.forEach { (key, value) -> putPrefix(key, value.toASCIIString()) }
         return this
     }
 
-    fun putPrefix(key: String, value: String): JsonLDContext {
+    private fun putPrefix(key: String, value: String): JsonLDContext {
         cxt[if (key.isEmpty()) "@vocab" else key] = quote(value)
-        return this
-    }
-
-    fun putTypedValue(id: String, type: String): JsonLDContext {
-        val key = createResource(id).localName
-        cxt[key] = generateJsonTypedValue(id, type)
         return this
     }
 
@@ -103,13 +98,6 @@ class JsonLDContext(prefixes: PrefixMap) {
     }
 
     companion object {
-        private const val ID = "\"@id\": "
-        private const val TYPE = "\"@type\": "
-
-        private fun generateJsonTypedValue(id: String, type: String): String {
-            return '{' + ID + quote(id) + ", " + TYPE + quote(type) + '}'
-        }
-
         private fun quote(s: String): String {
             return '"' + s + '"'
         }
