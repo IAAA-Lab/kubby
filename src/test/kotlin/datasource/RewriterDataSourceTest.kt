@@ -20,9 +20,9 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Rewrite a URI that matches the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
-        val uri = rdw.rewrite("http://target/", "http://source/good")
-        assertEquals("http://target/good", uri)
+        val rdw = RewriterDataSource(anyDs, "http://dbpedia.org/resource/")
+        val uri = rdw.rewrite("http://target/", "http://dbpedia.org/resource/Tetris")
+        assertEquals("http://target/Tetris", uri)
     }
 
     @Test

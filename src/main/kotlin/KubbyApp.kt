@@ -1,16 +1,14 @@
 package es.iaaa.kubby
 
 import es.iaaa.kubby.config.KubbyConfig
-import es.iaaa.kubby.datasource.DataSource
-import es.iaaa.kubby.datasource.EmptyDataSource
+import es.iaaa.kubby.datasource.*
 import es.iaaa.kubby.features.riot
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.DefaultHeaders
+import io.ktor.features.*
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.RequestConnectionPoint
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.response.respond
@@ -29,10 +27,23 @@ import org.apache.velocity.runtime.resource.util.StringResourceRepository
 import org.koin.dsl.module.module
 import org.koin.ktor.ext.inject
 import org.koin.standalone.StandAloneContext.startKoin
+import java.nio.file.Path
+import java.nio.file.Paths
+
+val target: Path = Paths.get("build/datasource/tdb2")
+val data: Path = Paths.get("src/test/resources/Tetris.n3")
 
 
 val kubbyModule = module {
-    single<DataSource> { EmptyDataSource() }
+    single<DataSource> {
+        val config = Tdb2DataSourceConfiguration(
+            path = target,
+            definition = DatasourceDefinition.CREATE,
+            data = data
+        )
+        val ds = Tdb2DataSource(config)
+        RewriterDataSource(ds, "http://dbpedia.org/resource/")
+    }
 }
 
 
@@ -46,6 +57,9 @@ fun Application.main() {
     install(DefaultHeaders)
     // This uses the logger to log every request/response
     install(CallLogging)
+    // This install support for forwarded headers
+    install(ForwardedHeaderSupport)
+    install(XForwardedHeaderSupport)
     // This install Velocity and configure the Velocity Engine
     install(Velocity) {
         // this: VelocityEngine
@@ -101,7 +115,9 @@ fun Route.data(dao: DataSource) {
             riot()
         }
         get("{id}") {
-            val model = dao.describe("", call.parameters["id"]!!)
+            val id = context.parameters["id"]!!
+            val ns = context.request.origin.buildResourceNamespace(KubbyConfig.route.data, id)
+            val model = dao.describe(ns, id)
             call.respond(model)
         }
     }
@@ -115,6 +131,23 @@ fun Route.page() {
         }
     }
 }
+
+fun RequestConnectionPoint.buildResourceNamespace(route: String, id: String): String {
+    val sb = StringBuilder()
+    sb.append("$scheme://$host")
+    when (scheme) {
+        "http" -> if (port != 80) sb.append(":$port")
+        "https" -> if (port != 443) sb.append(":$port")
+        else -> {
+        }
+    }
+    val keep = uri.length - route.length - id.length - 1
+    sb.append(uri.subSequence(0, keep))
+    sb.append(KubbyConfig.route.resource)
+    sb.append("/")
+    return sb.toString()
+}
+
 
 fun main(args: Array<String>) {
     // Start Koin

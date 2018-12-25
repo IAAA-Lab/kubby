@@ -20,7 +20,7 @@ import org.mockito.BDDMockito.given
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ApplicationTest : AutoCloseKoinTest() {
+class KubbyAppTest : AutoCloseKoinTest() {
 
     private val dao: DataSource by inject()
 
@@ -48,8 +48,8 @@ class ApplicationTest : AutoCloseKoinTest() {
 
     @Test
     fun testData() = withTestApplication(Application::main) {
-        given(dao.describe("", "1")).will { aSimpleModel() }
-        with(handleRequest(HttpMethod.Get, "${KubbyConfig.route.data}/1")) {
+        given(dao.describe("http://localhost/resource/", "1")).will { aSimpleModel() }
+        with(handleRequest(HttpMethod.Get, "${KubbyConfig.route.data}/1") ) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals(
                 """
@@ -72,6 +72,7 @@ class ApplicationTest : AutoCloseKoinTest() {
             )
         }
     }
+
 
     @Test
     fun testPage() = withTestApplication(Application::main) {

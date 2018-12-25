@@ -57,14 +57,14 @@ class RewriterDataSource(
             else -> obj
         }
 
-    internal fun rewrite(namespace: String, uri: String) = if (uri.startsWith((targetNamespace))) {
-        namespace + uri.substring(namespace.length)
-    } else {
-        uri
-    }
+    internal fun rewrite(namespace: String, uri: String) =
+        if (uri.startsWith((targetNamespace))) {
+            namespace + uri.substring(targetNamespace.length)
+        } else {
+            uri
+        }
 
     override fun close() {
         dataSource.close()
     }
-
 }
