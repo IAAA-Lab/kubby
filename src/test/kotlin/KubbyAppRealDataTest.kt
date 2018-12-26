@@ -29,8 +29,6 @@ class KubbyAppRealDataTest : AutoCloseKoinTest() {
         StandAloneContext.startKoin(listOf(kubbyModule))
     }
 
-
-
     @Test
     fun testData() = withTestApplication(Application::main) {
         with(handleRequest(HttpMethod.Get, "${KubbyConfig.route.data}/Tetris")) {

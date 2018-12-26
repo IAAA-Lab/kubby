@@ -2,6 +2,7 @@ package es.iaaa.kubby
 
 import es.iaaa.kubby.config.KubbyConfig
 import es.iaaa.kubby.datasource.*
+import es.iaaa.kubby.features.RDF
 import es.iaaa.kubby.features.riot
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -112,7 +113,9 @@ fun Route.resource() {
 fun Route.data(dao: DataSource) {
     route(KubbyConfig.route.data) {
         install(ContentNegotiation) {
-            riot()
+            riot {
+                contentTypes.add(RDF.TURTLE)
+            }
         }
         get("{id}") {
             val id = context.parameters["id"]!!

@@ -2,6 +2,7 @@ package es.iaaa.kubby.features
 
 import com.github.jsonldjava.core.JsonLdOptions
 import io.ktor.application.ApplicationCall
+import io.ktor.application.call
 import io.ktor.features.ContentConverter
 import io.ktor.features.ContentNegotiation
 import io.ktor.http.ContentType
@@ -18,8 +19,20 @@ import java.io.StringWriter
 import java.util.*
 import java.util.stream.Collectors.joining
 
-
+/**
+ * Implements output capabilities for common formats (those supported in Pubby and JSON-LD).
+ * It adds a Vary header set to Accept when it is configured to convert more than one format
+ * or it is required by the configuration.
+ *
+ * Note #1: The ContentNegotiation feature select converters that match specified Accept header,
+ * in order of quality, and then pick the first one that can convert the subject successfully
+ * otherwise it will return a 406 NotAcceptable response.
+ *
+ * Note #2: The ContentNegotiation feature does not add a Vary header when multiple formats are
+ * supported.
+ */
 class RiotConverter(private val config: RiotConverterConfiguration) : ContentConverter {
+
     override suspend fun convertForReceive(context: PipelineContext<ApplicationReceiveRequest, ApplicationCall>): Any? {
         return null
     }
@@ -29,27 +42,65 @@ class RiotConverter(private val config: RiotConverterConfiguration) : ContentCon
         contentType: ContentType,
         value: Any
     ): Any? {
-        return when (value) {
-            is Model -> convertModelForSend(value)
-            else -> null
+        return if (value is Model && config.contentTypes.contains(contentType)) {
+            when (contentType) {
+                RDF.JSON_LD -> writeJsonLD(value)
+                RDF.TURTLE -> writeTurtle(value)
+                RDF.N_TRIPLES -> writeNTriples(value)
+                RDF.RDF_XML -> writeRDFXML(value)
+                else -> null
+            }?.let {
+                if (isVaryRequired) {
+                    context.call.response.headers.append("Vary", "Accept")
+                }
+            }
+        } else {
+            null
         }
     }
 
-    private fun convertModelForSend(value: Model): String {
-        val g = DatasetFactory.wrap(value).asDatasetGraph()
+    private val isVaryRequired : Boolean
+        get() = config.contentTypes.size > 1 || config.varyRequired
+
+    private fun writeJsonLD(model: Model): String {
+        val g = DatasetFactory.wrap(model).asDatasetGraph()
         val pm = RiotLib.prefixMap(g)
         val cxt = JsonLDWriteContext()
         cxt.setJsonLDContext(JsonLDContext(pm).json())
         cxt.setOptions(config.options)
-        val writer = RDFDataMgr.createDatasetWriter(config.format)
+        val writer = RDFDataMgr.createDatasetWriter(config.jsonldFormatVariant)
         val out = StringWriter()
         writer.write(out, g, pm, null, cxt)
         return out.toString()
     }
+
+    private fun writeTurtle(model: Model): String {
+        val out = StringWriter()
+        RDFDataMgr.write(out, model, config.turtleFormatVariant)
+        return out.toString()
+    }
+
+    private fun writeNTriples(model: Model): String {
+        val out = StringWriter()
+        RDFDataMgr.write(out, model, config.ntriplesFormatVariant)
+        return out.toString()
+    }
+
+    private fun writeRDFXML(model: Model): String {
+        val out = StringWriter()
+        RDFDataMgr.write(out, model, config.rdfxmlFormatVariant)
+        return out.toString()
+    }
+
 }
 
 class RiotConverterConfiguration {
-    var format = RDFFormat.JSONLD!!
+    val contentTypes =  mutableSetOf(RDF.JSON_LD)
+    var jsonldFormatVariant : RDFFormat = RDFFormat.JSONLD
+    var turtleFormatVariant : RDFFormat = RDFFormat.TURTLE
+    var ntriplesFormatVariant : RDFFormat = RDFFormat.NTRIPLES
+    var rdfxmlFormatVariant : RDFFormat = RDFFormat.RDFXML
+    var varyRequired : Boolean = false
     val options = JsonLdOptions()
     fun options(block: JsonLdOptions.() -> Unit) {
         options.apply(block)
@@ -60,17 +111,19 @@ class RiotConverterConfiguration {
  * Register Riot converter into [ContentNegotiation] feature
  */
 fun ContentNegotiation.Configuration.riot(
-    contentType: ContentType = Rdf.JsonLd,
     block: RiotConverterConfiguration.() -> Unit = {}
 ) {
     val config = RiotConverterConfiguration()
     config.apply(block)
     val converter = RiotConverter(config)
-    register(contentType, converter)
+    config.contentTypes.forEach { register(it, converter) }
 }
 
-object Rdf {
-    val JsonLd = ContentType("application", "ld+json")
+object RDF {
+    val JSON_LD = ContentType("application", "ld+json")
+    val TURTLE = ContentType("text", "turtle")
+    val RDF_XML = ContentType("application", "rdf+xml")
+    val N_TRIPLES = ContentType("application", "n-triples")
 }
 
 class JsonLDContext(prefixes: PrefixMap) {
