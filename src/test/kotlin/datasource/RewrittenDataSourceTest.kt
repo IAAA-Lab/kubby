@@ -7,34 +7,32 @@ import org.apache.jena.rdf.model.Literal
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.Resource
+import org.apache.jena.vocabulary.OWL
 import org.apache.jena.vocabulary.VCARD
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
-import kotlin.test.fail
+import kotlin.test.*
 
-class RewriterDataSourceTest {
+class RewrittenDataSourceTest {
 
     val anyDs: DataSource = mockk(relaxed = true)
 
     @Test
     fun `Rewrite a URI that matches the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://dbpedia.org/resource/")
+        val rdw = RewrittenDataSource(anyDs, "http://dbpedia.org/resource/")
         val uri = rdw.rewrite("http://target/", "http://dbpedia.org/resource/Tetris")
         assertEquals("http://target/Tetris", uri)
     }
 
     @Test
     fun `Don't Rewrite a URI that does not match the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val uri = rdw.rewrite("http://target/", "http://other/good")
         assertEquals("http://other/good", uri)
     }
 
     @Test
     fun `Rewrite a subject that matches the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val subject = model.createResource("http://source/good")
         val result = rdw.rewriteResource(subject, "http://target/", model).uri
@@ -43,7 +41,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Don't rewrite a subject that does not match the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val subject = model.createResource("http://other/good")
         val result = rdw.rewriteResource(subject, "http://target/", model).uri
@@ -52,7 +50,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Keep bnodes as subject unaffected`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val subject = model.createResource()
         val result = rdw.rewriteResource(subject, "http://target/", model).uri
@@ -61,7 +59,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Rewrite a predicate that matches the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val property = model.createProperty("http://source/good")
         val result = rdw.rewriteProperty(property, "http://target/", model).uri
@@ -70,7 +68,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Don't rewrite a predicate that does not match the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val property = model.createProperty("http://other/good")
         val result = rdw.rewriteProperty(property, "http://target/", model).uri
@@ -79,7 +77,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Rewrite a object URI that matches the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val obj = model.createResource("http://source/good")
         val result = rdw.rewriteRDFNode(obj, "http://target/", model)
@@ -92,7 +90,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Don't rewrite a object URI that does not match the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val obj = model.createResource("http://other/good")
         val result = rdw.rewriteRDFNode(obj, "http://target/", model)
@@ -105,7 +103,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Plain literals are unaffected`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val obj = model.createTypedLiteral("http://source/good", null as String?)
         val result = rdw.rewriteRDFNode(obj, "http://target/", model)
@@ -119,7 +117,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Keep bnodes as  object unaffected`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val obj = model.createResource()
         val result = rdw.rewriteRDFNode(obj, "http://target/", model)
@@ -128,7 +126,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Rewrite datatypes of typed literals that matches the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val obj = model.createTypedLiteral("http://source/good", "http://source/good")
         val result = rdw.rewriteRDFNode(obj, "http://target/", model)
@@ -142,7 +140,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Don't rewrite datatypes of typed literals that does not match the target namespace`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val model = ModelFactory.createDefaultModel()
         val obj = model.createLiteral("http://source/good")
         val result = rdw.rewriteRDFNode(obj, "http://target/", model)
@@ -156,7 +154,7 @@ class RewriterDataSourceTest {
 
     @Test
     fun `Rewrite a simple model`() {
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val result = rdw.rewrite("http://target/", aSimpleModel())
         assertTrue(result.contains(result.createResource("http://target/JohnSmith"), VCARD.FN, "John Smith"))
     }
@@ -164,9 +162,25 @@ class RewriterDataSourceTest {
     @Test
     fun `Describe and rewrite a simple model`() {
         every { anyDs.describe("http://source/", "JohnSmith") } returns aSimpleModel()
-        val rdw = RewriterDataSource(anyDs, "http://source/")
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
         val result = rdw.describe("http://target/", "JohnSmith")
         assertTrue(result.contains(result.createResource("http://target/JohnSmith"), VCARD.FN, "John Smith"))
+    }
+
+    @Test
+    fun `Verify that the rewritten source doesn't have an unrequested owl sameAs`() {
+        every { anyDs.describe("http://source/", "JohnSmith") } returns aSimpleModel()
+        val rdw = RewrittenDataSource(anyDs, "http://source/")
+        val result = rdw.describe("http://target/", "JohnSmith")
+        assertFalse(result.contains(result.createResource("http://target/JohnSmith"), OWL.sameAs, result.createResource("http://source/JohnSmith")))
+    }
+
+    @Test
+    fun `Verify that the rewritten source has the expected owl sameAs`() {
+        every { anyDs.describe("http://source/", "JohnSmith") } returns aSimpleModel()
+        val rdw = RewrittenDataSource(anyDs, "http://source/", true)
+        val result = rdw.describe("http://target/", "JohnSmith")
+        assertTrue(result.contains(result.createResource("http://target/JohnSmith"), OWL.sameAs, result.createResource("http://source/JohnSmith")))
     }
 
     fun aSimpleModel(): Model {

@@ -43,7 +43,7 @@ val kubbyModule = module {
             data = data
         )
         val ds = Tdb2DataSource(config)
-        RewriterDataSource(ds, "http://dbpedia.org/resource/")
+        RewrittenDataSource(ds, "http://dbpedia.org/resource/", true)
     }
 }
 
