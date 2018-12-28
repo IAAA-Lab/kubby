@@ -1,9 +1,9 @@
 package es.iaaa.kubby.config
 
-import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
+import es.iaaa.kubby.util.getStringOrDefault
 
-object KubbyConfig {
+object Configuration {
     private val config = ConfigFactory.load()
     val route = Route
 
@@ -14,9 +14,3 @@ object KubbyConfig {
     }
 }
 
-fun Config.getStringOrDefault(path: String, default: String): String =
-    if (hasPath(path)) {
-        getString(path)
-    } else {
-        default
-    }

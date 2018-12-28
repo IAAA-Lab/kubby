@@ -1,7 +1,9 @@
 package es.iaaa.kubby
 
-import es.iaaa.kubby.config.KubbyConfig
+import es.iaaa.kubby.config.Configuration
 import es.iaaa.kubby.datasource.DataSource
+import es.iaaa.kubby.server.main
+import es.iaaa.kubby.server.module
 import io.ktor.application.Application
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -26,12 +28,12 @@ class KubbyAppRealDataTest : AutoCloseKoinTest() {
 
     @Before
     fun before() {
-        StandAloneContext.startKoin(listOf(kubbyModule))
+        StandAloneContext.startKoin(listOf(module))
     }
 
     @Test
     fun testData() = withTestApplication(Application::main) {
-        with(handleRequest(HttpMethod.Get, "${KubbyConfig.route.data}/Tetris")) {
+        with(handleRequest(HttpMethod.Get, "${Configuration.route.data}/Tetris")) {
             assertEquals(HttpStatusCode.OK, response.status())
             val model = ModelFactory.createDefaultModel()
             RDFDataMgr.read(model, StringReader(response.content), null, Lang.JSONLD)
