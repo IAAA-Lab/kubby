@@ -20,6 +20,20 @@ fun RequestConnectionPoint.buildResourceNamespace(route: String, id: String): St
     return sb.toString()
 }
 
+fun RequestConnectionPoint.buildRequest(): String {
+    val sb = StringBuilder()
+    sb.append("$scheme://$host")
+    when (scheme) {
+        "http" -> if (port != 80) sb.append(":$port")
+        "https" -> if (port != 443) sb.append(":$port")
+        else -> {
+        }
+    }
+    sb.append(uri)
+    return sb.toString()
+}
+
+
 fun Config.getStringOrDefault(path: String, default: String): String =
     if (hasPath(path)) {
         getString(path)
