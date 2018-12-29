@@ -55,6 +55,7 @@ class KubbyAppTest : AutoCloseKoinTest() {
                 |{
                 |  "@graph" : [ {
                 |    "@id" : "http://localhost/data/1",
+                |    "rdfs:label" : "RDF description of Jane Doe",
                 |    "foaf:primaryTopic" : {
                 |      "@id" : "http://localhost/resource/1"
                 |    }
