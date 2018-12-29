@@ -33,6 +33,9 @@ dependencies {
     compile "io.ktor:ktor-velocity:$ktor_version"
     compile "org.koin:koin-ktor:$koin_version"
 
+    compile "io.github.config4k:config4k:$config4k_version"
+
+
     compile "org.apache.jena:apache-jena-libs:$jena_version"
     compile "ch.qos.logback:logback-classic:1.2.3"
 

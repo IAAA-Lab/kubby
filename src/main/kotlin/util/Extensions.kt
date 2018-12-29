@@ -1,6 +1,5 @@
 package es.iaaa.kubby.util
 
-import com.typesafe.config.Config
 import es.iaaa.kubby.config.Configuration
 import io.ktor.http.RequestConnectionPoint
 
@@ -32,11 +31,3 @@ fun RequestConnectionPoint.buildRequest(): String {
     sb.append(uri)
     return sb.toString()
 }
-
-
-fun Config.getStringOrDefault(path: String, default: String): String =
-    if (hasPath(path)) {
-        getString(path)
-    } else {
-        default
-    }
