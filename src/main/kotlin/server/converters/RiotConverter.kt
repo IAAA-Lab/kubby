@@ -59,7 +59,7 @@ class RiotConverter(private val config: RiotConverterConfiguration) : ContentCon
         }
     }
 
-    private val isVaryRequired : Boolean
+    private val isVaryRequired: Boolean
         get() = config.contentTypes.size > 1 || config.varyRequired
 
     private fun writeJsonLD(model: Model): String {
@@ -95,12 +95,12 @@ class RiotConverter(private val config: RiotConverterConfiguration) : ContentCon
 }
 
 class RiotConverterConfiguration {
-    val contentTypes =  mutableSetOf(RDF.JSON_LD)
-    var jsonldFormatVariant : RDFFormat = RDFFormat.JSONLD
-    var turtleFormatVariant : RDFFormat = RDFFormat.TURTLE
-    var ntriplesFormatVariant : RDFFormat = RDFFormat.NTRIPLES
-    var rdfxmlFormatVariant : RDFFormat = RDFFormat.RDFXML
-    var varyRequired : Boolean = false
+    val contentTypes = mutableSetOf(RDF.JSON_LD)
+    var jsonldFormatVariant: RDFFormat = RDFFormat.JSONLD
+    var turtleFormatVariant: RDFFormat = RDFFormat.TURTLE
+    var ntriplesFormatVariant: RDFFormat = RDFFormat.NTRIPLES
+    var rdfxmlFormatVariant: RDFFormat = RDFFormat.RDFXML
+    var varyRequired: Boolean = false
     val options = JsonLdOptions()
     fun options(block: JsonLdOptions.() -> Unit) {
         options.apply(block)

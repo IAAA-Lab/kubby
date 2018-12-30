@@ -1,5 +1,6 @@
 package es.iaaa.kubby.server.metadata
 
+import com.typesafe.config.Config
 import es.iaaa.kubby.config.Configuration.config
 import es.iaaa.kubby.config.Configuration.defaultLocale
 import es.iaaa.kubby.datasource.addNsIfUndefined
@@ -12,6 +13,11 @@ import org.apache.jena.sparql.vocabulary.FOAF
 import org.apache.jena.vocabulary.RDFS
 
 class DocumentMetadata : MetadataAugmenter {
+
+    private val base: Config = config.getConfig("kubby.locale-data.$defaultLocale.resources.metadata")
+    private val anonTitle: String = base.getString("document-label-anon")
+    private val documentLabel: String = base.getString("document-label")
+
     override fun augment(model: Model, attributes: Attributes) {
         val resourceId = attributes.getOrNull(resourceId)
         val pageId = attributes.getOrNull(pageId)
@@ -21,20 +27,13 @@ class DocumentMetadata : MetadataAugmenter {
             val document = model.getResource(pageId)
             val title = topic.getTitle(defaultLocale) ?: anonTitle
 
-            model.addNsIfUndefined("foaf", FOAF.getURI())
-            model.addNsIfUndefined("rdfs", RDFS.getURI())
+            model.addNsIfUndefined("foaf", FOAF.NS)
+            model.addNsIfUndefined("rdfs", RDFS.uri)
 
             document.addProperty(FOAF.primaryTopic, topic)
             document.addProperty(RDFS.label, documentLabel.format(title))
         }
     }
-
-    companion object {
-        val base = "kubby.locale-data.$defaultLocale.resources.metadata"
-        val anonTitle = config.getString("$base.document-label-anon")
-        val documentLabel = config.getString("$base.document-label")
-    }
-
 }
 
 

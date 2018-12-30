@@ -4,7 +4,6 @@ import es.iaaa.kubby.config.Configuration
 import es.iaaa.kubby.config.Configuration.defaultLocale
 import es.iaaa.kubby.config.Configuration.labelProperties
 import es.iaaa.kubby.config.Configuration.locales
-import es.iaaa.kubby.config.Configuration.route
 import io.ktor.http.RequestConnectionPoint
 import org.apache.jena.rdf.model.Literal
 import org.apache.jena.rdf.model.Property
@@ -14,7 +13,7 @@ import org.apache.jena.shared.PrefixMapping
 import org.apache.jena.shared.impl.PrefixMappingImpl
 import java.util.*
 
-fun RequestConnectionPoint.buildResourceNamespace(path: String, id: String): String {
+fun RequestConnectionPoint.buildBase(path: String): String {
     val sb = StringBuilder()
     sb.append("$scheme://$host")
     when (scheme) {
@@ -23,12 +22,11 @@ fun RequestConnectionPoint.buildResourceNamespace(path: String, id: String): Str
         else -> {
         }
     }
-    val keep = uri.length - path.length - id.length - 1
+    val keep = uri.length - path.length
     sb.append(uri.subSequence(0, keep))
-    sb.append(route.resource)
-    sb.append("/")
     return sb.toString()
 }
+
 
 fun RequestConnectionPoint.buildRequest(): String {
     val sb = StringBuilder()

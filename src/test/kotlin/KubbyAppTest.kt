@@ -48,7 +48,7 @@ class KubbyAppTest : AutoCloseKoinTest() {
     @Test
     fun testData() = withTestApplication(Application::main) {
         given(dao.describe("http://localhost/resource/", "1")).will { aSimpleModel("http://localhost/resource/1") }
-        with(handleRequest(HttpMethod.Get, "${Configuration.route.data}/1") ) {
+        with(handleRequest(HttpMethod.Get, "${Configuration.route.data}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals(
                 """

@@ -9,8 +9,8 @@ import org.apache.jena.rdf.model.Property
 
 data class Route(
     val resource: String,
-    val data : String,
-    val page : String
+    val data: String,
+    val page: String
 )
 
 data class LocaleData(
@@ -18,20 +18,21 @@ data class LocaleData(
 )
 
 object Configuration {
-    val config : Config = ConfigFactory.load()
+    val config: Config = ConfigFactory.load()
     val route = config.extract<Route>("kubby.route")
     val locales = config.extract<Map<String, LocaleData>>("kubby.locale-data")
     val defaultLocale = config.extract<String>("kubby.locale-default")
-    val prefixes = config.extract<Map<String,String>>("kubby.prefix-declarations")
+    val prefixes = config.extract<Map<String, String>>("kubby.prefix-declarations")
     val labelProperties: List<Property>
+
     init {
         val model = ModelFactory.createDefaultModel()
         model.setNsPrefixes(prefixes)
         labelProperties = config.extract<List<String>>("kubby.label-properties").map {
             val match = prefixes.entries.firstOrNull { entry -> it.startsWith("${entry.key}:") }
-            if (match  != null) {
+            if (match != null) {
                 model.createProperty(match.value, it.substring(match.key.length + 1))
-            } else  {
+            } else {
                 model.createProperty(it)
             }
         }

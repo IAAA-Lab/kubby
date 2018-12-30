@@ -38,10 +38,18 @@ class KubbyAppRealDataTest : AutoCloseKoinTest() {
             assertEquals(HttpStatusCode.OK, response.status())
             val model = ModelFactory.createDefaultModel()
             RDFDataMgr.read(model, StringReader(response.content), null, Lang.JSONLD)
-            assertTrue(model.contains(model.createResource("http://localhost/resource/Tetris"),
-                RDFS.seeAlso, model.createResource("http://localhost/resource/Korobeiniki")))
-            assertTrue(model.contains(model.createResource("http://localhost/data/Tetris"),
-                FOAF.primaryTopic, model.createResource("http://localhost/resource/Tetris")))
+            assertTrue(
+                model.contains(
+                    model.createResource("http://localhost/resource/Tetris"),
+                    RDFS.seeAlso, model.createResource("http://localhost/resource/Korobeiniki")
+                )
+            )
+            assertTrue(
+                model.contains(
+                    model.createResource("http://localhost/data/Tetris"),
+                    FOAF.primaryTopic, model.createResource("http://localhost/resource/Tetris")
+                )
+            )
         }
     }
 }

@@ -38,12 +38,16 @@ class KubbyAppTest : AutoCloseKoinTest() {
     @Test
     fun testData() = withTestApplication(Application::main) {
         given(dao.describe("http://localhost/resource/", "1")).will { aSimpleModel("http://localhost/resource/1") }
-        with(handleRequest(HttpMethod.Get, "${Configuration.route.data}/1") ) {
+        with(handleRequest(HttpMethod.Get, "${Configuration.route.data}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             val model = ModelFactory.createDefaultModel()
             RDFDataMgr.read(model, StringReader(response.content), null, Lang.JSONLD)
-            assertTrue(model.contains(model.createResource("http://localhost/data/1"),
-                FOAF.primaryTopic, model.createResource("http://localhost/resource/1")))
+            assertTrue(
+                model.contains(
+                    model.createResource("http://localhost/data/1"),
+                    FOAF.primaryTopic, model.createResource("http://localhost/resource/1")
+                )
+            )
         }
     }
 }

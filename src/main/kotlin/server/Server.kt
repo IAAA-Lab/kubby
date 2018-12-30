@@ -18,9 +18,8 @@ fun startServer() {
     StandAloneContext.startKoin(listOf(module))
     embeddedServer(
         Netty,
-        port = 8080,
         module = Application::main
-    )
+    ).start(true)
 }
 
 fun Application.main() {

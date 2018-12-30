@@ -172,7 +172,13 @@ class RewrittenDataSourceTest {
         every { anyDs.describe("http://source/", "JohnSmith") } returns aSimpleModel()
         val rdw = RewrittenDataSource(anyDs, "http://source/")
         val result = rdw.describe("http://target/", "JohnSmith")
-        assertFalse(result.contains(result.createResource("http://target/JohnSmith"), OWL.sameAs, result.createResource("http://source/JohnSmith")))
+        assertFalse(
+            result.contains(
+                result.createResource("http://target/JohnSmith"),
+                OWL.sameAs,
+                result.createResource("http://source/JohnSmith")
+            )
+        )
     }
 
     @Test
@@ -180,7 +186,13 @@ class RewrittenDataSourceTest {
         every { anyDs.describe("http://source/", "JohnSmith") } returns aSimpleModel()
         val rdw = RewrittenDataSource(anyDs, "http://source/", true)
         val result = rdw.describe("http://target/", "JohnSmith")
-        assertTrue(result.contains(result.createResource("http://target/JohnSmith"), OWL.sameAs, result.createResource("http://source/JohnSmith")))
+        assertTrue(
+            result.contains(
+                result.createResource("http://target/JohnSmith"),
+                OWL.sameAs,
+                result.createResource("http://source/JohnSmith")
+            )
+        )
     }
 
     fun aSimpleModel(): Model {
