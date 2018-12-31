@@ -1,4 +1,4 @@
-package es.iaaa.kubby.server.metadata
+package es.iaaa.kubby.metadata
 
 import io.ktor.util.Attributes
 import org.apache.jena.rdf.model.Model

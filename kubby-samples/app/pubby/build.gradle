@@ -1,0 +1,16 @@
+apply plugin: 'application'
+
+mainClassName = 'io.ktor.server.netty.EngineMain'
+
+apply plugin: 'kotlin'
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+dependencies {
+    compile project(':kubby-server:kubby-server-core')
+    compile project(':kubby-features:kubby-metadata')
+    compile project(':kubby-features:kubby-riot')
+}
+

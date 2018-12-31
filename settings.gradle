@@ -1,0 +1,6 @@
+include ':kubby-server:kubby-server-core'
+
+include ':kubby-features:kubby-metadata'
+include ':kubby-features:kubby-riot'
+
+include ':kubby-samples:app:pubby'

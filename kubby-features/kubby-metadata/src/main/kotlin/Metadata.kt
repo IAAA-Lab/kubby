@@ -1,4 +1,4 @@
-package es.iaaa.kubby.server.metadata
+package es.iaaa.kubby.metadata
 
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.ApplicationFeature

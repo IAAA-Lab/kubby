@@ -1,4 +1,4 @@
-package es.iaaa.kubby.server.metadata
+package es.iaaa.kubby.metadata
 
 import com.typesafe.config.Config
 import es.iaaa.kubby.config.Configuration
