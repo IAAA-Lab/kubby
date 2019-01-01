@@ -2,12 +2,12 @@ package es.iaaa.kubby.server.routes
 
 import com.typesafe.config.Config
 import es.iaaa.kubby.config.Configuration
-import es.iaaa.kubby.datasource.DataSource
 import es.iaaa.kubby.features.RDF
 import es.iaaa.kubby.features.riot
 import es.iaaa.kubby.metadata.Metadata
 import es.iaaa.kubby.metadata.documentMetadata
 import es.iaaa.kubby.metadata.provenanceMetadata
+import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.util.AttributeKeys.aboutId
 import es.iaaa.kubby.util.AttributeKeys.pageId
 import es.iaaa.kubby.util.AttributeKeys.resourceId

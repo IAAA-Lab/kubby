@@ -1,7 +1,7 @@
-package es.iaaa.kubby.datasource
+package es.iaaa.kubby.repository
 
-import es.iaaa.kubby.datasource.DatasourceDefinition.CONNECT
-import es.iaaa.kubby.datasource.DatasourceDefinition.CREATE
+import es.iaaa.kubby.repository.DatasourceDefinition.CONNECT
+import es.iaaa.kubby.repository.DatasourceDefinition.CREATE
 import org.apache.jena.dboe.base.file.Location
 import org.apache.jena.query.Dataset
 import org.apache.jena.query.QueryExecutionFactory.create

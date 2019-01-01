@@ -1,6 +1,6 @@
 package es.iaaa.kubby.server
 
-import es.iaaa.kubby.datasource.DataSource
+import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.server.routes.data
 import es.iaaa.kubby.server.routes.page
 import es.iaaa.kubby.server.routes.resource

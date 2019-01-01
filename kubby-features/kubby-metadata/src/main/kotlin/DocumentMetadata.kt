@@ -3,7 +3,7 @@ package es.iaaa.kubby.metadata
 import com.typesafe.config.Config
 import es.iaaa.kubby.config.Configuration.config
 import es.iaaa.kubby.config.Configuration.defaultLocale
-import es.iaaa.kubby.datasource.addNsIfUndefined
+import es.iaaa.kubby.repository.addNsIfUndefined
 import es.iaaa.kubby.util.AttributeKeys.pageId
 import es.iaaa.kubby.util.AttributeKeys.resourceId
 import es.iaaa.kubby.util.getTitle

@@ -1,9 +1,9 @@
 package es.iaaa.kubby
 
 import es.iaaa.kubby.config.Configuration
-import es.iaaa.kubby.datasource.DataSource
+import es.iaaa.kubby.config.module
+import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.server.main
-import es.iaaa.kubby.server.module
 import io.ktor.application.Application
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode

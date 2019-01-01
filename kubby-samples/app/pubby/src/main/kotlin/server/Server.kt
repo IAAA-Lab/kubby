@@ -1,6 +1,7 @@
 package es.iaaa.kubby.server
 
-import es.iaaa.kubby.datasource.DataSource
+import es.iaaa.kubby.config.module
+import es.iaaa.kubby.repository.DataSource
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging

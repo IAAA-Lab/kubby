@@ -1,4 +1,4 @@
-package es.iaaa.kubby.datasource
+package es.iaaa.kubby.repository
 
 import io.mockk.every
 import io.mockk.mockk

@@ -1,4 +1,4 @@
-package es.iaaa.kubby.datasource
+package es.iaaa.kubby.repository
 
 import org.apache.jena.dboe.base.file.Location.create
 import org.apache.jena.query.Dataset

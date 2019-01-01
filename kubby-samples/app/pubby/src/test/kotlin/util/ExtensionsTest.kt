@@ -1,5 +1,6 @@
-package es.iaaa.kubby.util
+package util
 
+import es.iaaa.kubby.util.toTitleCase
 import org.junit.Test
 import kotlin.test.assertEquals
 

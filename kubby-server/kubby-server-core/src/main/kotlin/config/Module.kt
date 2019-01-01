@@ -1,6 +1,6 @@
-package es.iaaa.kubby.server
+package es.iaaa.kubby.config
 
-import es.iaaa.kubby.datasource.*
+import es.iaaa.kubby.repository.*
 import org.koin.dsl.module.module
 import java.nio.file.Path
 import java.nio.file.Paths
