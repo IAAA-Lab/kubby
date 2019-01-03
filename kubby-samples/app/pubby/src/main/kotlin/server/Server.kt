@@ -13,10 +13,9 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.velocity.Velocity
 import org.koin.ktor.ext.inject
-import org.koin.standalone.StandAloneContext
+import org.koin.ktor.ext.installKoin
 
 fun startServer() {
-    StandAloneContext.startKoin(listOf(module))
     embeddedServer(
         Netty,
         module = Application::main
@@ -37,13 +36,15 @@ fun Application.main() {
         setup()
     }
 
+    installKoin(listOf(module))
+
     // Lazy inject DataSource
-    val dataSource: DataSource by inject()
+    val dataSource by inject<DataSource>()
 
     // Routing section
     // Register all the routes of the application
     install(Routing) {
-        setup(dataSource)
+        setup()
     }
 }
 

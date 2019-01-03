@@ -9,7 +9,7 @@ val target: Path = Paths.get("build/datasource/tdb2")
 val data: Path = Paths.get("src/test/resources/Tetris.n3")
 
 
-val module = module {
+val module = module(createOnStart = false) {
     single<DataSource> {
         val config = Tdb2DataSourceConfiguration(
             path = target,

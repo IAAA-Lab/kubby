@@ -1,7 +1,6 @@
 package es.iaaa.kubby
 
 import es.iaaa.kubby.config.Configuration
-import es.iaaa.kubby.config.module
 import es.iaaa.kubby.fixtures.Models.aSimpleModel
 import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.server.main
@@ -10,8 +9,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
-import org.junit.Before
-import org.koin.standalone.StandAloneContext
 import org.koin.standalone.inject
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.declareMock
@@ -21,13 +18,7 @@ import kotlin.test.assertEquals
 
 class KubbyAppTest : AutoCloseKoinTest() {
 
-    private val dao: DataSource by inject()
-
-    @Before
-    fun before() {
-        StandAloneContext.startKoin(listOf(module))
-        declareMock<DataSource>()
-    }
+    val dao by inject<DataSource>()
 
     @Test
     fun testIndex() = withTestApplication(Application::main) {
@@ -47,6 +38,7 @@ class KubbyAppTest : AutoCloseKoinTest() {
 
     @Test
     fun testData() = withTestApplication(Application::main) {
+        declareMock<DataSource>()
         given(dao.describe("http://localhost/resource/", "1")).will { aSimpleModel("http://localhost/resource/1") }
         with(handleRequest(HttpMethod.Get, "${Configuration.route.data}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())

@@ -37,6 +37,6 @@ subprojects {
 
         testCompile "io.ktor:ktor-server-test-host:$ktor_version"
         testCompile "org.koin:koin-test:$koin_version"
-        testImplementation "io.mockk:mockk:$mockk_version"
+        testCompile "io.mockk:mockk:$mockk_version"
     }
 }

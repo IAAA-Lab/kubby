@@ -1,8 +1,6 @@
 package es.iaaa.kubby
 
 import es.iaaa.kubby.config.Configuration
-import es.iaaa.kubby.config.module
-import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.server.main
 import io.ktor.application.Application
 import io.ktor.http.HttpMethod
@@ -14,9 +12,6 @@ import org.apache.jena.riot.Lang
 import org.apache.jena.riot.RDFDataMgr
 import org.apache.jena.sparql.vocabulary.FOAF
 import org.apache.jena.vocabulary.RDFS
-import org.junit.Before
-import org.koin.standalone.StandAloneContext
-import org.koin.standalone.inject
 import org.koin.test.AutoCloseKoinTest
 import java.io.StringReader
 import kotlin.test.Test
@@ -24,13 +19,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class KubbyAppRealDataTest : AutoCloseKoinTest() {
-
-    private val dao: DataSource by inject()
-
-    @Before
-    fun before() {
-        StandAloneContext.startKoin(listOf(module))
-    }
 
     @Test
     fun testData() = withTestApplication(Application::main) {

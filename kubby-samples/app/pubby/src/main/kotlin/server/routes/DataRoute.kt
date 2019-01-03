@@ -22,11 +22,13 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.route
+import org.koin.ktor.ext.inject
 import java.util.*
 
 
-fun Route.data(dao: DataSource) {
+fun Route.data() {
 
+    val dao by inject<DataSource>()
     val config: Config = Configuration.config.getConfig("kubby.route")
     val dataPath: String = config.getString("data")
     val resourcePath: String = config.getString("resource")
