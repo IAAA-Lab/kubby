@@ -1,7 +1,7 @@
 package es.iaaa.kubby.server.metadata
 
 import es.iaaa.kubby.config.Configuration
-import es.iaaa.kubby.server.main
+import es.iaaa.kubby.main
 import io.ktor.application.Application
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode

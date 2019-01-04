@@ -9,8 +9,6 @@ compileKotlin {
 }
 
 dependencies {
-    compile project(':kubby-server:kubby-server-core')
-    compile project(':kubby-features:kubby-metadata')
-    compile project(':kubby-features:kubby-riot')
+    compile project(':kubby-server')
 }
 

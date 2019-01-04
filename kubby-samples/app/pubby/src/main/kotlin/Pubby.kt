@@ -1,24 +1,19 @@
-package es.iaaa.kubby.server
+package es.iaaa.kubby
 
-import es.iaaa.kubby.config.module
-import es.iaaa.kubby.repository.DataSource
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.ForwardedHeaderSupport
 import io.ktor.features.XForwardedHeaderSupport
-import io.ktor.routing.Routing
+import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.velocity.Velocity
-import org.koin.ktor.ext.inject
-import org.koin.ktor.ext.installKoin
 
-fun startServer() {
+fun main(args: Array<String>) {
     embeddedServer(
         Netty,
-        module = Application::main
+        commandLineEnvironment(args)
     ).start(true)
 }
 
@@ -31,26 +26,5 @@ fun Application.main() {
     // This install support for forwarded headers
     install(ForwardedHeaderSupport)
     install(XForwardedHeaderSupport)
-    // This install Velocity and configure the Velocity Engine
-    install(Velocity) {
-        setup()
-    }
-
-    installKoin(listOf(module))
-
-    // Lazy inject DataSource
-    val dataSource by inject<DataSource>()
-
-    // Routing section
-    // Register all the routes of the application
-    install(Routing) {
-        setup()
-    }
+    installKubby()
 }
-
-
-
-
-
-
-

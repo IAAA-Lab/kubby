@@ -3,7 +3,6 @@ package es.iaaa.kubby
 import es.iaaa.kubby.config.Configuration
 import es.iaaa.kubby.fixtures.Models.aSimpleModel
 import es.iaaa.kubby.repository.DataSource
-import es.iaaa.kubby.server.main
 import io.ktor.application.Application
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
