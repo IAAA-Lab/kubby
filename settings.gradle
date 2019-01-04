@@ -1,3 +1,3 @@
-include ':kubby-server'
+include ':kubby-ext'
 
 include ':kubby-samples:app:pubby'

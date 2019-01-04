@@ -9,6 +9,6 @@ compileKotlin {
 }
 
 dependencies {
-    compile project(':kubby-server')
+    compile project(':kubby-ext')
 }
 
