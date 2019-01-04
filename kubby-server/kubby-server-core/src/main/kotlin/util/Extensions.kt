@@ -5,10 +5,7 @@ import es.iaaa.kubby.config.Configuration.defaultLocale
 import es.iaaa.kubby.config.Configuration.labelProperties
 import es.iaaa.kubby.config.Configuration.locales
 import io.ktor.http.RequestConnectionPoint
-import org.apache.jena.rdf.model.Literal
-import org.apache.jena.rdf.model.Property
-import org.apache.jena.rdf.model.RDFNode
-import org.apache.jena.rdf.model.Resource
+import org.apache.jena.rdf.model.*
 import org.apache.jena.shared.PrefixMapping
 import org.apache.jena.shared.impl.PrefixMappingImpl
 import java.util.*
@@ -128,3 +125,9 @@ val Resource.prefixes: PrefixMapping
         Configuration.prefixes.forEach { prefix, uri -> prefixes.setNsPrefix(prefix, uri) }
         return prefixes
     }
+
+fun Model.addNsIfUndefined(prefix: String, uri: String) {
+    if (this.getNsURIPrefix(uri) != null) return
+    if (this.getNsPrefixURI(prefix) != null) return
+    this.setNsPrefix(prefix, uri)
+}

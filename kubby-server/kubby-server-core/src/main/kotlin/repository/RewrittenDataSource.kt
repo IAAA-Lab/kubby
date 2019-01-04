@@ -1,5 +1,6 @@
 package es.iaaa.kubby.repository
 
+import es.iaaa.kubby.util.addNsIfUndefined
 import org.apache.jena.rdf.model.*
 import org.apache.jena.vocabulary.OWL
 
@@ -103,8 +104,3 @@ class RewrittenDataSource(
     }
 }
 
-fun Model.addNsIfUndefined(prefix: String, uri: String) {
-    if (this.getNsURIPrefix(uri) != null) return
-    if (this.getNsPrefixURI(prefix) != null) return
-    this.setNsPrefix(prefix, uri)
-}

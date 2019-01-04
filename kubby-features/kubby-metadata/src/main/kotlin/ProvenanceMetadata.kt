@@ -2,9 +2,9 @@ package es.iaaa.kubby.metadata
 
 import com.typesafe.config.Config
 import es.iaaa.kubby.config.Configuration
-import es.iaaa.kubby.repository.addNsIfUndefined
 import es.iaaa.kubby.util.AttributeKeys
 import es.iaaa.kubby.util.AttributeKeys.pageId
+import es.iaaa.kubby.util.addNsIfUndefined
 import io.ktor.util.Attributes
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.sparql.vocabulary.FOAF
