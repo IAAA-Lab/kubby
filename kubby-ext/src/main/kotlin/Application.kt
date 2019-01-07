@@ -1,6 +1,6 @@
 package es.iaaa.kubby
 
-import es.iaaa.kubby.config.module
+import es.iaaa.kubby.config.createModule
 import es.iaaa.kubby.content.dataContent
 import es.iaaa.kubby.content.indexContent
 import es.iaaa.kubby.content.pageContent
@@ -32,7 +32,7 @@ import org.koin.ktor.ext.installKoin
  * Help configure Kubby for Ktor.
  */
 fun Application.installKubby() {
-    installKoin(listOf(module))
+    installKoin(listOf(createModule(environment.config)))
 
     // This install Velocity and configure the Velocity Engine
     install(Velocity) {

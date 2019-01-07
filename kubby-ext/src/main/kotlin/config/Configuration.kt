@@ -6,8 +6,6 @@ import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.Property
 
 
-
-
 abstract class Source
 data class SparqlEndpoint(
     val endpoint: String,
