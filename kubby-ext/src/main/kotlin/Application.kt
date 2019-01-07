@@ -7,10 +7,10 @@ import es.iaaa.kubby.content.pageContent
 import es.iaaa.kubby.content.resourceContent
 import es.iaaa.kubby.features.RDF
 import es.iaaa.kubby.features.riot
+import es.iaaa.kubby.features.setup
 import es.iaaa.kubby.metadata.Metadata
 import es.iaaa.kubby.metadata.documentMetadata
 import es.iaaa.kubby.metadata.provenanceMetadata
-import es.iaaa.kubby.server.setup
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.application.log
@@ -34,14 +34,9 @@ import org.koin.ktor.ext.installKoin
 fun Application.installKubby() {
     installKoin(listOf(module))
 
-    // TODO installKubby()
-    // TODO that creates the module factory ( moduleFactory(environment.config) )
-    // TODO that installs Kubby Routing
-    // TODO that install velocity
-
     // This install Velocity and configure the Velocity Engine
     install(Velocity) {
-        setup()
+        setup(environment)
     }
 
     install(Metadata) {

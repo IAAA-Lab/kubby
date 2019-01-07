@@ -1,8 +1,11 @@
 package es.iaaa.kubby.config
 
 import io.ktor.config.ApplicationConfig
+import kotlinx.io.charsets.Charset
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.Property
+
+
 
 
 abstract class Source
@@ -13,6 +16,12 @@ data class SparqlEndpoint(
     val trustEndpoint: Boolean = false
 ) : Source()
 
+
+data class VelocityConfiguration(
+    val resourceLoaderPath: String,
+    val suffix: String,
+    val charset: Charset
+)
 
 /**
  * Get the project name.
@@ -105,3 +114,10 @@ val ApplicationConfig.pagePath: String
 val ApplicationConfig.aboutPath: String
     get() = property("kubby.route.about").getString()
 
+// TODO test
+val ApplicationConfig.velocityConfiguration: VelocityConfiguration
+    get() = VelocityConfiguration(
+        resourceLoaderPath = property("kubby.velocity.resourceLoaderPath").getString(),
+        suffix = property("kubby.velocity.suffix").getString(),
+        charset = Charset.forName(property("kubby.velocity.charset").getString())
+    )
