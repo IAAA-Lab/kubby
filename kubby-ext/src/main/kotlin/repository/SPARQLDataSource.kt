@@ -16,8 +16,10 @@ class SPARQLDataSource(
     private val removeNsPrefix: Regex = "^ns[0-9]+$".toRegex()
 ) : DataSource {
 
-    override fun describe(namespace: String, localId: String): Model {
-        val query = QueryFactory.create("DESCRIBE <$namespace$localId>")
+    override fun qname(uri: String) = QName(localPart = uri)
+
+    override fun describe(qname: QName): Model {
+        val query = QueryFactory.create("DESCRIBE <$qname>")
         val client = buildClient()
         val exec = QueryExecutionFactory.sparqlService(service, query, defaultGraphURI, client, null)
         val model = exec.execDescribe()

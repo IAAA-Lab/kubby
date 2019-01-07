@@ -22,6 +22,12 @@ class RewrittenDataSource(
     private val addSameAs: Boolean = false
 ) : DataSource {
 
+    override fun qname(uri: String) = if (uri.startsWith(target)) {
+            QName(target, uri.substring(target.length))
+        } else {
+            dataSource.qname(uri)
+        }
+
     /**
      * Describe a resource identified by [namespace] and [localId] by
      * querying the [dataSource] for the resource identified by [target] and [localId]
@@ -32,14 +38,14 @@ class RewrittenDataSource(
      * @param localId the local identifier of the resource.
      * @return a rewritten response.
      */
-    override fun describe(namespace: String, localId: String) =
-        rewrite(namespace, dataSource.describe(target, localId))
-            .addSameAsStatement(namespace, localId)
+    override fun describe(qname: QName) =
+        rewrite(qname.namespaceURI, dataSource.describe(QName(target, qname.localPart)))
+            .addSameAsStatement(qname)
 
-    private fun Model.addSameAsStatement(namespace: String, localId: String): Model {
-        if (addSameAs && !isEmpty && target != namespace) {
-            val original = getResource(target + localId)
-            val rewritten = getResource(namespace + localId)
+    private fun Model.addSameAsStatement(qname: QName): Model {
+        if (addSameAs && !isEmpty && target != qname.namespaceURI) {
+            val original = getResource(target + qname.localPart)
+            val rewritten = getResource(qname.toString())
             rewritten.addProperty(OWL.sameAs, original)
             addNsIfUndefined("owl", OWL.NS)
         }

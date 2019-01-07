@@ -9,7 +9,7 @@ class SPARQLDataSourceTest {
     @Test
     fun `retrieve the description of a resource from a remote endpoint with issues with its SSL certificate`() {
         val ds = SPARQLDataSource("https://dbpedia.org/sparql", "http://dbpedia.org", true)
-        val model = ds.describe("http://dbpedia.org/resource/", "Aragón")
+        val model = ds.describe(QName("http://dbpedia.org/resource/", "Aragón"))
         assertTrue(
             model.contains(
                 model.createResource("http://en.wikipedia.org/wiki/Aragón"),
@@ -22,7 +22,7 @@ class SPARQLDataSourceTest {
     @Test
     fun `retrieve the description of a resource from a remote endpoint`() {
         val ds = SPARQLDataSource("http://datos.bne.es/sparql")
-        val model = ds.describe("http://datos.bne.es/resource/", "XX85148")
+        val model = ds.describe(QName("http://datos.bne.es/resource/", "XX85148"))
         assertTrue(
             model.contains(
                 model.createResource("http://datos.bne.es/resource/bimo0000239213"),

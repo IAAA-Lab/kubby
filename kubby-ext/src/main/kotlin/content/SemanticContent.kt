@@ -2,15 +2,17 @@ package es.iaaa.kubby.content
 
 import es.iaaa.kubby.config.*
 import es.iaaa.kubby.repository.DataSource
+import es.iaaa.kubby.repository.NULL_NS_URI
+import es.iaaa.kubby.repository.QName
 import es.iaaa.kubby.util.AttributeKeys
 import es.iaaa.kubby.util.buildBase
 import es.iaaa.kubby.util.buildRequest
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.features.origin
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
-import io.ktor.response.respondRedirect
 import io.ktor.routing.Route
 import io.ktor.routing.application
 import io.ktor.routing.get
@@ -33,8 +35,10 @@ fun Route.indexContent() {
     val dataSource by inject<DataSource>()
     get {
         config.indexResource?.let { index ->
-            val model = dataSource.describe("", index)
-            processPageContentResponse(model)
+            val qname = dataSource.qname(index)
+            if (qname.namespaceURI != NULL_NS_URI) {
+                call.respondSeeOther("${config.pagePath}/${qname.localPart}")
+            }
         }
     }
 }
@@ -47,7 +51,7 @@ fun Route.resourceContent() {
     route(config.resourcePath) {
         get("{$pathParameterName...}") {
             val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
-            call.respondRedirect("${config.dataPath}/$relativePath")
+            call.respondSeeOther("${config.dataPath}/$relativePath")
         }
     }
 }
@@ -62,10 +66,10 @@ fun Route.dataContent() {
         get("{$pathParameterName...}") {
             val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
             val base = context.request.origin.buildBase("${config.dataPath}/$relativePath")
-            val ns = "$base${config.resourcePath}/"
-            val model = dataSource.describe(ns, relativePath)
+            val qname = QName("$base${config.resourcePath}/", relativePath)
+            val model = dataSource.describe(qname)
             call.attributes.put(AttributeKeys.timeId, GregorianCalendar.getInstance())
-            call.attributes.put(AttributeKeys.resourceId, ns + relativePath)
+            call.attributes.put(AttributeKeys.resourceId, qname.toString())
             call.attributes.put(AttributeKeys.pageId, context.request.origin.buildRequest())
             call.attributes.put(AttributeKeys.aboutId, "$base${config.aboutPath}")
             call.respond(model)
@@ -83,8 +87,8 @@ fun Route.pageContent() {
         get("{$pathParameterName...}") {
             val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
             val base = context.request.origin.buildBase("${config.pagePath}/$relativePath")
-            val ns = "$base${config.resourcePath}/"
-            val model = dataSource.describe(ns, relativePath)
+            val qname = QName("$base${config.resourcePath}/", relativePath)
+            val model = dataSource.describe(qname)
             processPageContentResponse(model)
         }
     }
@@ -95,4 +99,12 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.processPageContentRes
 ) {
     val model = mutableMapOf("a" to 1)
     call.respond(HttpStatusCode.NotFound, VelocityContent("404.vm", model))
+}
+
+/**
+ * Responds to a client with a `301 Moved Permanently` or `302 Found` redirect
+ */
+suspend fun ApplicationCall.respondSeeOther(url: String) {
+    response.headers.append(HttpHeaders.Location, url)
+    respond(HttpStatusCode.SeeOther)
 }

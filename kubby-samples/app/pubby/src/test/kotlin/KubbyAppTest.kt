@@ -5,7 +5,9 @@ import es.iaaa.kubby.config.pagePath
 import es.iaaa.kubby.config.resourcePath
 import es.iaaa.kubby.fixtures.Models.aSimpleModel
 import es.iaaa.kubby.repository.DataSource
+import es.iaaa.kubby.repository.QName
 import io.ktor.config.ApplicationConfig
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.engine.commandLineEnvironment
@@ -33,8 +35,8 @@ class KubbyAppTest : AutoCloseKoinTest() {
     @Test
     fun testIndex() = withApplication(commandLineEnvironment(emptyArray())){
         with(handleRequest(HttpMethod.Get, "/")) {
-            assertEquals(HttpStatusCode.OK, response.status())
-            assertEquals("index", response.content)
+            assertEquals(HttpStatusCode.SeeOther, response.status())
+            assertEquals("${runtimeConfig.pagePath}/DBpedia", response.headers[HttpHeaders.Location])
         }
     }
 
@@ -49,7 +51,7 @@ class KubbyAppTest : AutoCloseKoinTest() {
     @Test
     fun testData() = withApplication(commandLineEnvironment(emptyArray())) {
         declareMock<DataSource>()
-        given(dao.describe("http://localhost/resource/", "1")).will { aSimpleModel("http://localhost/resource/1") }
+        given(dao.describe(QName("http://localhost/resource/", "1"))).will { aSimpleModel("http://localhost/resource/1") }
         with(handleRequest(HttpMethod.Get, "${runtimeConfig.dataPath}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals(

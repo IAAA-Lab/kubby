@@ -54,7 +54,7 @@ class Tdb2DataSourceTest {
             data = data
         )
         val ds = Tdb2DataSource(config)
-        val result = ds.describe("http://dbpedia.org/resource/", "Tetris")
+        val result = ds.describe(QName("http://dbpedia.org/resource/", "Tetris"))
 
         assertFalse { result.isEmpty }
     }
@@ -79,7 +79,7 @@ class Tdb2DataSourceTest {
         val config = Tdb2DataSourceConfiguration(target)
         val ds = Tdb2DataSource(config)
 
-        val result = ds.describe("http://dbpedia.org/resource/", "Tetris")
+        val result = ds.describe(QName("http://dbpedia.org/resource/", "Tetris"))
 
         assertFalse { result.isEmpty }
     }
@@ -91,7 +91,7 @@ class Tdb2DataSourceTest {
         val config = Tdb2DataSourceConfiguration(target)
         val ds = Tdb2DataSource(config)
 
-        val result = ds.describe("http://example.com/resource/", "Tetris")
+        val result = ds.describe(QName("http://example.com/resource/", "Tetris"))
 
         assertTrue { result.isEmpty }
     }

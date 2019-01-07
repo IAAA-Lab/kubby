@@ -161,17 +161,17 @@ class RewrittenDataSourceTest {
 
     @Test
     fun `Describe and rewrite a simple model`() {
-        every { anyDs.describe("http://source/", "JohnSmith") } returns aSimpleModel()
+        every { anyDs.describe(QName("http://source/", "JohnSmith")) } returns aSimpleModel()
         val rdw = RewrittenDataSource(anyDs, "http://source/")
-        val result = rdw.describe("http://target/", "JohnSmith")
+        val result = rdw.describe(QName("http://target/", "JohnSmith"))
         assertTrue(result.contains(result.createResource("http://target/JohnSmith"), VCARD.FN, "John Smith"))
     }
 
     @Test
     fun `Verify that the rewritten source doesn't have an unrequested owl sameAs`() {
-        every { anyDs.describe("http://source/", "JohnSmith") } returns aSimpleModel()
+        every { anyDs.describe(QName("http://source/", "JohnSmith")) } returns aSimpleModel()
         val rdw = RewrittenDataSource(anyDs, "http://source/")
-        val result = rdw.describe("http://target/", "JohnSmith")
+        val result = rdw.describe(QName("http://target/", "JohnSmith"))
         assertFalse(
             result.contains(
                 result.createResource("http://target/JohnSmith"),
@@ -183,9 +183,9 @@ class RewrittenDataSourceTest {
 
     @Test
     fun `Verify that the rewritten source has the expected owl sameAs`() {
-        every { anyDs.describe("http://source/", "JohnSmith") } returns aSimpleModel()
+        every { anyDs.describe(QName("http://source/", "JohnSmith")) } returns aSimpleModel()
         val rdw = RewrittenDataSource(anyDs, "http://source/", true)
-        val result = rdw.describe("http://target/", "JohnSmith")
+        val result = rdw.describe(QName("http://target/", "JohnSmith"))
         assertTrue(
             result.contains(
                 result.createResource("http://target/JohnSmith"),

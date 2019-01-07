@@ -33,6 +33,8 @@ class Tdb2DataSourceConfiguration(
 
 class Tdb2DataSource(private val config: Tdb2DataSourceConfiguration) : DataSource {
 
+    override fun qname(uri: String) = QName(localPart = uri)
+
     init {
         with(DescribeHandlerRegistry.get()) {
             clear()
@@ -61,8 +63,8 @@ class Tdb2DataSource(private val config: Tdb2DataSourceConfiguration) : DataSour
         return newDataset
     }
 
-    override fun describe(namespace: String, localId: String): Model {
-        val query = QueryFactory.create("DESCRIBE <$namespace$localId>")
+    override fun describe(qname: QName): Model {
+        val query = QueryFactory.create("DESCRIBE <$qname>")
         return calculateRead(dataset) {
             create(query, dataset).use {
                 it.execDescribe()
