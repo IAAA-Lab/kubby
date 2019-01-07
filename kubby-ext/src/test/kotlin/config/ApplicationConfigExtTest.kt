@@ -75,7 +75,7 @@ class ApplicationConfigExtTest {
             endpoint = "https://dbpedia.org/sparql",
             trustEndpoint = true,
             defaultGraph = "http://dbpedia.org",
-            datasetBase =  "http://dbpedia.org/resource/"
+            datasetBase = "http://dbpedia.org/resource/"
         )
         assertEquals(1, config.datasets.size)
         assertEquals(expect, config.datasets[0])

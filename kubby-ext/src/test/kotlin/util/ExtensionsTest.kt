@@ -15,6 +15,7 @@ class ExtensionsTest {
         runtimeConfig = commandLineEnvironment(arrayOf("-port=80")).config
 
     }
+
     @Test
     fun `toTitleCase converts an English string to title case`() {
         assertEquals("Berlin is a City in Germany", "Berlin is a city in Germany".toTitleCase("en", runtimeConfig))
@@ -27,7 +28,10 @@ class ExtensionsTest {
 
     @Test
     fun `toTitleCase trims and collapses consecutive whitespace`() {
-        assertEquals("Berlin is a City in Germany", " Berlin  is  a  city  in  Germany ".toTitleCase("en", runtimeConfig))
+        assertEquals(
+            "Berlin is a City in Germany",
+            " Berlin  is  a  city  in  Germany ".toTitleCase("en", runtimeConfig)
+        )
     }
 
     @Test

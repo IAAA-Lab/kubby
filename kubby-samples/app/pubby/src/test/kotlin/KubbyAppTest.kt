@@ -33,7 +33,7 @@ class KubbyAppTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun testIndex() = withApplication(commandLineEnvironment(emptyArray())){
+    fun testIndex() = withApplication(commandLineEnvironment(emptyArray())) {
         with(handleRequest(HttpMethod.Get, "/")) {
             assertEquals(HttpStatusCode.SeeOther, response.status())
             assertEquals("${runtimeConfig.pagePath}/DBpedia", response.headers[HttpHeaders.Location])
@@ -51,7 +51,14 @@ class KubbyAppTest : AutoCloseKoinTest() {
     @Test
     fun testData() = withApplication(commandLineEnvironment(emptyArray())) {
         declareMock<DataSource>()
-        given(dao.describe(QName("http://localhost/resource/", "1"))).will { aSimpleModel("http://localhost/resource/1") }
+        given(
+            dao.describe(
+                QName(
+                    "http://localhost/resource/",
+                    "1"
+                )
+            )
+        ).will { aSimpleModel("http://localhost/resource/1") }
         with(handleRequest(HttpMethod.Get, "${runtimeConfig.dataPath}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals(

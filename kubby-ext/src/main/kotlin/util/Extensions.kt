@@ -103,7 +103,7 @@ fun Resource.getTitle(lang: String?, props: ApplicationConfig): String? {
 }
 
 val String?.preferNull: String?
- get() = if (this == null || isBlank()) null else  this
+    get() = if (this == null || isBlank()) null else this
 
 fun Resource.getValuesFromMultipleProperties(properties: Collection<Property>) =
     properties.flatMap {

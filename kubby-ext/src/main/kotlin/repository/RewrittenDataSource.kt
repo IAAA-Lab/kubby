@@ -23,10 +23,10 @@ class RewrittenDataSource(
 ) : DataSource {
 
     override fun qname(uri: String) = if (uri.startsWith(target)) {
-            QName(target, uri.substring(target.length))
-        } else {
-            dataSource.qname(uri)
-        }
+        QName(target, uri.substring(target.length))
+    } else {
+        dataSource.qname(uri)
+    }
 
     /**
      * Describe a resource identified by [namespace] and [localId] by
