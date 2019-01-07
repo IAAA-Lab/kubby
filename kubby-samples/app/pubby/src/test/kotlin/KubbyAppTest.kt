@@ -1,13 +1,17 @@
 package es.iaaa.kubby
 
-import es.iaaa.kubby.config.Configuration
+import es.iaaa.kubby.config.dataPath
+import es.iaaa.kubby.config.pagePath
+import es.iaaa.kubby.config.resourcePath
 import es.iaaa.kubby.fixtures.Models.aSimpleModel
 import es.iaaa.kubby.repository.DataSource
-import io.ktor.application.Application
+import io.ktor.config.ApplicationConfig
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
+import io.ktor.server.testing.withApplication
+import org.junit.Before
 import org.koin.standalone.inject
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.declareMock
@@ -19,8 +23,15 @@ class KubbyAppTest : AutoCloseKoinTest() {
 
     val dao by inject<DataSource>()
 
+    lateinit var runtimeConfig: ApplicationConfig
+
+    @Before
+    fun before() {
+        runtimeConfig = commandLineEnvironment(arrayOf("-port=80")).config
+    }
+
     @Test
-    fun testIndex() = withTestApplication(Application::main) {
+    fun testIndex() = withApplication(commandLineEnvironment(emptyArray())){
         with(handleRequest(HttpMethod.Get, "/")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("index", response.content)
@@ -28,18 +39,18 @@ class KubbyAppTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun testResource() = withTestApplication(Application::main) {
-        with(handleRequest(HttpMethod.Get, "${Configuration.route.resource}/1")) {
+    fun testResource() = withApplication(commandLineEnvironment(emptyArray())) {
+        with(handleRequest(HttpMethod.Get, "${runtimeConfig.resourcePath}/1")) {
             assertEquals(HttpStatusCode.Found, response.status())
-            assertEquals("${Configuration.route.data}/1", response.headers["Location"])
+            assertEquals("${runtimeConfig.dataPath}/1", response.headers["Location"])
         }
     }
 
     @Test
-    fun testData() = withTestApplication(Application::main) {
+    fun testData() = withApplication(commandLineEnvironment(emptyArray())) {
         declareMock<DataSource>()
         given(dao.describe("http://localhost/resource/", "1")).will { aSimpleModel("http://localhost/resource/1") }
-        with(handleRequest(HttpMethod.Get, "${Configuration.route.data}/1")) {
+        with(handleRequest(HttpMethod.Get, "${runtimeConfig.dataPath}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals(
                 """
@@ -74,8 +85,8 @@ class KubbyAppTest : AutoCloseKoinTest() {
 
 
     @Test
-    fun testPage() = withTestApplication(Application::main) {
-        with(handleRequest(HttpMethod.Get, "${Configuration.route.page}/1")) {
+    fun testPage() = withApplication(commandLineEnvironment(emptyArray())) {
+        with(handleRequest(HttpMethod.Get, "${runtimeConfig.pagePath}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("page", response.content)
         }

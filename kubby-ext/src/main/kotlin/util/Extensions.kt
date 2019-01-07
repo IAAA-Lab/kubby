@@ -1,9 +1,10 @@
 package es.iaaa.kubby.util
 
-import es.iaaa.kubby.config.Configuration
-import es.iaaa.kubby.config.Configuration.defaultLocale
-import es.iaaa.kubby.config.Configuration.labelProperties
-import es.iaaa.kubby.config.Configuration.locales
+import es.iaaa.kubby.config.defaultLanguage
+import es.iaaa.kubby.config.labelProperties
+import es.iaaa.kubby.config.list
+import es.iaaa.kubby.config.usePrefixes
+import io.ktor.config.ApplicationConfig
 import io.ktor.http.RequestConnectionPoint
 import org.apache.jena.rdf.model.*
 import org.apache.jena.shared.PrefixMapping
@@ -43,14 +44,10 @@ private val camelCaseBoundaryPattern =
 
 private val wordPattern = "[ \t\r\n-]+".toRegex()
 
-fun String?.toTitleCase(lang: String? = defaultLocale): String? {
+fun String?.toTitleCase(lang: String?, props: ApplicationConfig): String? {
     if (this == null) return null
 
-    val uncapitalizedWords = if (locales.containsKey(lang)) {
-        locales.getValue(lang!!).uncapitalizedWords
-    } else {
-        emptySet()
-    }
+    val uncapitalizedWords = props.list("uncapitalized-words", lang ?: props.defaultLanguage)
 
     val str = camelCaseBoundaryPattern.replace(this, " ")
     return if (lang != null) toTitleCase(str, Locale.forLanguageTag(lang), uncapitalizedWords)
@@ -59,25 +56,7 @@ fun String?.toTitleCase(lang: String? = defaultLocale): String? {
 
 private fun toTitleCase(
     str: String,
-    locale: Locale,
-    uncapitalizedWords: Set<String>
-): String {
-    return wordPattern.split(str)
-        .filter { !it.isEmpty() }
-        .map { it.toLowerCase(locale) }
-        .fold("") { acc, word ->
-            "$acc " + if (acc.isEmpty() || !uncapitalizedWords.contains(word)) {
-                word.substring(0, 1).toUpperCase(locale) + word.substring(1)
-            } else {
-                word
-            }
-        }
-        .trimStart()
-}
-
-private fun toTitleCase(
-    str: String,
-    uncapitalizedWords: Set<String>
+    uncapitalizedWords: List<String>
 ): String {
     return wordPattern.split(str)
         .filter { !it.isEmpty() }
@@ -92,16 +71,39 @@ private fun toTitleCase(
         .trimStart()
 }
 
-fun Resource.getTitle(lang: String?): String? {
+private fun toTitleCase(
+    str: String,
+    locale: Locale,
+    uncapitalizedWords: List<String>
+): String {
+    return wordPattern.split(str)
+        .filter { !it.isEmpty() }
+        .map { it.toLowerCase(locale) }
+        .fold("") { acc, word ->
+            "$acc " + if (acc.isEmpty() || !uncapitalizedWords.contains(word)) {
+                word.substring(0, 1).toUpperCase(locale) + word.substring(1)
+            } else {
+                word
+            }
+        }
+        .trimStart()
+}
+
+
+fun Resource.getTitle(lang: String?, props: ApplicationConfig): String? {
     fun extractTitle(): String? {
-        val match = prefixes.nsPrefixMap.toList().find { uri.startsWith(it.second) }
+        val match = getPrefixes(props).nsPrefixMap.toList().find { uri.startsWith(it.second) }
         return if (match != null) uri.substring(match.second.length) else null
     }
     if (!this.isResource) return null
-    val literal = getLabel(lang)
-    val label = literal?.lexicalForm ?: extractTitle()
-    return if ("" == label) uri.toTitleCase(null) else label.toTitleCase(literal?.language)
+    val literal = getLabel(lang, props)
+    val label = (literal?.lexicalForm ?: extractTitle()).preferNull
+        ?: literal?.language.preferNull
+    return uri.toTitleCase(label, props)
 }
+
+val String?.preferNull: String?
+ get() = if (this == null || isBlank()) null else  this
 
 fun Resource.getValuesFromMultipleProperties(properties: Collection<Property>) =
     properties.flatMap {
@@ -113,18 +115,17 @@ fun getBestLanguageMatch(nodes: Collection<RDFNode>, lang: String?): Literal? {
     return literals.find { lang == null || lang == it.language } ?: literals.firstOrNull()
 }
 
-fun Resource.getLabel(lang: String?): Literal? {
-    val candidates = getValuesFromMultipleProperties(labelProperties)
+fun Resource.getLabel(lang: String?, props: ApplicationConfig): Literal? {
+    val candidates = getValuesFromMultipleProperties(props.labelProperties)
     return getBestLanguageMatch(candidates, lang)
 }
 
-val Resource.prefixes: PrefixMapping
-    get() {
-        val prefixes = PrefixMappingImpl()
-        prefixes.setNsPrefixes(this.model)
-        Configuration.prefixes.forEach { prefix, uri -> prefixes.setNsPrefix(prefix, uri) }
-        return prefixes
-    }
+fun Resource.getPrefixes(props: ApplicationConfig): PrefixMapping {
+    val prefixes = PrefixMappingImpl()
+    prefixes.setNsPrefixes(this.model)
+    props.usePrefixes.forEach { prefix, uri -> prefixes.setNsPrefix(prefix, uri) }
+    return prefixes
+}
 
 fun Model.addNsIfUndefined(prefix: String, uri: String) {
     if (this.getNsURIPrefix(uri) != null) return

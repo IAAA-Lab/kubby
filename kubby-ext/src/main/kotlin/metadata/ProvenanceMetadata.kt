@@ -1,10 +1,10 @@
 package es.iaaa.kubby.metadata
 
-import com.typesafe.config.Config
-import es.iaaa.kubby.config.Configuration
+import es.iaaa.kubby.config.softwareName
 import es.iaaa.kubby.util.AttributeKeys
 import es.iaaa.kubby.util.AttributeKeys.pageId
 import es.iaaa.kubby.util.addNsIfUndefined
+import io.ktor.config.ApplicationConfig
 import io.ktor.util.Attributes
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.sparql.vocabulary.FOAF
@@ -13,10 +13,7 @@ import java.util.*
 
 class ProvenanceMetadata : MetadataAugmenter {
 
-    private val config: Config = Configuration.config.getConfig("kubby")
-    private val name: String = config.getString("name")
-
-    override fun augment(model: Model, attributes: Attributes) {
+    override fun augment(model: Model, attributes: Attributes, props: ApplicationConfig) {
         val pageId = attributes.getOrNull(pageId)
 
         if (pageId != null) {
@@ -44,7 +41,7 @@ class ProvenanceMetadata : MetadataAugmenter {
 
             agent.addProperty(RDF.type, model.createResource(prov + "SoftwareAgent"))
             agent.addProperty(RDF.type, model.createResource(prov + "Agent"))
-            agent.addLiteral(FOAF.name, name)
+            agent.addLiteral(FOAF.name, props.softwareName)
         }
     }
 }

@@ -28,7 +28,9 @@ class Metadata(val registrations: List<MetadataAugmenter>) {
 
             pipeline.sendPipeline.intercept(ApplicationSendPipeline.Transform) { subject ->
                 if (subject is Model) {
-                    feature.registrations.forEach { it.augment(subject, call.attributes) }
+                    feature.registrations.forEach {
+                        it.augment(subject, call.attributes, call.application.environment.config)
+                    }
                 }
                 proceedWith(subject)
             }
