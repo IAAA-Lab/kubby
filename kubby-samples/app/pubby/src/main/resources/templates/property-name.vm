@@ -7,7 +7,7 @@
         <a class="uri" href="$property.BrowsableURL" title="$property.URI">$property.InverseLabel</a>
     #elseif ($showLabels && $property.label)
         <a class="uri" href="$property.BrowsableURL" title="$property.URI">$property.label</a>
-    #elseif ($property.hasPrefix())
+    #elseif ($property.hasPrefix)
         <a class="uri" href="$property.BrowsableURL" title="$property.URI"><small>$property.Prefix:</small>$property.LocalName</a>
     #else
         <a class="uri" href="$property.BrowsableURL" title="$property.URI"><small>?:</small>$property.LocalName</a>

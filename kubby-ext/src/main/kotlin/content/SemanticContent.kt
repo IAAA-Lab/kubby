@@ -1,6 +1,7 @@
 package es.iaaa.kubby.content
 
 import es.iaaa.kubby.config.*
+import es.iaaa.kubby.description.DescriptionHandler
 import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.repository.NULL_NS_URI
 import es.iaaa.kubby.repository.QName
@@ -10,8 +11,10 @@ import es.iaaa.kubby.util.buildRequest
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.features.origin
+import io.ktor.http.ContentType.Text
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.request.contentType
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.application
@@ -51,7 +54,12 @@ fun Route.resourceContent() {
     route(config.resourcePath) {
         get("{$pathParameterName...}") {
             val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
-            call.respondSeeOther("${config.dataPath}/$relativePath")
+            val contentType = call.request.contentType().withoutParameters()
+            if (Text.Html.match(contentType)) {
+                call.respondSeeOther("${config.pagePath}/$relativePath")
+            } else  {
+                call.respondSeeOther("${config.dataPath}/$relativePath")
+            }
         }
     }
 }
@@ -82,14 +90,17 @@ fun Route.dataContent() {
  */
 fun Route.pageContent() {
     val config = application.environment.config
+    val handler = DescriptionHandler(config)
     val dataSource by inject<DataSource>()
     route(config.pagePath) {
         get("{$pathParameterName...}") {
             val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
             val base = context.request.origin.buildBase("${config.pagePath}/$relativePath")
             val qname = QName("$base${config.resourcePath}/", relativePath)
+            val data = QName("$base${config.dataPath}/", relativePath)
             val model = dataSource.describe(qname)
-            processPageContentResponse(model)
+            val content = handler.contentOf(model.getResource(qname.toString()), data.toString())
+            call.respond(HttpStatusCode.OK, VelocityContent("page.vm", content))
         }
     }
 }

@@ -74,15 +74,31 @@ val ApplicationConfig.datasets: List<Source>
  * Get the list of label properties.
  */
 val ApplicationConfig.labelProperties: List<Property>
-    get() {
+    get() = getProperties("kubby.label-properties")
+
+/**
+ * Get the list of comment properties.
+ */
+val ApplicationConfig.commentProperties: List<Property>
+    get() = getProperties("kubby.comment-properties")
+
+/**
+ * Get the list of image properties.
+ */
+val ApplicationConfig.imageProperties: List<Property>
+    get() = getProperties("kubby.image-properties")
+
+private fun ApplicationConfig.getProperties(key: String): List<Property> {
         val model = ModelFactory.createDefaultModel()
         val prefixes = usePrefixes.toMap()
-        return property("kubby.label-properties").getList().map { prop ->
+        return property(key).getList().map { prop ->
             prefixes.entries.firstOrNull { entry -> prop.startsWith("${entry.key}:") }
                 ?.let { model.createProperty(it.value, prop.substring(it.key.length + 1)) }
                 ?: model.createProperty(prop)
         }
     }
+
+
 
 // TODO test
 fun ApplicationConfig.text(key: String, lang: String) =
@@ -115,7 +131,7 @@ val ApplicationConfig.aboutPath: String
 // TODO test
 val ApplicationConfig.velocityConfiguration: VelocityConfiguration
     get() = VelocityConfiguration(
-        resourceLoaderPath = property("kubby.velocity.resourceLoaderPath").getString(),
+        resourceLoaderPath = property("kubby.velocity.resource-loader-path").getString(),
         suffix = property("kubby.velocity.suffix").getString(),
         charset = Charset.forName(property("kubby.velocity.charset").getString())
     )

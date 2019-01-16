@@ -15,13 +15,17 @@ fun createModule(config: ApplicationConfig): Module {
                 dataSource = SPARQLDataSource(
                     service = it.endpoint,
                     defaultGraphURI = it.defaultGraph,
-                    forceTrust = it.trustEndpoint),
+                    forceTrust = it.trustEndpoint
+                ),
                 target = it.datasetBase
-                )
+            )
         }
-   return module(createOnStart = false) {
+    return module(createOnStart = false) {
         single<DataSource> {
             MergeDataSource(ds)
+        }
+        single {
+            config
         }
     }
 }

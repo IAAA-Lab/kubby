@@ -1,9 +1,6 @@
 package es.iaaa.kubby.util
 
-import es.iaaa.kubby.config.defaultLanguage
-import es.iaaa.kubby.config.labelProperties
-import es.iaaa.kubby.config.list
-import es.iaaa.kubby.config.usePrefixes
+import es.iaaa.kubby.config.*
 import io.ktor.config.ApplicationConfig
 import io.ktor.http.RequestConnectionPoint
 import org.apache.jena.rdf.model.*
@@ -99,8 +96,9 @@ fun Resource.getTitle(lang: String?, props: ApplicationConfig): String? {
     val literal = getLabel(lang, props)
     val label = (literal?.lexicalForm ?: extractTitle()).preferNull
         ?: literal?.language.preferNull
-    return uri.toTitleCase(label, props)
+    return label.toTitleCase(lang, props)
 }
+
 
 val String?.preferNull: String?
     get() = if (this == null || isBlank()) null else this
@@ -112,13 +110,27 @@ fun Resource.getValuesFromMultipleProperties(properties: Collection<Property>) =
 
 fun getBestLanguageMatch(nodes: Collection<RDFNode>, lang: String?): Literal? {
     val literals = nodes.filter { it.isLiteral }.map { it.asLiteral() }
-    return literals.find { lang == null || lang == it.language } ?: literals.firstOrNull()
+    return literals.find { lang.isNullOrEmpty() || lang == it.language } ?: literals.firstOrNull()
 }
 
 fun Resource.getLabel(lang: String?, props: ApplicationConfig): Literal? {
     val candidates = getValuesFromMultipleProperties(props.labelProperties)
     return getBestLanguageMatch(candidates, lang)
 }
+
+
+fun Resource.getComment(lang: String?, props: ApplicationConfig): String? {
+    val candidates = getValuesFromMultipleProperties(props.commentProperties)
+    return getBestLanguageMatch(candidates, lang)?.let { toSentenceCase(it.lexicalForm, it.language)}
+}
+
+fun Resource.getImageURL(props: ApplicationConfig): String? = getValuesFromMultipleProperties(props.imageProperties)
+    .firstOrNull { it.isURIResource }?.asResource()?.uri
+
+
+
+private fun toSentenceCase(s: String?, lang: String): String? = s?.trim()?.let { if (it == "") null else it.capitalize() }
+
 
 fun Resource.getPrefixes(props: ApplicationConfig): PrefixMapping {
     val prefixes = PrefixMappingImpl()
