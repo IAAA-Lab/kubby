@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7' 
     }
 }
 
@@ -11,13 +12,14 @@ allprojects {
     group = "es.iaaa"
     version = "1.0-SNAPSHOT"
 
-
     repositories {
         jcenter()
     }
 }
 
 subprojects {
+
+    apply plugin: 'org.sonarqube'
     apply plugin: 'kotlin'
     compileKotlin {
         kotlinOptions.jvmTarget = "1.8"
@@ -28,9 +30,9 @@ subprojects {
         compile "io.ktor:ktor-server-netty:$ktor_version"
         compile "io.ktor:ktor-velocity:$ktor_version"
         compile "org.koin:koin-ktor:$koin_version"
+        compile "com.google.guava:guava:26.0-jre"
 
         compile "io.github.config4k:config4k:$config4k_version"
-
 
         compile "org.apache.jena:apache-jena-libs:$jena_version"
         compile "ch.qos.logback:logback-classic:1.2.3"
