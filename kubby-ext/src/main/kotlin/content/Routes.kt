@@ -5,15 +5,13 @@ import es.iaaa.kubby.description.DescriptionHandler
 import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.repository.NULL_NS_URI
 import es.iaaa.kubby.repository.QName
-import es.iaaa.kubby.util.AttributeKeys
-import es.iaaa.kubby.util.buildBase
-import es.iaaa.kubby.util.buildRequest
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.features.origin
 import io.ktor.http.ContentType.Text
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.RequestConnectionPoint
 import io.ktor.request.contentType
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -28,7 +26,7 @@ import java.io.File
 import java.util.*
 
 
-private const val pathParameterName = "static-content-path-parameter"
+private const val PATH_PARAMETER_NAME = "static-content-path-parameter"
 
 /**
  * Set up a routing tree to handle the index resource.
@@ -52,8 +50,8 @@ fun Route.indexContent() {
 fun Route.resourceContent() {
     val config = application.environment.config
     route(config.resourcePath) {
-        get("{$pathParameterName...}") {
-            val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
+        get("{$PATH_PARAMETER_NAME...}") {
+            val relativePath = call.parameters.getAll(PATH_PARAMETER_NAME)?.joinToString(File.separator) ?: return@get
             val contentType = call.request.contentType().withoutParameters()
             if (Text.Html.match(contentType)) {
                 call.respondSeeOther("${config.pagePath}/$relativePath")
@@ -71,15 +69,15 @@ fun Route.dataContent() {
     val config = application.environment.config
     val dataSource by inject<DataSource>()
     route(config.dataPath) {
-        get("{$pathParameterName...}") {
-            val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
+        get("{$PATH_PARAMETER_NAME...}") {
+            val relativePath = call.parameters.getAll(PATH_PARAMETER_NAME)?.joinToString(File.separator) ?: return@get
             val base = context.request.origin.buildBase("${config.dataPath}/$relativePath")
             val qname = QName("$base${config.resourcePath}/", relativePath)
             val model = dataSource.describe(qname)
-            call.attributes.put(AttributeKeys.timeId, GregorianCalendar.getInstance())
-            call.attributes.put(AttributeKeys.resourceId, qname.toString())
-            call.attributes.put(AttributeKeys.pageId, context.request.origin.buildRequest())
-            call.attributes.put(AttributeKeys.aboutId, "$base${config.aboutPath}")
+            call.attributes.put(ContentKeys.timeId, GregorianCalendar.getInstance())
+            call.attributes.put(ContentKeys.resourceId, qname.toString())
+            call.attributes.put(ContentKeys.pageId, context.request.origin.uriRequest)
+            call.attributes.put(ContentKeys.aboutId, "$base${config.aboutPath}")
             call.respond(model)
         }
     }
@@ -93,8 +91,8 @@ fun Route.pageContent() {
     val handler = DescriptionHandler(config)
     val dataSource by inject<DataSource>()
     route(config.pagePath) {
-        get("{$pathParameterName...}") {
-            val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
+        get("{$PATH_PARAMETER_NAME...}") {
+            val relativePath = call.parameters.getAll(PATH_PARAMETER_NAME)?.joinToString(File.separator) ?: return@get
             val base = context.request.origin.buildBase("${config.pagePath}/$relativePath")
             val qname = QName("$base${config.resourcePath}/", relativePath)
             val data = QName("$base${config.dataPath}/", relativePath)
@@ -119,3 +117,29 @@ suspend fun ApplicationCall.respondSeeOther(url: String) {
     response.headers.append(HttpHeaders.Location, url)
     respond(HttpStatusCode.SeeOther)
 }
+
+fun RequestConnectionPoint.buildBase(path: String): String {
+    val sb = StringBuilder()
+    sb.append("$scheme://$host")
+    if ((scheme == "http" && port != 80) ||
+        (scheme == "https" && port != 443)) {
+        sb.append(":$port")
+    }
+    val keep = uri.length - path.length
+    sb.append(uri.subSequence(0, keep))
+    return sb.toString()
+}
+
+
+val RequestConnectionPoint.uriRequest: String get() = "$scheme://$authority$uri"
+
+val RequestConnectionPoint.authority: String
+    get() {
+        val sb = StringBuffer()
+        sb.append(host)
+        if ((scheme == "http" && port != 80) ||
+            (scheme == "https" && port != 443)) {
+            sb.append(":$port")
+        }
+        return sb.toString()
+    }

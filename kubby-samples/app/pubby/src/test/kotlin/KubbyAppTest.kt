@@ -27,29 +27,25 @@ class KubbyAppTest : AutoCloseKoinTest() {
 
     lateinit var runtimeConfig: ApplicationConfig
 
-    @Before
-    fun before() {
+    @Before fun before() {
         runtimeConfig = commandLineEnvironment(arrayOf("-port=80")).config
     }
 
-    @Test
-    fun testIndex() = withApplication(commandLineEnvironment(emptyArray())) {
+    @Test fun `index redirects to DBPedia page`() = withApplication(commandLineEnvironment(emptyArray())) {
         with(handleRequest(HttpMethod.Get, "/")) {
             assertEquals(HttpStatusCode.SeeOther, response.status())
             assertEquals("${runtimeConfig.pagePath}/DBpedia", response.headers[HttpHeaders.Location])
         }
     }
 
-    @Test
-    fun testResource() = withApplication(commandLineEnvironment(emptyArray())) {
+    @Test fun `DBpedia as resource returns redirect`() = withApplication(commandLineEnvironment(emptyArray())) {
         with(handleRequest(HttpMethod.Get, "${runtimeConfig.resourcePath}/1")) {
             assertEquals(HttpStatusCode.Found, response.status())
             assertEquals("${runtimeConfig.dataPath}/1", response.headers["Location"])
         }
     }
 
-    @Test
-    fun testData() = withApplication(commandLineEnvironment(emptyArray())) {
+    @Test fun `resource description returns JSON-LD`() = withApplication(commandLineEnvironment(emptyArray())) {
         declareMock<DataSource>()
         given(
             dao.describe(
@@ -93,8 +89,7 @@ class KubbyAppTest : AutoCloseKoinTest() {
     }
 
 
-    @Test
-    fun testPage() = withApplication(commandLineEnvironment(emptyArray())) {
+    @Test fun testPage() = withApplication(commandLineEnvironment(emptyArray())) {
         with(handleRequest(HttpMethod.Get, "${runtimeConfig.pagePath}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
             assertEquals("page", response.content)

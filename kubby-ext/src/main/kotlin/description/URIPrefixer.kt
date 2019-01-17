@@ -27,20 +27,19 @@ class URIPrefixer(private val resource: Resource, prefixes: PrefixMapping) {
         }
     }
 
-    val prefix: String?
-        get() = _prefix
+    val prefix: String? get() = _prefix
 
-    val hasPrefix: Boolean
-        get() = _prefix != null
+    val hasPrefix: Boolean get() = _prefix != null
 
-    val localName: String?
-        get() {
-            if (resource.isAnon) return null
-            return _localName ?: pattern.find(resource.uri)?.let { it.groupValues[0] } ?: ""
+    val localName: String? get() = if (!resource.isAnon) {
+            _localName ?: pattern.find(resource.uri)?.let { it.groupValues[0] } ?: ""
+        } else {
+            null
         }
 
-    fun toTurtle(): String {
-        if (resource.isAnon) return "[]"
-        return if (hasPrefix) "$_prefix:$localName" else "<${resource.uri}>"
-    }
+    fun toTurtle() = when {
+            resource.isAnon -> "[]"
+            hasPrefix -> "$_prefix:$localName"
+            else -> "<${resource.uri}>"
+        }
 }

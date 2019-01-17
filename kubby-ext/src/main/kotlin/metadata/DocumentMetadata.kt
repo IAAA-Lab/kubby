@@ -2,10 +2,10 @@ package es.iaaa.kubby.metadata
 
 import es.iaaa.kubby.config.defaultLanguage
 import es.iaaa.kubby.config.text
-import es.iaaa.kubby.util.AttributeKeys.pageId
-import es.iaaa.kubby.util.AttributeKeys.resourceId
-import es.iaaa.kubby.util.addNsIfUndefined
-import es.iaaa.kubby.util.getTitle
+import es.iaaa.kubby.content.ContentKeys.pageId
+import es.iaaa.kubby.content.ContentKeys.resourceId
+import es.iaaa.kubby.model.addNsIfUndefined
+import es.iaaa.kubby.description.getTitle
 import io.ktor.config.ApplicationConfig
 import io.ktor.util.Attributes
 import org.apache.jena.rdf.model.Model

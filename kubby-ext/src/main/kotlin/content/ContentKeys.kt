@@ -1,9 +1,9 @@
-package es.iaaa.kubby.util
+package es.iaaa.kubby.content
 
 import io.ktor.util.AttributeKey
 import java.util.*
 
-object AttributeKeys {
+object ContentKeys {
     val resourceId = AttributeKey<String>("resourceId")
     val pageId = AttributeKey<String>("pageId")
     val aboutId = AttributeKey<String>("aboutId")

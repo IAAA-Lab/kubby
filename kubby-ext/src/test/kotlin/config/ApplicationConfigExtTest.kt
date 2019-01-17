@@ -15,27 +15,22 @@ class ApplicationConfigExtTest {
 
     lateinit var runtimeConfig: ApplicationConfig
 
-    @Before
-    fun before() {
+    @Before fun before() {
         val classLoader = javaClass.classLoader
         val file = File(classLoader.getResource("config/test.conf").file)
         config = HoconApplicationConfig(ConfigFactory.parseFile(file))
         runtimeConfig = commandLineEnvironment(arrayOf("-port=80")).config
-
     }
 
-    @Test
-    fun `test access to the project name`() {
+    @Test fun `ensure project name has value`() {
         assertEquals("Test DBpedia.org", config.projectName)
     }
 
-    @Test
-    fun `test access to the project homepage`() {
+    @Test fun `ensure the project homepage has value`() {
         assertEquals("http://dbpedia.org", config.projectHomepage)
     }
 
-    @Test
-    fun `test access to the prefixes of the project`() {
+    @Test fun `ensure the prefixes are defined`() {
         val expected = mapOf(
             "rdf" to "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             "dc" to "http://purl.org/dc/elements/1.1/",
@@ -46,8 +41,7 @@ class ApplicationConfigExtTest {
         assertEquals(expected, config.usePrefixes)
     }
 
-    @Test
-    fun `test access to the default prefixes of the project`() {
+    @Test fun `ensure the default prefixes are defined`() {
         val expected = mapOf(
             "rdfs" to "http://www.w3.org/2000/01/rdf-schema#",
             "rdf" to "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -59,18 +53,15 @@ class ApplicationConfigExtTest {
         assertEquals(expected, runtimeConfig.usePrefixes)
     }
 
-    @Test
-    fun `test access to the default language`() {
+    @Test fun `ensure the default language is defined`() {
         assertEquals("en", config.defaultLanguage)
     }
 
-    @Test
-    fun `test access to the index resource`() {
+    @Test fun `ensure the index resource is defined`() {
         assertEquals("http://dbpedia.org/resource/DBpedia", config.indexResource)
     }
 
-    @Test
-    fun `test access to the configured datasets`() {
+    @Test fun `configure a SPARQL endpoint`() {
         val expect = SparqlEndpoint(
             endpoint = "https://dbpedia.org/sparql",
             trustEndpoint = true,
@@ -81,8 +72,7 @@ class ApplicationConfigExtTest {
         assertEquals(expect, config.datasets[0])
     }
 
-    @Test
-    fun `test access to the default label properties of the project`() {
+    @Test fun `ensure to the default label properties are defined`() {
         val expected = listOf(
             "http://www.w3.org/2000/01/rdf-schema#label",
             "http://purl.org/dc/elements/1.1/title",

@@ -1,9 +1,9 @@
 package es.iaaa.kubby.metadata
 
 import es.iaaa.kubby.config.softwareName
-import es.iaaa.kubby.util.AttributeKeys
-import es.iaaa.kubby.util.AttributeKeys.pageId
-import es.iaaa.kubby.util.addNsIfUndefined
+import es.iaaa.kubby.content.ContentKeys
+import es.iaaa.kubby.content.ContentKeys.pageId
+import es.iaaa.kubby.model.addNsIfUndefined
 import io.ktor.config.ApplicationConfig
 import io.ktor.util.Attributes
 import org.apache.jena.rdf.model.Model
@@ -17,8 +17,8 @@ class ProvenanceMetadata : MetadataAugmenter {
         val pageId = attributes.getOrNull(pageId)
 
         if (pageId != null) {
-            val aboutId: String = attributes[AttributeKeys.aboutId]
-            val time: Calendar = attributes[AttributeKeys.timeId]
+            val aboutId: String = attributes[ContentKeys.aboutId]
+            val time: Calendar = attributes[ContentKeys.timeId]
             val date = model.createTypedLiteral(time)
 
 

@@ -21,14 +21,11 @@ class Tdb2DataSourceTest {
     private val data: Path = Paths.get("src/test/resources/Tetris.n3")
     private val assembler: Path = Paths.get("src/test/resources/tdb2.ttl")
 
-
-    @Before
-    fun before() {
+    @Before fun before() {
         deleteRecursivelyIfExists(target)
     }
 
-    @Test
-    fun `Create an empty new TDB2 dataset by default`() {
+    @Test fun `create an empty new TDB2 dataset by default`() {
 
         val config = Tdb2DataSourceConfiguration(target)
         Tdb2DataSource(config)
@@ -36,8 +33,7 @@ class Tdb2DataSourceTest {
         assertTrue { Files.isDirectory(target) }
     }
 
-    @Test
-    fun `Create an empty new TDB2 dataset with an assembler`() {
+    @Test fun `create an empty new TDB2 dataset with an assembler`() {
 
         val config = Tdb2DataSourceConfiguration(assembler)
         Tdb2DataSource(config)
@@ -45,8 +41,7 @@ class Tdb2DataSourceTest {
         assertTrue { Files.isDirectory(target) }
     }
 
-    @Test
-    fun `Create and load a new TDB2 dataset`() {
+    @Test fun `create and load a new TDB2 dataset`() {
 
         val config = Tdb2DataSourceConfiguration(
             path = target,
@@ -59,9 +54,7 @@ class Tdb2DataSourceTest {
         assertFalse { result.isEmpty }
     }
 
-
-    @Test
-    fun `Connect to an existing TDB2 dataset`() {
+    @Test fun `connect to an existing TDB2 dataset`() {
         val existing = connectDataset(create(target))
         loadFile(existing)
         val statements = countStatements(existing)
@@ -72,8 +65,7 @@ class Tdb2DataSourceTest {
         assertEquals(statements, countStatements(existing))
     }
 
-    @Test
-    fun `Describe an existing resource in the TB2 dataset`() {
+    @Test fun `describe an existing resource in the TB2 dataset`() {
         initializeDataset()
 
         val config = Tdb2DataSourceConfiguration(target)
@@ -84,8 +76,7 @@ class Tdb2DataSourceTest {
         assertFalse { result.isEmpty }
     }
 
-    @Test
-    fun `Describe a non existing resource in the TB2 dataset`() {
+    @Test fun `describe a non existing resource in the TB2 dataset`() {
         initializeDataset()
 
         val config = Tdb2DataSourceConfiguration(target)

@@ -1,6 +1,6 @@
 package es.iaaa.kubby.repository
 
-import es.iaaa.kubby.util.addNsIfUndefined
+import es.iaaa.kubby.model.addNsIfUndefined
 import org.apache.jena.rdf.model.*
 import org.apache.jena.vocabulary.OWL
 
@@ -43,7 +43,8 @@ class RewrittenDataSource(
             .addSameAsStatement(qname)
 
     private fun Model.addSameAsStatement(qname: QName): Model {
-        if (addSameAs && !isEmpty && target != qname.namespaceURI) {
+        if (addSameAs && !isEmpty &&
+            target != qname.namespaceURI) {
             val original = getResource(target + qname.localPart)
             val rewritten = getResource(qname.toString())
             rewritten.addProperty(OWL.sameAs, original)

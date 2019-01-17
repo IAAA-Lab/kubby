@@ -23,13 +23,11 @@ class KubbyAppRealDataTest : AutoCloseKoinTest() {
 
     lateinit var runtimeConfig: ApplicationConfig
 
-    @Before
-    fun before() {
+    @Before fun before() {
         runtimeConfig = commandLineEnvironment(arrayOf("-port=80")).config
     }
 
-    @Test
-    fun testData() = withApplication(commandLineEnvironment(emptyArray())) {
+    @Test fun testData() = withApplication(commandLineEnvironment(emptyArray())) {
         with(handleRequest(HttpMethod.Get, "${runtimeConfig.dataPath}/Tetris")) {
             assertEquals(HttpStatusCode.OK, response.status())
             val model = ModelFactory.createDefaultModel()

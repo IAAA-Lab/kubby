@@ -12,36 +12,29 @@ class DescriptionHandlerTest  : AutoCloseKoinTest() {
 
     private lateinit var node: ContentNode
 
-    @Before
-    fun before() {
+    @Before fun before() {
         val config = HoconApplicationConfig(ConfigFactory.load("test.conf"))
         val model = Models.aSimpleModel("http://example.com/sample")
         node = DescriptionHandler(config).contentOf(model.getResource("http://example.com/sample"), "http://example.com/data/sample")
     }
 
-    @Test
-    fun testProjectName()  {
+    @Test fun `ensure project name is defined`()  {
         assertEquals("Test project", node["projectName"])
     }
 
-    @Test
-    fun testTitle()  {
+    @Test fun `ensure title is defined`()  {
         assertEquals("Jane Doe", node["title"])
     }
 
-    @Test
-    fun testProjectHomepage()  {
+    @Test fun `ensure home page is defined`()  {
         assertEquals("http://example.com", node["projectHomepage"])
     }
 
-    @Test
-    fun testRdfLink()  {
+    @Test fun `ensure RDF link is defined`()  {
         assertEquals("http://example.com/data/sample", node["rdfLink"])
     }
 
-
-    @Test
-    fun testRdfFormat()  {
+    @Test fun `ensure RDF format is defined`()  {
         assertEquals("application/ld+json", node["rdfFormat"])
     }
 }
