@@ -29,13 +29,10 @@ class RewrittenDataSource(
     }
 
     /**
-     * Describe a resource identified by [namespace] and [localId] by
-     * querying the [dataSource] for the resource identified by [target] and [localId]
-     * and then retuning a result that contains the same data but with all IRIs
-     * starting with [target] replaced with IRIs starting with [namespace].
+     * Describe a resource identified by [qname] querying the [dataSource] and then retuning
+     * a result that contains the same data but with all IRI starting with [target] replaced
+     * with IRIs starting with the namespace of [qname].
      *
-     * @param namespace the namespace of the resource.
-     * @param localId the local identifier of the resource.
      * @return a rewritten response.
      */
     override fun describe(qname: QName) =
@@ -83,7 +80,7 @@ class RewrittenDataSource(
             }
         }
 
-    internal fun rewriteLiteral(literal: Literal, namespace: String, model: Model) =
+    private fun rewriteLiteral(literal: Literal, namespace: String, model: Model) =
         with(literal) {
             if (datatypeURI?.startsWith(target) == true) {
                 model.createTypedLiteral(lexicalForm, rewrite(namespace, datatypeURI))

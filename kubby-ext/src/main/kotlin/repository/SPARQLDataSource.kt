@@ -1,5 +1,6 @@
 package es.iaaa.kubby.repository
 
+import es.iaaa.kubby.config.SPARQLEndpoint
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory
 import org.apache.http.impl.client.HttpClients
@@ -15,6 +16,12 @@ class SPARQLDataSource(
     private val forceTrust: Boolean = false,
     private val removeNsPrefix: Regex = "^ns[0-9]+$".toRegex()
 ) : DataSource {
+
+    constructor(config: SPARQLEndpoint) : this(
+        service = config.endpoint,
+        defaultGraphURI = config.defaultGraph,
+        forceTrust = config.trustEndpoint
+    )
 
     override fun qname(uri: String) = QName(localPart = uri)
 
@@ -51,3 +58,4 @@ class SPARQLDataSource(
         // empty
     }
 }
+

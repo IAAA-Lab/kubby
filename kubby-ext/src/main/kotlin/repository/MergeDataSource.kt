@@ -3,13 +3,13 @@ package es.iaaa.kubby.repository
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 
-class MergeDataSource(val datasources: List<DataSource>) : DataSource {
+class MergeDataSource(private val datasources: List<DataSource>) : DataSource {
     override fun qname(uri: String) = datasources
         .map { it.qname(uri) }
         .find { it.namespaceURI != NULL_NS_URI }
         ?: QName(localPart = uri)
 
-    override fun describe(qname: QName) = datasources
+    override fun describe(qname: QName) : Model = datasources
         .fold(ModelFactory.createDefaultModel()) { r, ds -> r.merge(ds.describe(qname))}
 
     override fun close() {

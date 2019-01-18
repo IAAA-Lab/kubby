@@ -1,4 +1,4 @@
-package description
+package es.iaaa.kubby.description
 
 import org.apache.jena.rdf.model.Resource
 import org.apache.jena.rdf.model.ResourceFactory

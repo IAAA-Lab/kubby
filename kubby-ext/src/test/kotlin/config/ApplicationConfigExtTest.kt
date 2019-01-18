@@ -62,7 +62,7 @@ class ApplicationConfigExtTest {
     }
 
     @Test fun `configure a SPARQL endpoint`() {
-        val expect = SparqlEndpoint(
+        val expect = SPARQLEndpoint(
             endpoint = "https://dbpedia.org/sparql",
             trustEndpoint = true,
             defaultGraph = "http://dbpedia.org",

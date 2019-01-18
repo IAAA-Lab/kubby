@@ -1,8 +1,8 @@
 package es.iaaa.kubby
 
-import es.iaaa.kubby.config.dataPath
-import es.iaaa.kubby.config.pagePath
-import es.iaaa.kubby.config.resourcePath
+import es.iaaa.kubby.content.dataPath
+import es.iaaa.kubby.content.pagePath
+import es.iaaa.kubby.content.resourcePath
 import es.iaaa.kubby.fixtures.Models.aSimpleModel
 import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.repository.QName
@@ -23,7 +23,7 @@ import kotlin.test.assertEquals
 
 class KubbyAppTest : AutoCloseKoinTest() {
 
-    val dao by inject<DataSource>()
+    private val dao by inject<DataSource>()
 
     lateinit var runtimeConfig: ApplicationConfig
 

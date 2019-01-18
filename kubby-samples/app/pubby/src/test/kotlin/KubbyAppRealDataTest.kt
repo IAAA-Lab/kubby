@@ -1,6 +1,6 @@
 package es.iaaa.kubby
 
-import es.iaaa.kubby.config.dataPath
+import es.iaaa.kubby.content.dataPath
 import io.ktor.config.ApplicationConfig
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode

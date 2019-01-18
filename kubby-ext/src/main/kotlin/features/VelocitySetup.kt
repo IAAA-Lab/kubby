@@ -1,11 +1,12 @@
 package es.iaaa.kubby.features
 
 import com.google.common.reflect.ClassPath
-import es.iaaa.kubby.config.velocityConfiguration
 import io.ktor.application.ApplicationEnvironment
+import io.ktor.config.ApplicationConfig
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader
 import org.apache.velocity.runtime.resource.util.StringResourceRepository
+import java.nio.charset.Charset
 
 
 fun VelocityEngine.setup(env: ApplicationEnvironment) {
@@ -24,3 +25,17 @@ fun VelocityEngine.setup(env: ApplicationEnvironment) {
         repository.putStringResource(name, it.asCharSource(conf.charset).read())
     }
 }
+
+data class VelocityConfiguration(
+    val resourceLoaderPath: String,
+    val suffix: String,
+    val charset: Charset
+)
+
+// TODO test
+val ApplicationConfig.velocityConfiguration: VelocityConfiguration
+    get() = VelocityConfiguration(
+        resourceLoaderPath = property("kubby.velocity.resource-loader-path").getString(),
+        suffix = property("kubby.velocity.suffix").getString(),
+        charset = Charset.forName(property("kubby.velocity.charset").getString())
+    )

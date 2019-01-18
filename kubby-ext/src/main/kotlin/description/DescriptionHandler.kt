@@ -1,6 +1,5 @@
 package es.iaaa.kubby.description
 
-import description.URIPrefixer
 import es.iaaa.kubby.config.*
 import io.ktor.config.ApplicationConfig
 import org.apache.jena.rdf.model.Literal
@@ -150,6 +149,10 @@ fun String?.toTitleCase(lang: String?, props: ApplicationConfig): String? {
         toTitleCase(str, uncapitalizedWords)
     }
 }
+
+// TODO test
+fun ApplicationConfig.list(key: String, lang: String) =
+    propertyOrNull("$ROOT_KEY.language-data.$lang.$key")?.getList() ?: emptyList()
 
 private fun toTitleCase(
     str: String,

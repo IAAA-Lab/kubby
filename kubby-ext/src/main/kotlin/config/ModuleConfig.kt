@@ -9,20 +9,17 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 
 fun createModule(config: ApplicationConfig): Module {
-    val ds = config.datasets.filterIsInstance(SparqlEndpoint::class.java)
+    val list = config.datasets
+        .filterIsInstance(SPARQLEndpoint::class.java)
         .map {
             RewrittenDataSource(
-                dataSource = SPARQLDataSource(
-                    service = it.endpoint,
-                    defaultGraphURI = it.defaultGraph,
-                    forceTrust = it.trustEndpoint
-                ),
+                dataSource = SPARQLDataSource(it),
                 target = it.datasetBase
             )
         }
     return module(createOnStart = false) {
         single<DataSource> {
-            MergeDataSource(ds)
+            MergeDataSource(list)
         }
         single {
             config

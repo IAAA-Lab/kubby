@@ -14,7 +14,7 @@ import kotlin.test.*
 
 class RewrittenDataSourceTest {
 
-    val anyDs: DataSource = mockk(relaxed = true)
+    private val anyDs: DataSource = mockk(relaxed = true)
 
     @Test fun `rewrite a URI that matches the target namespace`() {
         val rdw = RewrittenDataSource(anyDs, "http://dbpedia.org/resource/")

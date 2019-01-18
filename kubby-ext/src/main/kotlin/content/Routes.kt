@@ -1,12 +1,14 @@
 package es.iaaa.kubby.content
 
-import es.iaaa.kubby.config.*
+import es.iaaa.kubby.config.ROOT_KEY
+import es.iaaa.kubby.config.indexResource
 import es.iaaa.kubby.description.DescriptionHandler
 import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.repository.NULL_NS_URI
 import es.iaaa.kubby.repository.QName
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
+import io.ktor.config.ApplicationConfig
 import io.ktor.features.origin
 import io.ktor.http.ContentType.Text
 import io.ktor.http.HttpHeaders
@@ -18,9 +20,7 @@ import io.ktor.routing.Route
 import io.ktor.routing.application
 import io.ktor.routing.get
 import io.ktor.routing.route
-import io.ktor.util.pipeline.PipelineContext
 import io.ktor.velocity.VelocityContent
-import org.apache.jena.rdf.model.Model
 import org.koin.ktor.ext.inject
 import java.io.File
 import java.util.*
@@ -51,7 +51,10 @@ fun Route.resourceContent() {
     val config = application.environment.config
     route(config.resourcePath) {
         get("{$PATH_PARAMETER_NAME...}") {
-            val relativePath = call.parameters.getAll(PATH_PARAMETER_NAME)?.joinToString(File.separator) ?: return@get
+            val relativePath = call.parameters
+                .getAll(PATH_PARAMETER_NAME)
+                ?.joinToString(File.separator)
+                ?: return@get
             val contentType = call.request.contentType().withoutParameters()
             if (Text.Html.match(contentType)) {
                 call.respondSeeOther("${config.pagePath}/$relativePath")
@@ -70,7 +73,10 @@ fun Route.dataContent() {
     val dataSource by inject<DataSource>()
     route(config.dataPath) {
         get("{$PATH_PARAMETER_NAME...}") {
-            val relativePath = call.parameters.getAll(PATH_PARAMETER_NAME)?.joinToString(File.separator) ?: return@get
+            val relativePath = call.parameters
+                .getAll(PATH_PARAMETER_NAME)
+                ?.joinToString(File.separator)
+                ?: return@get
             val base = context.request.origin.buildBase("${config.dataPath}/$relativePath")
             val qname = QName("$base${config.resourcePath}/", relativePath)
             val model = dataSource.describe(qname)
@@ -92,7 +98,10 @@ fun Route.pageContent() {
     val dataSource by inject<DataSource>()
     route(config.pagePath) {
         get("{$PATH_PARAMETER_NAME...}") {
-            val relativePath = call.parameters.getAll(PATH_PARAMETER_NAME)?.joinToString(File.separator) ?: return@get
+            val relativePath = call.parameters
+                .getAll(PATH_PARAMETER_NAME)
+                ?.joinToString(File.separator)
+                ?: return@get
             val base = context.request.origin.buildBase("${config.pagePath}/$relativePath")
             val qname = QName("$base${config.resourcePath}/", relativePath)
             val data = QName("$base${config.dataPath}/", relativePath)
@@ -101,13 +110,6 @@ fun Route.pageContent() {
             call.respond(HttpStatusCode.OK, VelocityContent("page.vm", content))
         }
     }
-}
-
-private suspend fun PipelineContext<Unit, ApplicationCall>.processPageContentResponse(
-    m: Model
-) {
-    val model = mutableMapOf("a" to 1)
-    call.respond(HttpStatusCode.NotFound, VelocityContent("404.vm", model))
 }
 
 /**
@@ -143,3 +145,19 @@ val RequestConnectionPoint.authority: String
         }
         return sb.toString()
     }
+
+// TODO test
+val ApplicationConfig.aboutPath: String
+    get() = property("$ROOT_KEY.route.about").getString()
+
+// TODO test
+val ApplicationConfig.pagePath: String
+    get() = property("$ROOT_KEY.route.page").getString()
+
+// TODO test
+val ApplicationConfig.dataPath: String
+    get() = property("$ROOT_KEY.route.data").getString()
+
+// TODO test
+val ApplicationConfig.resourcePath: String
+    get() = property("$ROOT_KEY.route.resource").getString()

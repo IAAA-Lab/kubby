@@ -49,7 +49,7 @@ class RiotConverter(private val config: RiotConverterConfiguration) : ContentCon
                 RDF.N_TRIPLES -> writeNTriples(value)
                 RDF.RDF_XML -> writeRDFXML(value)
                 else -> writeJsonLD(value)
-            }?.also {
+            }.also {
                 if (isVaryRequired) {
                     context.call.response.headers.append("Vary", "Accept")
                 }
