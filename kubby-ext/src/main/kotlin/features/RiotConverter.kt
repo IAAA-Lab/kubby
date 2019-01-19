@@ -110,7 +110,7 @@ class RiotConverterConfiguration {
 /**
  * Register Riot converter into [ContentNegotiation] feature
  */
-fun ContentNegotiation.Configuration.riot(
+fun ContentNegotiation.Configuration.kubbyRiot(
     block: RiotConverterConfiguration.() -> Unit = {}
 ) {
     val config = RiotConverterConfiguration()

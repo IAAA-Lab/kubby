@@ -8,7 +8,7 @@ import io.ktor.config.ApplicationConfig
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 
-fun createModule(config: ApplicationConfig): Module {
+fun createKubbyModule(config: ApplicationConfig): Module {
     val list = config.datasets
         .filterIsInstance(SPARQLEndpoint::class.java)
         .map {

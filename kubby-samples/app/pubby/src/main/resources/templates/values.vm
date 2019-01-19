@@ -1,27 +1,27 @@
 ## Renders the values of a single ResourceProperties, given in $property, as an unordered list
 <ul class="property-values">
-    #foreach ($value in $property.SimpleValues)
+    #foreach ($value in $property.values)
         <li>
-            #if ($value.isURI)
-                #if ($showLabels && $value.label)
-                    <a class="uri" href="$value.BrowsableURL" title="$value.URI">$value.label</a>
-                #elseif ($value.hasPrefix)
-                    <a class="uri" href="$value.BrowsableURL" title="$value.URI">
-                        <small>$value.Prefix:</small>$value.LocalName</a>
-                #else
-                    <small>&lt;</small>
-                    <a class="uri" href="$value.BrowsableURL">$value.URI</a>
-                    <small>&gt;</small>
-                #end
-            #elseif ($value.isLiteral)
-                <span class="literal">$value.LiteralLexicalForm
-                    #if ($value.DatatypeLabel)
-                        <small> ($value.DatatypeLabel)</small>
+            #if ($value.literal)
+                <span class="literal">$value.lexicalForm
+                    #if ($value.datatypeLabel)
+                        <small> ($value.datatypeLabel)</small>
                     #end
-                    #if ($value.LiteralLanguage != "")
-                        <small> ($value.LiteralLanguage)</small>
+                    #if ($value.language != "")
+                        <small> ($value.language)</small>
                     #end
     </span>
+            #else
+                #if ($showLabels && $value.label)
+                    <a class="uri" href="$value.url" title="$value.uri">$value.label</a>
+                #elseif ($value.hasPrefix)
+                    <a class="uri" href="$value.url" title="$value.uri">
+                        <small>$value.prefix:</small>$value.localName</a>
+                #else
+                    <small>&lt;</small>
+                    <a class="uri" href="$value.url">$value.uri</a>
+                    <small>&gt;</small>
+                #end
             #end
         </li>
     #end

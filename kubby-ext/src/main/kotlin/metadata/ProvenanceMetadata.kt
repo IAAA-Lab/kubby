@@ -47,7 +47,7 @@ class ProvenanceMetadata : MetadataAugmenter {
 }
 
 
-fun Metadata.Configuration.provenanceMetadata() {
+fun KubbyMetadata.Configuration.provenanceMetadata() {
     register(ProvenanceMetadata())
 }
 

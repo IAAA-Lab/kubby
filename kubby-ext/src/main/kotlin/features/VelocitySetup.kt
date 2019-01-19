@@ -9,7 +9,7 @@ import org.apache.velocity.runtime.resource.util.StringResourceRepository
 import java.nio.charset.Charset
 
 
-fun VelocityEngine.setup(env: ApplicationEnvironment) {
+fun VelocityEngine.kubbySetup(env: ApplicationEnvironment) {
     setProperty("resource.loader", "string")
     addProperty("string.resource.loader.class", StringResourceLoader::class.java.name)
     addProperty("string.resource.loader.repository.static", "false")

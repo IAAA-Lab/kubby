@@ -1,21 +1,22 @@
-package es.iaaa.kubby.description
+package es.iaaa.kubby.app.pubby.rest.api
 
 import com.typesafe.config.ConfigFactory
 import es.iaaa.kubby.fixtures.Models
 import io.ktor.config.HoconApplicationConfig
 import org.junit.Before
 import org.junit.Test
-import org.koin.test.AutoCloseKoinTest
 import kotlin.test.assertEquals
 
-class DescriptionHandlerTest  : AutoCloseKoinTest() {
+class EntityDtoTest {
 
-    private lateinit var node: ContentNode
+    private lateinit var node: Map<String,Any>
 
     @Before fun before() {
         val config = HoconApplicationConfig(ConfigFactory.load("test.conf"))
         val model = Models.aSimpleModel("http://example.com/sample")
-        node = DescriptionHandler(config).contentOf(model.getResource("http://example.com/sample"), "http://example.com/data/sample")
+        node = model.getResource("http://example.com/sample")
+            .toEntityDto(config, "http://example.com/data/sample")
+            .toMap()
     }
 
     @Test fun `ensure project name is defined`()  {

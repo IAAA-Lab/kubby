@@ -2,7 +2,6 @@ package es.iaaa.kubby.content
 
 import es.iaaa.kubby.config.ROOT_KEY
 import es.iaaa.kubby.config.indexResource
-import es.iaaa.kubby.description.DescriptionHandler
 import es.iaaa.kubby.repository.DataSource
 import es.iaaa.kubby.repository.NULL_NS_URI
 import es.iaaa.kubby.repository.QName
@@ -21,6 +20,7 @@ import io.ktor.routing.application
 import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.velocity.VelocityContent
+import org.apache.jena.rdf.model.Resource
 import org.koin.ktor.ext.inject
 import java.io.File
 import java.util.*
@@ -92,9 +92,8 @@ fun Route.dataContent() {
 /**
  * Set up a routing tree to serve page content.
  */
-fun Route.pageContent() {
+fun Route.createResourceViewController(block: ResourceViewModel.() -> Map<String, Any>) {
     val config = application.environment.config
-    val handler = DescriptionHandler(config)
     val dataSource by inject<DataSource>()
     route(config.pagePath) {
         get("{$PATH_PARAMETER_NAME...}") {
@@ -106,11 +105,18 @@ fun Route.pageContent() {
             val qname = QName("$base${config.resourcePath}/", relativePath)
             val data = QName("$base${config.dataPath}/", relativePath)
             val model = dataSource.describe(qname)
-            val content = handler.contentOf(model.getResource(qname.toString()), data.toString())
+            val resource = model.getResource(qname.toString())
+            val content = block(ResourceViewModel(resource, data.toString(), config))
             call.respond(HttpStatusCode.OK, VelocityContent("page.vm", content))
         }
     }
 }
+
+data class ResourceViewModel(
+    val resource: Resource,
+    val dataUri: String,
+    val config: ApplicationConfig
+)
 
 /**
  * Responds to a client with a `301 Moved Permanently` or `302 Found` redirect

@@ -7,7 +7,7 @@ import io.ktor.response.ApplicationSendPipeline
 import io.ktor.util.AttributeKey
 import org.apache.jena.rdf.model.Model
 
-class Metadata(val registrations: List<MetadataAugmenter>) {
+class KubbyMetadata(val registrations: List<MetadataAugmenter>) {
     class Configuration {
         internal val registrations = mutableListOf<MetadataAugmenter>()
         fun <T : MetadataAugmenter> register(converter: T, configuration: T.() -> Unit = {}) {
@@ -18,13 +18,13 @@ class Metadata(val registrations: List<MetadataAugmenter>) {
     }
 
     companion object Feature :
-        ApplicationFeature<ApplicationCallPipeline, Configuration, Metadata> {
+        ApplicationFeature<ApplicationCallPipeline, Configuration, KubbyMetadata> {
 
-        override val key = AttributeKey<Metadata>("Metadata")
+        override val key = AttributeKey<KubbyMetadata>("KubbyMetadata")
 
-        override fun install(pipeline: ApplicationCallPipeline, configure: Configuration.() -> Unit): Metadata {
+        override fun install(pipeline: ApplicationCallPipeline, configure: Configuration.() -> Unit): KubbyMetadata {
             val configuration = Configuration().apply(configure)
-            val feature = Metadata(configuration.registrations)
+            val feature = KubbyMetadata(configuration.registrations)
 
             pipeline.sendPipeline.intercept(ApplicationSendPipeline.Transform) { subject ->
                 if (subject is Model) {

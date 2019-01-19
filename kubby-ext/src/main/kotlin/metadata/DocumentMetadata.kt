@@ -41,7 +41,7 @@ class DocumentMetadata : MetadataAugmenter {
 fun ApplicationConfig.text(key: String, lang: String) =
     property("kubby.language-data.$lang.$key").getString()
 
-fun Metadata.Configuration.documentMetadata() {
+fun KubbyMetadata.Configuration.documentMetadata() {
     register(DocumentMetadata())
 }
 
