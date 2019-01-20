@@ -35,7 +35,7 @@ subprojects {
         compile "io.github.config4k:config4k:$config4k_version"
 
         compile "org.apache.jena:apache-jena-libs:$jena_version"
-        compile "ch.qos.logback:logback-classic:1.2.3"
+        compile "ch.qos.logback:logback-classic:$logback_version"
 
         testCompile "io.ktor:ktor-server-test-host:$ktor_version"
         testCompile "org.koin:koin-test:$koin_version"

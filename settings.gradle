@@ -1,3 +1,13 @@
+rootProject.name = 'kubby'
+
+enableFeaturePreview('GRADLE_METADATA')
+
+def module(group, name) {
+    include(name)
+    project(":$name").projectDir = file("$group/$name")
+}
+
+
 include ':kubby-ext'
 
-include ':kubby-samples:app:pubby'
+module('kubby-samples/app', 'pubby')
