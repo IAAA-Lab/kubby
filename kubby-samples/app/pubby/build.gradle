@@ -1,5 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "4.0.4"
+    id "com.palantir.docker" version "0.21.0"
 }
 
 apply plugin: 'kotlin'
@@ -17,7 +18,13 @@ dependencies {
 
 shadowJar {
     mergeServiceFiles()
-    baseName = 'kubby'
+    baseName = 'pubby'
     classifier = null
     version = null
 }
+
+docker {
+    name 'iaaa/pubby'
+    copySpec.from("build/libs").into("build/libs")
+}
+
