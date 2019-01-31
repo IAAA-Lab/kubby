@@ -33,8 +33,7 @@ fun Resource?.toEntityDto(config: ProjectDescription, data: String) =
             title = getName(
                 config.labelProperties,
                 config.defaultLanguage
-            ).toTitleCase(config.getLanguageList("uncapitalized-words"))
-                ?: "",
+            ).toTitleCase(config.getLanguageList("uncapitalized-words")),
             comment = findBestLiteral(config.commentProperties, config.defaultLanguage)?.formattedLexicalForm() ?: "",
             image = findAllDistinctObjectsFrom(config.imageProperties).firstUriOrNull() ?: "",
             properties = toListContentNodeDto(config),

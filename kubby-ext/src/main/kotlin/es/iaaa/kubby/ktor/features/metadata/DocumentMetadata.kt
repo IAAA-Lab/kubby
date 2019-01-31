@@ -27,7 +27,10 @@ class DocumentMetadata : MetadataProcesor {
             addNsIfUndefined("rdfs", RDFS.uri)
             getResource(context.page).apply {
                 addProperty(FOAF.primaryTopic, topic)
-                addProperty(RDFS.label, projectDescription.getLanguageValue("metadata-document-label").format(title))
+                addProperty(
+                    RDFS.label,
+                    projectDescription.getLanguageValue("metadata-document-label").format(title)
+                )
             }
         }
     }
