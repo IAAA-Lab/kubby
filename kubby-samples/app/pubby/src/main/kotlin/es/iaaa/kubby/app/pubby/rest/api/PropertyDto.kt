@@ -1,9 +1,9 @@
 package es.iaaa.kubby.app.pubby.rest.api
 
-import es.iaaa.kubby.config.defaultLanguage
-import es.iaaa.kubby.description.URIPrefixer
-import es.iaaa.kubby.description.getLabel
-import io.ktor.config.ApplicationConfig
+import es.iaaa.kubby.config.ProjectDescription
+import es.iaaa.kubby.rdf.findBestLiteral
+import es.iaaa.kubby.rdf.hasPrefix
+import es.iaaa.kubby.rdf.prefix
 import org.apache.jena.rdf.model.Property
 import org.apache.jena.rdf.model.RDFNode
 import org.apache.jena.rdf.model.Resource
@@ -16,7 +16,7 @@ data class PropertyDto(
     val inverse: Boolean,
     val values: List<PropertyValueDto>,
     val localName: String,
-    val prefix: String,
+    val prefix: String?,
     val hasPrefix: Boolean,
     val uri: String,
     val label: String,
@@ -27,10 +27,10 @@ data class PropertyDto(
 /**
  * [Resource] to list of [PropertyDto] mapper.
  */
-fun Resource.toListContentNodeDto(config: ApplicationConfig): List<PropertyDto> {
+fun Resource.toListContentNodeDto(config: ProjectDescription): List<PropertyDto> {
     val direct = listProperties().toList()
         .filter { it.`object`.isNode }
-        .groupBy({ it.predicate }) { it.`object`.toPropertyValueDto()}
+        .groupBy({ it.predicate }) { it.`object`.toPropertyValueDto() }
         .map { (property, nodes) -> property.toPropertyDto(false, nodes, config) }
     val inverse = model.listStatements(null, null, this).toList()
         .filter { it.subject.isURIResource }
@@ -44,18 +44,22 @@ fun Resource.toListContentNodeDto(config: ApplicationConfig): List<PropertyDto> 
 /**
  * [Property] to [PropertyDto] mapper.
  */
-fun Property.toPropertyDto(isInverse: Boolean, values: List<PropertyValueDto>, config: ApplicationConfig): PropertyDto {
-    val prefixer = URIPrefixer(this, model)
+fun Property.toPropertyDto(
+    isInverse: Boolean,
+    values: List<PropertyValueDto>,
+    config: ProjectDescription
+): PropertyDto {
+    val label = findBestLiteral(config.labelProperties, config.defaultLanguage)?.lexicalForm ?: ""
     return PropertyDto(
         property = this,
         inverse = isInverse,
         values = values,
         localName = localName,
-        prefix = prefixer.prefix ?: "",
-        hasPrefix = prefixer.hasPrefix,
+        prefix = prefix(),
+        hasPrefix = hasPrefix(),
         uri = uri,
-        label = getLabel(config.defaultLanguage, config)?.lexicalForm ?: "",
-        inverseLabel = getLabel(config.defaultLanguage, config)?.lexicalForm ?: "",
+        label = label,
+        inverseLabel = label,
         url = uri
     )
 }

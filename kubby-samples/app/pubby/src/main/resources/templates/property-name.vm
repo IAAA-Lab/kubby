@@ -1,4 +1,4 @@
-## Renders the name of a ResourceProperty, given in $property
+## Renders the projectName of a ResourceProperty, given in $property
 <span class="property-name">
 #if ($property.inverse && !($showLabels && $property.inverseLabel))
     <small>Is</small>

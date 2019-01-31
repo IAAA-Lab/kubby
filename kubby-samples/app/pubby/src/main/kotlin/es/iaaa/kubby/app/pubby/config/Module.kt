@@ -2,15 +2,15 @@ package es.iaaa.kubby.app.pubby.config
 
 import es.iaaa.kubby.app.pubby.rest.api.pageEntityController
 import es.iaaa.kubby.config.createKubbyModule
-import es.iaaa.kubby.content.dataContent
-import es.iaaa.kubby.content.indexContent
-import es.iaaa.kubby.content.resourceContent
-import es.iaaa.kubby.features.RDF
-import es.iaaa.kubby.features.kubbyRiot
-import es.iaaa.kubby.features.kubbySetup
-import es.iaaa.kubby.metadata.KubbyMetadata
-import es.iaaa.kubby.metadata.documentMetadata
-import es.iaaa.kubby.metadata.provenanceMetadata
+import es.iaaa.kubby.ktor.features.Metadata
+import es.iaaa.kubby.ktor.features.RDF
+import es.iaaa.kubby.ktor.features.metadata.document
+import es.iaaa.kubby.ktor.features.metadata.provenance
+import es.iaaa.kubby.ktor.features.rdf
+import es.iaaa.kubby.ktor.features.setup
+import es.iaaa.kubby.rest.api.dataController
+import es.iaaa.kubby.rest.api.indexController
+import es.iaaa.kubby.rest.api.resourceController
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.*
@@ -33,16 +33,16 @@ fun Application.main() {
     installKoin(listOf(createKubbyModule(environment.config)))
 
     install(Velocity) {
-        kubbySetup(environment)
+        setup(environment)
     }
 
-    install(KubbyMetadata) {
-        documentMetadata()
-        provenanceMetadata()
+    install(Metadata) {
+        document()
+        provenance()
     }
 
     install(ContentNegotiation) {
-        kubbyRiot {
+        rdf {
             contentTypes.add(RDF.TURTLE)
         }
     }
@@ -51,9 +51,9 @@ fun Application.main() {
         static("static") {
             resources("static")
         }
-        indexContent()
-        resourceContent()
-        dataContent()
+        indexController()
+        resourceController()
+        dataController()
         pageEntityController()
     }
 }

@@ -1,0 +1,54 @@
+package es.iaaa.kubby.repository.source
+
+import es.iaaa.kubby.repository.EntityId
+import es.iaaa.kubby.repository.EntityRepository
+import org.apache.http.conn.ssl.NoopHostnameVerifier
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory
+import org.apache.http.impl.client.HttpClients
+import org.apache.http.ssl.SSLContexts
+import org.apache.jena.query.QueryExecutionFactory.sparqlService
+import org.apache.jena.query.QueryFactory
+import org.apache.jena.rdf.model.Resource
+
+/**
+ * Access to a remote SPARQL repository at [service].
+ *
+ * The RDF Dataset to be queried may be specified in [dataset].
+ * Endpoints with self signed certificates and other issues may be trusted by setting [forceTrust] to true.
+ */
+class SparqlEntityRepository(
+    private val service: String,
+    private val dataset: String? = null,
+    private val forceTrust: Boolean = false
+) : EntityRepository {
+
+    override fun getId(uri: String) = EntityId(localPart = uri)
+
+    override fun findOne(id: EntityId): Resource =
+        sparqlService(
+            service,
+            QueryFactory.create("DESCRIBE <${id.uri}>"),
+            dataset,
+            buildClient(),
+            null
+        ).execDescribe().getResource(id.uri)
+
+    private fun buildClient() = if (forceTrust) {
+        val sslContext = SSLContexts.custom()
+            .loadTrustMaterial { _, _ -> true }.build()
+        val sslConnectionSocketFactory = SSLConnectionSocketFactory(
+            sslContext, arrayOf("SSLv2Hello", "SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"), null,
+            NoopHostnameVerifier.INSTANCE
+        )
+        HttpClients.custom()
+            .setSSLSocketFactory(sslConnectionSocketFactory)
+            .build()
+    } else {
+        null
+    }
+
+    override fun close() {
+        // empty
+    }
+}
+

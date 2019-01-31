@@ -29,6 +29,6 @@
     #end
     #if ($rdfLink)
         <div id="rdficon"><a href="$rdfLink" title="RDF data"><img src="/static/rdf-icon.gif"
-                                                                    alt="[This page as RDF]"/></a></div>
+                                                                   alt="[This page as RDF]"/></a></div>
     #end
 </div>
