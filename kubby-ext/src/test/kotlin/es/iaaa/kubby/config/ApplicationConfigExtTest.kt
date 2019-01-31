@@ -4,9 +4,9 @@ import com.typesafe.config.ConfigFactory
 import es.iaaa.kubby.repository.SparqlEndpoint
 import io.ktor.config.HoconApplicationConfig
 import io.ktor.server.engine.commandLineEnvironment
-import org.junit.Before
-import org.junit.Test
 import java.io.File
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ApplicationConfigExtTest {
@@ -15,7 +15,7 @@ class ApplicationConfigExtTest {
 
     lateinit var runtimeConfig: ProjectDescription
 
-    @Before
+    @BeforeTest
     fun before() {
         val classLoader = javaClass.classLoader
         val file = File(classLoader.getResource("config/test.conf").file)

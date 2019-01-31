@@ -1,14 +1,14 @@
 package es.iaaa.kubby.text
 
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TextTests {
 
     lateinit var excludeWords: List<String>
 
-    @Before
+    @BeforeTest
     fun before() {
         excludeWords = listOf("is", "a", "in")
     }

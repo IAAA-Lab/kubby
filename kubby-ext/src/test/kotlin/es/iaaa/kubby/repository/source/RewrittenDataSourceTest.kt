@@ -7,8 +7,8 @@ import io.mockk.every
 import io.mockk.mockk
 import org.apache.jena.vocabulary.OWL
 import org.apache.jena.vocabulary.VCARD
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -16,7 +16,7 @@ class RewrittenDataSourceTest {
 
     private val anyDs: EntityRepository = mockk(relaxed = true)
 
-    @Before
+    @BeforeTest
     fun before() {
         every {
             anyDs.findOne(

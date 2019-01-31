@@ -1,9 +1,11 @@
 package es.iaaa.kubby.rdf
 
 import es.iaaa.kubby.fixtures.Models.aSimpleModel
+
 import org.apache.jena.rdf.model.ModelFactory.createDefaultModel
 import org.apache.jena.vocabulary.VCARD
-import org.junit.Test
+
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

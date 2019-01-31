@@ -9,14 +9,10 @@ import org.apache.jena.riot.RDFDataMgr.read
 import org.apache.jena.system.Txn.calculateRead
 import org.apache.jena.system.Txn.executeWrite
 import org.apache.jena.tdb2.TDB2Factory.connectDataset
-import org.junit.Before
-import org.junit.Test
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class Tdb2DataSourceTest {
 
@@ -24,7 +20,7 @@ class Tdb2DataSourceTest {
     private val data: Path = Paths.get("src/test/resources/Tetris.n3")
     private val assembler: Path = Paths.get("src/test/resources/tdb2.ttl")
 
-    @Before
+    @BeforeTest
     fun before() {
         target.deleteRecursivelyIfExists()
     }

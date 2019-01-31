@@ -2,7 +2,7 @@ package es.iaaa.kubby.repository.source
 
 import es.iaaa.kubby.repository.EntityId
 import org.apache.jena.sparql.vocabulary.FOAF
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class SPARQLDataSourceTest {

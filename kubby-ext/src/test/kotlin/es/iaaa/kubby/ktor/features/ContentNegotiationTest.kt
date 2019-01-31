@@ -10,9 +10,10 @@ import kotlin.test.assertEquals
 
 class ContentNegotiationTest {
 
-    @Test fun `generates JSON-LD`(){
+    @Test
+    fun `generates JSON-LD`() {
         val obj = JSONObject(Models.aSimpleModel().toString(RDFFormat.JSONLD, JsonLdOptions()))
-        assertEquals("http://source/JohnSmith", obj.getString("@id"))
-        assertEquals("John Smith", obj.getString("http://www.w3.org/2001/vcard-rdf/3.0#FN"))
+        assertEquals("http://source/JohnSmith", obj["@id"])
+        assertEquals("John Smith", obj["http://www.w3.org/2001/vcard-rdf/3.0#FN"])
     }
 }
