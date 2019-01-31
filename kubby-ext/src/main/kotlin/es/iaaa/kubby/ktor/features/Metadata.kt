@@ -1,7 +1,7 @@
 package es.iaaa.kubby.ktor.features
 
 import es.iaaa.kubby.config.ProjectDescription
-import es.iaaa.kubby.rest.api.RequestContext
+import es.iaaa.kubby.rest.api.ContentContext
 import es.iaaa.kubby.rest.api.requestContextKey
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.ApplicationFeature
@@ -61,5 +61,5 @@ interface MetadataProcesor {
     /**
      * Enrich a [model] given a [context] and a [projectDescription].
      */
-    fun process(model: Model, context: RequestContext, projectDescription: ProjectDescription)
+    fun process(model: Model, context: ContentContext, projectDescription: ProjectDescription)
 }

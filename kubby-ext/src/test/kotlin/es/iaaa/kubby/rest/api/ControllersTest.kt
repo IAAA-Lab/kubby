@@ -1,12 +1,16 @@
 package es.iaaa.kubby.rest.api
 
+import es.iaaa.kubby.services.DescribeEntityService
 import io.ktor.application.ApplicationCall
 import io.ktor.features.origin
 import io.ktor.http.RequestConnectionPoint
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import org.apache.jena.rdf.model.ModelFactory
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ControllersTest {
 
@@ -92,7 +96,7 @@ class ControllersTest {
 
 
     @Test
-    fun `extract local path with multiple segments`() {
+    fun `extract loal path with multiple segments`() {
         val applicationCall = mockk<ApplicationCall>()
 
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("a", "b")
@@ -205,4 +209,146 @@ class ControllersTest {
         }
 
     }
+
+
+    @Test
+    fun `process request with id is findable`() {
+        val applicationCall = mockk<ApplicationCall>()
+        val service = mockk<DescribeEntityService>()
+
+        val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
+        val resource = anyResource()
+
+        every { applicationCall.request.origin.scheme } returns "http"
+        every { applicationCall.request.origin.host } returns "localhost"
+        every { applicationCall.request.origin.port } returns 80
+        every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("1")
+        every { service.findOne("http://localhost/r/", "1") } returns resource
+
+        for (i in listOf("d", "p")) {
+            every { applicationCall.request.origin.uri } returns "/$i/1"
+
+            val ctx = applicationCall.processRequests("/$i", routes, service)
+
+
+            assertTrue(ctx is ContentContext)
+            assertEquals("http://localhost/d/1", ctx.data)
+            assertEquals("http://localhost/p/1", ctx.page)
+            assertEquals(resource, ctx.resource)
+        }
+
+        verify(exactly = 2) { service.findOne("http://localhost/r/", "1") }
+    }
+
+    @Test
+    fun `process request without id is not findable`() {
+        val applicationCall = mockk<ApplicationCall>()
+        val service = mockk<DescribeEntityService>()
+
+        val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
+        val resource = anyResource()
+
+        every { applicationCall.request.origin.scheme } returns "http"
+        every { applicationCall.request.origin.host } returns "localhost"
+        every { applicationCall.request.origin.port } returns 80
+        every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
+
+        for (i in listOf("d", "p")) {
+            every { applicationCall.request.origin.uri } returns "/$i/"
+            every { service.findOne("http://localhost/r/", "") } returns resource
+
+            val ctx = applicationCall.processRequests("/$i", routes, service)
+
+            verify(exactly = 0) { service.findOne("http://localhost/r/", "") }
+
+            assertTrue(ctx is NoContext)
+        }
+    }
+
+    @Test
+    fun `resource redirect with id is findable`() {
+        val applicationCall = mockk<ApplicationCall>()
+        val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
+
+        every { applicationCall.request.origin.scheme } returns "http"
+        every { applicationCall.request.origin.host } returns "localhost"
+        every { applicationCall.request.origin.port } returns 80
+        every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("1")
+        every { applicationCall.request.origin.uri } returns "/r/1"
+
+        val ctx = applicationCall.processRedirects(routes)
+
+        assertTrue(ctx is RedirectContext)
+        assertEquals("http://localhost/d/1", ctx.data)
+        assertEquals("http://localhost/p/1", ctx.page)
+    }
+
+    @Test
+    fun `resource redirect without id is not findable`() {
+        val applicationCall = mockk<ApplicationCall>()
+        val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
+
+        every { applicationCall.request.origin.scheme } returns "http"
+        every { applicationCall.request.origin.host } returns "localhost"
+        every { applicationCall.request.origin.port } returns 80
+        every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
+        every { applicationCall.request.origin.uri } returns "/r/"
+
+        val ctx = applicationCall.processRedirects(routes)
+
+        assertTrue(ctx is NoContext)
+    }
+
+    @Test
+    fun `resource redirect without id and slash is not findable`() {
+        val applicationCall = mockk<ApplicationCall>()
+        val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
+
+        every { applicationCall.request.origin.scheme } returns "http"
+        every { applicationCall.request.origin.host } returns "localhost"
+        every { applicationCall.request.origin.port } returns 80
+        every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
+        every { applicationCall.request.origin.uri } returns "/r"
+
+        val ctx = applicationCall.processRedirects(routes)
+
+        assertTrue(ctx is NoContext)
+    }
+
+    @Test
+    fun `index redirect is findable`() {
+        val applicationCall = mockk<ApplicationCall>()
+        val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
+
+        every { applicationCall.request.origin.scheme } returns "http"
+        every { applicationCall.request.origin.host } returns "localhost"
+        every { applicationCall.request.origin.port } returns 80
+        every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
+        every { applicationCall.request.origin.uri } returns "/"
+
+        val ctx = applicationCall.processRedirects(routes, "1")
+
+        assertTrue(ctx is RedirectContext)
+        assertEquals("http://localhost/d/1", ctx.data)
+        assertEquals("http://localhost/p/1", ctx.page)
+    }
+
+    @Test
+    fun `index redirect and resource redirect is not findable`() {
+        val applicationCall = mockk<ApplicationCall>()
+        val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
+
+        every { applicationCall.request.origin.scheme } returns "http"
+        every { applicationCall.request.origin.host } returns "localhost"
+        every { applicationCall.request.origin.port } returns 80
+        every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("2")
+        every { applicationCall.request.origin.uri } returns "/r/2"
+
+        val ctx = applicationCall.processRedirects(routes, "1")
+
+        assertTrue(ctx is NoContext)
+    }
+
+    fun anyResource() = ModelFactory.createDefaultModel().createResource()
 }
+

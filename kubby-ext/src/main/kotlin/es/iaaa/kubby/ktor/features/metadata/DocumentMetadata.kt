@@ -5,7 +5,7 @@ import es.iaaa.kubby.ktor.features.Metadata
 import es.iaaa.kubby.ktor.features.MetadataProcesor
 import es.iaaa.kubby.rdf.addNsIfUndefined
 import es.iaaa.kubby.rdf.getName
-import es.iaaa.kubby.rest.api.RequestContext
+import es.iaaa.kubby.rest.api.ContentContext
 import es.iaaa.kubby.text.toTitleCase
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.sparql.vocabulary.FOAF
@@ -16,7 +16,7 @@ import org.apache.jena.vocabulary.RDFS
  */
 class DocumentMetadata : MetadataProcesor {
 
-    override fun process(model: Model, context: RequestContext, projectDescription: ProjectDescription) {
+    override fun process(model: Model, context: ContentContext, projectDescription: ProjectDescription) {
         val topic = model.getResource(context.resource.uri)
         val title: String =
             topic.getName(projectDescription.labelProperties, projectDescription.defaultLanguage)

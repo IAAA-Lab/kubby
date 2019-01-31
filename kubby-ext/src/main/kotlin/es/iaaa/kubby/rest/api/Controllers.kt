@@ -20,7 +20,7 @@ import java.util.*
 /**
  * Context access key.
  */
-val requestContextKey = AttributeKey<RequestContext>("kubby.requestContext")
+val requestContextKey = AttributeKey<ContentContext>("kubby.requestContext")
 
 /**
  * Routes configuration.
@@ -41,11 +41,10 @@ data class EntityUris(
     val localId: String
 )
 
-
 /**
- * Logic in [pageController] for populating the response from the [RequestContext].
+ * Logic in [pageController] for populating the response from the [ContentContext].
  */
-typealias PageAdapter = RequestContext.() -> PageResponse
+typealias PageAdapter = ContentContext.() -> PageResponse
 
 /**
  * A response body ([content]) with [status].
@@ -56,24 +55,34 @@ data class PageResponse(
 )
 
 /**
- * Context of the page request.
+ * Root of the context classes.
  */
-data class RequestContext(
+sealed class Context
+
+/**
+ * Context of the page or data request.
+ */
+data class ContentContext(
     val resource: Resource,
     val page: String,
     val data: String,
-    val findable: Boolean,
     val time: Calendar = GregorianCalendar.getInstance()
-)
+) : Context()
 
 /**
- * Context of the page redirect.
+ * Context of the redirect request.
  */
 data class RedirectContext(
     val page: String,
-    val data: String,
-    val findable: Boolean
-)
+    val data: String
+) : Context()
+
+/**
+ * Context of a failed request.
+ */
+object NoContext : Context()
+
+
 
 /**
  * Sets up a route to handle the index resource if defined.
@@ -84,7 +93,7 @@ fun Route.indexController() {
     service.indexLocalPart()?.let { localPart ->
         get {
             val ctx = call.processRedirects(routes, localPart)
-            if (ctx.findable) {
+            if (ctx is RedirectContext) {
                 call.response.headers.append(HttpHeaders.Location, ctx.page)
                 call.respond(HttpStatusCode.SeeOther)
             }
@@ -100,7 +109,7 @@ fun Route.resourceController() {
     route(routes.resourcePath) {
         get("{$PATH_LOCAL_PART...}") {
             val ctx = call.processRedirects(routes)
-            if (ctx.findable) {
+            if (ctx is RedirectContext) {
                 val url = if (Text.Html.match(call.extractContentType())) {
                     ctx.page
                 } else {
@@ -122,7 +131,7 @@ fun Route.dataController() {
     route(routes.dataPath) {
         get("{$PATH_LOCAL_PART...}") {
             val ctx = call.processRequests(routes.dataPath, routes, service)
-            if (ctx.findable) {
+            if (ctx is ContentContext) {
                 call.attributes.put(requestContextKey, ctx)
                 ctx.resource.apply { if (!model.isEmpty) call.respond(model) }
             }
@@ -139,7 +148,7 @@ fun Route.pageController(adapt: PageAdapter) {
     route(routes.pagePath) {
         get("{$PATH_LOCAL_PART...}") {
             val ctx = call.processRequests(routes.pagePath, routes, service)
-            if (ctx.findable) {
+            if (ctx is ContentContext) {
                 call.attributes.put(requestContextKey, ctx)
                 adapt(ctx).apply { call.respond(status, content) }
             }
@@ -150,18 +159,19 @@ fun Route.pageController(adapt: PageAdapter) {
 /**
  * Common processRedirects in page and data controllers.
  */
-private fun ApplicationCall.processRequests(
+internal fun ApplicationCall.processRequests(
     path: String,
     routes: Routes,
     service: DescribeEntityService
-): RequestContext {
+): Context {
     val (page, data, namespace, localId) = extractEntityUris(path, routes)
-    return RequestContext(
-        resource = service.findOne(namespace, localId),
-        page = page,
-        data = data,
-        findable = localId.isNotEmpty()
-    )
+    return if (localId.isNotEmpty())
+        ContentContext(
+            resource = service.findOne(namespace, localId),
+            page = page,
+            data = data
+        )
+    else NoContext
 }
 
 /**
@@ -170,13 +180,17 @@ private fun ApplicationCall.processRequests(
 internal fun ApplicationCall.processRedirects(
     routes: Routes,
     alternativeId: String = ""
-): RedirectContext {
-    val (page, data, _, effectiveId) = extractEntityUris(if (alternativeId.isNotEmpty()) "" else routes.resourcePath, routes)
-    return RedirectContext(
-        page = "$page$alternativeId",
-        data = "$data$alternativeId",
-        findable = effectiveId.isNotEmpty() xor alternativeId.isNotEmpty()
+): Context {
+    val (page, data, _, effectiveId) = extractEntityUris(
+        if (alternativeId.isNotEmpty()) "" else routes.resourcePath,
+        routes
     )
+    return if (effectiveId.isNotEmpty() xor alternativeId.isNotEmpty())
+        RedirectContext(
+            page = "$page$alternativeId",
+            data = "$data$alternativeId"
+        )
+    else NoContext
 }
 
 /**
@@ -207,7 +221,7 @@ internal fun String.toNormalizedUrlString() = Url(this).toURI().normalize().toSt
 internal fun ApplicationCall.extractLocalPath() = parameters
     .getAll(PATH_LOCAL_PART)
     ?.joinToString("/")
-    ?.replace("?","%3F")
+    ?.replace("?", "%3F")
     ?: ""
 
 /**
