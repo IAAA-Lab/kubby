@@ -49,21 +49,22 @@ subprojects {
         }
     }
     dependencies {
-        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-        compile "io.ktor:ktor-server-core:$ktor_version"
-        compile "io.ktor:ktor-server-netty:$ktor_version"
-        compile "io.ktor:ktor-velocity:$ktor_version"
-        compile "org.koin:koin-ktor:$koin_version"
-        compile "com.google.guava:guava:26.0-jre"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        implementation "io.ktor:ktor-server-core:$ktor_version"
+        implementation "io.ktor:ktor-server-netty:$ktor_version"
+        implementation "io.ktor:ktor-velocity:$ktor_version"
+        implementation "org.koin:koin-ktor:$koin_version"
+        implementation "com.google.guava:guava:26.0-jre"
 
-        compile "io.github.config4k:config4k:$config4k_version"
+        implementation "io.github.config4k:config4k:$config4k_version"
 
-        compile "org.apache.jena:apache-jena-libs:$jena_version"
-        compile "ch.qos.logback:logback-classic:$logback_version"
+        implementation "org.apache.jena:apache-jena-libs:$jena_version"
+        implementation "ch.qos.logback:logback-classic:$logback_version"
 
-        testCompile "io.ktor:ktor-server-test-host:$ktor_version"
-        testCompile "org.koin:koin-test:$koin_version"
-        testCompile "io.mockk:mockk:$mockk_version"
-        testCompile "org.json:json:$json_version"
+        testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
+        testImplementation "org.koin:koin-test:$koin_version"
+        testImplementation "io.mockk:mockk:$mockk_version"
+        testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+        testImplementation "org.json:json:$json_version"
     }
 }

@@ -47,8 +47,8 @@ data class PageResponse(
 fun Route.indexController() {
     val service by inject<IndexService>()
     val routes by inject<Routes>()
-    service.indexLocalPart()?.let { localPart ->
-        get {
+    get {
+        service.indexLocalPart()?.let { localPart ->
             val ctx = call.processRedirects(PATH_LOCAL_PART, routes, localPart)
             if (ctx is RedirectContext) {
                 call.response.headers.append(HttpHeaders.Location, ctx.page)
