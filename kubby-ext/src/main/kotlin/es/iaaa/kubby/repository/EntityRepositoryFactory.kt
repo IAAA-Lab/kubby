@@ -26,7 +26,7 @@ data class SparqlEndpoint(
 data class Tdb2Location(
     val path: Path,
     val mode: DatasourceMode = DatasourceMode.CONNECT,
-    val data: Path ,
+    val data: Path,
     val namespace: String,
     val addSameAs: Boolean
 ) : DataSourceConfiguration()

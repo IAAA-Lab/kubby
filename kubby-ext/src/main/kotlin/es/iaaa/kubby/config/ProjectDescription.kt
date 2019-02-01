@@ -118,7 +118,7 @@ private fun ApplicationConfig.createTDB2Store() =
     Tdb2Location(
         path = Paths.get(property("path").getString()),
         mode = propertyOrNull("mode")?.getString()?.let { DatasourceMode.valueOf(it) } ?: DatasourceMode.CONNECT,
-        data = propertyOrNull("data")?.getString()?.let { Paths.get(it)} ?: Paths.get("data.ttl"),
+        data = propertyOrNull("data")?.getString()?.let { Paths.get(it) } ?: Paths.get("data.ttl"),
         namespace = property("dataset-base").getString(),
         addSameAs = propertyOrNull("add-same-as")?.getString()?.toBoolean() ?: false
     )

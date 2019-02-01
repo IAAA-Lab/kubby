@@ -35,7 +35,7 @@ class ResourceControllerTests : AutoCloseKoinTest() {
 
     @Test
     fun `redirect controller redirects text requests to page`() = withTestApplication(sut) {
-        with(handleRequest(HttpMethod.Get, "/r/index") { addHeader("Accept", "text/html")}) {
+        with(handleRequest(HttpMethod.Get, "/r/index") { addHeader("Accept", "text/html") }) {
             assertEquals(HttpStatusCode.SeeOther, response.status())
             assertEquals("http://localhost/p/index", response.headers[HttpHeaders.Location])
         }
@@ -43,7 +43,12 @@ class ResourceControllerTests : AutoCloseKoinTest() {
 
     @Test
     fun `redirect controller redirects browser requests to page`() = withTestApplication(sut) {
-        with(handleRequest(HttpMethod.Get, "/r/index") { addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8")}) {
+        with(handleRequest(HttpMethod.Get, "/r/index") {
+            addHeader(
+                "Accept",
+                "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
+            )
+        }) {
             assertEquals(HttpStatusCode.SeeOther, response.status())
             assertEquals("http://localhost/p/index", response.headers[HttpHeaders.Location])
         }
@@ -51,7 +56,7 @@ class ResourceControllerTests : AutoCloseKoinTest() {
 
     @Test
     fun `redirect controller redirects data requests to data`() = withTestApplication(sut) {
-        with(handleRequest(HttpMethod.Get, "/r/index") { addHeader("Accept", "application/ld+json")}) {
+        with(handleRequest(HttpMethod.Get, "/r/index") { addHeader("Accept", "application/ld+json") }) {
             assertEquals(HttpStatusCode.SeeOther, response.status())
             assertEquals("http://localhost/d/index", response.headers[HttpHeaders.Location])
         }
@@ -59,7 +64,7 @@ class ResourceControllerTests : AutoCloseKoinTest() {
 
     @Test
     fun `redirect controller redirects mixed data and page requests to page`() = withTestApplication(sut) {
-        with(handleRequest(HttpMethod.Get, "/r/index") { addHeader("Accept", "application/ld+json,text/html")}) {
+        with(handleRequest(HttpMethod.Get, "/r/index") { addHeader("Accept", "application/ld+json,text/html") }) {
             assertEquals(HttpStatusCode.SeeOther, response.status())
             assertEquals("http://localhost/p/index", response.headers[HttpHeaders.Location])
         }

@@ -115,7 +115,6 @@ fun Route.pageController(adapt: PageAdapter) {
 }
 
 
-
 /**
  * Identifier of the local part in route mode.
  */

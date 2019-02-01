@@ -228,7 +228,7 @@ class ContextsTest {
         for (i in listOf("d", "p")) {
             every { applicationCall.request.origin.uri } returns "/$i/1"
 
-            val ctx = applicationCall.processRequests(PATH_LOCAL_PART,"/$i", routes, service)
+            val ctx = applicationCall.processRequests(PATH_LOCAL_PART, "/$i", routes, service)
 
 
             assertTrue(ctx is ContentContext)
@@ -257,7 +257,7 @@ class ContextsTest {
             every { applicationCall.request.origin.uri } returns "/$i/"
             every { service.findOne("http://localhost/r/", "") } returns resource
 
-            val ctx = applicationCall.processRequests(PATH_LOCAL_PART,"/$i", routes, service)
+            val ctx = applicationCall.processRequests(PATH_LOCAL_PART, "/$i", routes, service)
 
             verify(exactly = 0) { service.findOne("http://localhost/r/", "") }
 
