@@ -12,7 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ControllersTest {
+class ContextsTest {
 
     @Test
     fun `authority for standard http request is the host`() {
@@ -101,7 +101,7 @@ class ControllersTest {
 
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("a", "b")
 
-        assertEquals("a/b", applicationCall.extractLocalPath())
+        assertEquals("a/b", applicationCall.extractLocalPath(PATH_LOCAL_PART))
     }
 
     @Test
@@ -110,7 +110,7 @@ class ControllersTest {
 
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("a?")
 
-        assertEquals("a%3F", applicationCall.extractLocalPath())
+        assertEquals("a%3F", applicationCall.extractLocalPath(PATH_LOCAL_PART))
     }
 
 
@@ -120,7 +120,7 @@ class ControllersTest {
 
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("a")
 
-        assertEquals("a", applicationCall.extractLocalPath())
+        assertEquals("a", applicationCall.extractLocalPath(PATH_LOCAL_PART))
     }
 
     @Test
@@ -129,7 +129,7 @@ class ControllersTest {
 
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns emptyList()
 
-        assertEquals("", applicationCall.extractLocalPath())
+        assertEquals("", applicationCall.extractLocalPath(PATH_LOCAL_PART))
     }
 
     @Test
@@ -138,7 +138,7 @@ class ControllersTest {
 
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
 
-        assertEquals("", applicationCall.extractLocalPath())
+        assertEquals("", applicationCall.extractLocalPath(PATH_LOCAL_PART))
     }
 
     @Test
@@ -154,7 +154,7 @@ class ControllersTest {
         for (i in listOf("d", "r", "p")) {
             every { applicationCall.request.origin.uri } returns "/$i/1"
 
-            val uris = applicationCall.extractEntityUris(i, routes)
+            val uris = applicationCall.extractEntityUris(PATH_LOCAL_PART, i, routes)
 
             assertEquals("http://localhost/d/1", uris.data)
             assertEquals("http://localhost/p/1", uris.page)
@@ -177,7 +177,7 @@ class ControllersTest {
         for (i in listOf("d", "r", "p")) {
             every { applicationCall.request.origin.uri } returns "/$i/"
 
-            val uris = applicationCall.extractEntityUris(i, routes)
+            val uris = applicationCall.extractEntityUris(PATH_LOCAL_PART, i, routes)
 
             assertEquals("http://localhost/d/", uris.data)
             assertEquals("http://localhost/p/", uris.page)
@@ -200,7 +200,7 @@ class ControllersTest {
         for (i in listOf("d", "r", "p")) {
             every { applicationCall.request.origin.uri } returns "/$i"
 
-            val uris = applicationCall.extractEntityUris(i, routes)
+            val uris = applicationCall.extractEntityUris(PATH_LOCAL_PART, i, routes)
 
             assertEquals("http://localhost/d/", uris.data)
             assertEquals("http://localhost/p/", uris.page)
@@ -228,7 +228,7 @@ class ControllersTest {
         for (i in listOf("d", "p")) {
             every { applicationCall.request.origin.uri } returns "/$i/1"
 
-            val ctx = applicationCall.processRequests("/$i", routes, service)
+            val ctx = applicationCall.processRequests(PATH_LOCAL_PART,"/$i", routes, service)
 
 
             assertTrue(ctx is ContentContext)
@@ -257,7 +257,7 @@ class ControllersTest {
             every { applicationCall.request.origin.uri } returns "/$i/"
             every { service.findOne("http://localhost/r/", "") } returns resource
 
-            val ctx = applicationCall.processRequests("/$i", routes, service)
+            val ctx = applicationCall.processRequests(PATH_LOCAL_PART,"/$i", routes, service)
 
             verify(exactly = 0) { service.findOne("http://localhost/r/", "") }
 
@@ -276,7 +276,7 @@ class ControllersTest {
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("1")
         every { applicationCall.request.origin.uri } returns "/r/1"
 
-        val ctx = applicationCall.processRedirects(routes)
+        val ctx = applicationCall.processRedirects(PATH_LOCAL_PART, routes)
 
         assertTrue(ctx is RedirectContext)
         assertEquals("http://localhost/d/1", ctx.data)
@@ -294,7 +294,7 @@ class ControllersTest {
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
         every { applicationCall.request.origin.uri } returns "/r/"
 
-        val ctx = applicationCall.processRedirects(routes)
+        val ctx = applicationCall.processRedirects(PATH_LOCAL_PART, routes)
 
         assertTrue(ctx is NoContext)
     }
@@ -310,7 +310,7 @@ class ControllersTest {
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
         every { applicationCall.request.origin.uri } returns "/r"
 
-        val ctx = applicationCall.processRedirects(routes)
+        val ctx = applicationCall.processRedirects(PATH_LOCAL_PART, routes)
 
         assertTrue(ctx is NoContext)
     }
@@ -326,7 +326,7 @@ class ControllersTest {
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
         every { applicationCall.request.origin.uri } returns "/"
 
-        val ctx = applicationCall.processRedirects(routes, "1")
+        val ctx = applicationCall.processRedirects(PATH_LOCAL_PART, routes, "1")
 
         assertTrue(ctx is RedirectContext)
         assertEquals("http://localhost/d/1", ctx.data)
@@ -344,7 +344,7 @@ class ControllersTest {
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("2")
         every { applicationCall.request.origin.uri } returns "/r/2"
 
-        val ctx = applicationCall.processRedirects(routes, "1")
+        val ctx = applicationCall.processRedirects(PATH_LOCAL_PART, routes, "1")
 
         assertTrue(ctx is NoContext)
     }

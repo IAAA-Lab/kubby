@@ -2,20 +2,16 @@ package es.iaaa.kubby.rest.api
 
 import es.iaaa.kubby.services.DescribeEntityService
 import es.iaaa.kubby.services.IndexService
-import io.ktor.application.ApplicationCall
 import io.ktor.application.call
-import io.ktor.features.origin
-import io.ktor.http.*
 import io.ktor.http.ContentType.Text
-import io.ktor.request.contentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.util.AttributeKey
-import org.apache.jena.rdf.model.Resource
 import org.koin.ktor.ext.inject
-import java.util.*
 
 /**
  * Context access key.
@@ -32,16 +28,6 @@ data class Routes(
 )
 
 /**
- * Uris related to an entity
- */
-data class EntityUris(
-    val page: String,
-    val data: String,
-    val namespace: String,
-    val localId: String
-)
-
-/**
  * Logic in [pageController] for populating the response from the [ContentContext].
  */
 typealias PageAdapter = ContentContext.() -> PageResponse
@@ -54,35 +40,6 @@ data class PageResponse(
     val content: Any
 )
 
-/**
- * Root of the context classes.
- */
-sealed class Context
-
-/**
- * Context of the page or data request.
- */
-data class ContentContext(
-    val resource: Resource,
-    val page: String,
-    val data: String,
-    val time: Calendar = GregorianCalendar.getInstance()
-) : Context()
-
-/**
- * Context of the redirect request.
- */
-data class RedirectContext(
-    val page: String,
-    val data: String
-) : Context()
-
-/**
- * Context of a failed request.
- */
-object NoContext : Context()
-
-
 
 /**
  * Sets up a route to handle the index resource if defined.
@@ -92,7 +49,7 @@ fun Route.indexController() {
     val routes by inject<Routes>()
     service.indexLocalPart()?.let { localPart ->
         get {
-            val ctx = call.processRedirects(routes, localPart)
+            val ctx = call.processRedirects(PATH_LOCAL_PART, routes, localPart)
             if (ctx is RedirectContext) {
                 call.response.headers.append(HttpHeaders.Location, ctx.page)
                 call.respond(HttpStatusCode.SeeOther)
@@ -108,7 +65,7 @@ fun Route.resourceController() {
     val routes by inject<Routes>()
     route(routes.resourcePath) {
         get("{$PATH_LOCAL_PART...}") {
-            val ctx = call.processRedirects(routes)
+            val ctx = call.processRedirects(PATH_LOCAL_PART, routes)
             if (ctx is RedirectContext) {
                 val url = if (Text.Html.match(call.extractContentType())) {
                     ctx.page
@@ -130,7 +87,7 @@ fun Route.dataController() {
     val routes by inject<Routes>()
     route(routes.dataPath) {
         get("{$PATH_LOCAL_PART...}") {
-            val ctx = call.processRequests(routes.dataPath, routes, service)
+            val ctx = call.processRequests(PATH_LOCAL_PART, routes.dataPath, routes, service)
             if (ctx is ContentContext) {
                 call.attributes.put(requestContextKey, ctx)
                 ctx.resource.apply { if (!model.isEmpty) call.respond(model) }
@@ -147,7 +104,7 @@ fun Route.pageController(adapt: PageAdapter) {
     val routes by inject<Routes>()
     route(routes.pagePath) {
         get("{$PATH_LOCAL_PART...}") {
-            val ctx = call.processRequests(routes.pagePath, routes, service)
+            val ctx = call.processRequests(PATH_LOCAL_PART, routes.pagePath, routes, service)
             if (ctx is ContentContext) {
                 call.attributes.put(requestContextKey, ctx)
                 adapt(ctx).apply { call.respond(status, content) }
@@ -156,107 +113,6 @@ fun Route.pageController(adapt: PageAdapter) {
     }
 }
 
-/**
- * Common processRedirects in page and data controllers.
- */
-internal fun ApplicationCall.processRequests(
-    path: String,
-    routes: Routes,
-    service: DescribeEntityService
-): Context {
-    val (page, data, namespace, localId) = extractEntityUris(path, routes)
-    return if (localId.isNotEmpty())
-        ContentContext(
-            resource = service.findOne(namespace, localId),
-            page = page,
-            data = data
-        )
-    else NoContext
-}
-
-/**
- *  Process in redirects.
- */
-internal fun ApplicationCall.processRedirects(
-    routes: Routes,
-    alternativeId: String = ""
-): Context {
-    val (page, data, _, effectiveId) = extractEntityUris(
-        if (alternativeId.isNotEmpty()) "" else routes.resourcePath,
-        routes
-    )
-    return if (effectiveId.isNotEmpty() xor alternativeId.isNotEmpty())
-        RedirectContext(
-            page = "$page$alternativeId",
-            data = "$data$alternativeId"
-        )
-    else NoContext
-}
-
-/**
- * Extract paths.
- */
-internal fun ApplicationCall.extractEntityUris(
-    path: String,
-    routes: Routes
-): EntityUris {
-    val localId = extractLocalPath()
-    val base = extractHierPart("$path/$localId").let {
-        if (it.endsWith(path)) it.dropLast(path.length) else it
-    }
-    return EntityUris(
-        page = "$base${routes.pagePath}/$localId".toNormalizedUrlString(),
-        data = "$base${routes.dataPath}/$localId".toNormalizedUrlString(),
-        namespace = "$base${routes.resourcePath}/".toNormalizedUrlString(),
-        localId = localId
-    )
-}
-
-internal fun String.toNormalizedUrlString() = Url(this).toURI().normalize().toString()
-
-
-/**
- * Extracts the local part of the request.
- */
-internal fun ApplicationCall.extractLocalPath() = parameters
-    .getAll(PATH_LOCAL_PART)
-    ?.joinToString("/")
-    ?.replace("?", "%3F")
-    ?: ""
-
-/**
- * Extracts the hier part of the request by removing the [localPart].
- */
-internal fun ApplicationCall.extractHierPart(localPart: String) =
-    with(request.origin) {
-        val sb = StringBuilder()
-        sb.append("$scheme://$authority")
-        if (uri.endsWith(localPart)) {
-            sb.append(uri.dropLast(localPart.length))
-        } else {
-            sb.append(uri)
-        }
-        sb.toString()
-    }
-
-/**
- * Extracts the content type of the request.
- */
-private fun ApplicationCall.extractContentType() = request
-    .contentType().withoutParameters()
-
-/**
- * Authority.
- */
-internal val RequestConnectionPoint.authority: String
-    get() = StringBuffer().apply {
-        append(host)
-        if ((scheme == "http" && port != 80) ||
-            (scheme == "https" && port != 443)
-        ) {
-            append(":$port")
-        }
-    }.toString()
 
 
 /**
