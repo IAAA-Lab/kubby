@@ -67,7 +67,8 @@ fun Route.resourceController() {
         get("{$PATH_LOCAL_PART...}") {
             val ctx = call.processRedirects(PATH_LOCAL_PART, routes)
             if (ctx is RedirectContext) {
-                val url = if (Text.Html.match(call.extractContentType())) {
+                val match = call.extractAcceptedTypes().any { Text.Html.match(it) }
+                val url = if (match) {
                     ctx.page
                 } else {
                     ctx.data

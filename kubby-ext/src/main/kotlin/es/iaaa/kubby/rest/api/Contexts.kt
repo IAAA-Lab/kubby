@@ -3,10 +3,11 @@ package es.iaaa.kubby.rest.api
 import es.iaaa.kubby.services.DescribeEntityService
 import io.ktor.application.ApplicationCall
 import io.ktor.features.origin
+import io.ktor.http.ContentType
 import io.ktor.http.RequestConnectionPoint
 import io.ktor.http.Url
 import io.ktor.http.toURI
-import io.ktor.request.contentType
+import io.ktor.request.acceptItems
 import org.apache.jena.rdf.model.Resource
 import java.util.*
 
@@ -138,8 +139,7 @@ internal fun ApplicationCall.extractHierPart(localPart: String) =
 /**
  * Extracts the content type of the request.
  */
-internal fun ApplicationCall.extractContentType() = request
-    .contentType().withoutParameters()
+internal fun ApplicationCall.extractAcceptedTypes() = request.acceptItems().map { ContentType.parse(it.value) }
 
 /**
  * Authority.
