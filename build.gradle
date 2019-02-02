@@ -54,10 +54,7 @@ subprojects {
         implementation "io.ktor:ktor-server-netty:$ktor_version"
         implementation "io.ktor:ktor-velocity:$ktor_version"
         implementation "org.koin:koin-ktor:$koin_version"
-        implementation "com.google.guava:guava:26.0-jre"
-
-        implementation "io.github.config4k:config4k:$config4k_version"
-
+        implementation "com.google.guava:guava:$guava_version"
         implementation "org.apache.jena:apache-jena-libs:$jena_version"
         implementation "ch.qos.logback:logback-classic:$logback_version"
 
@@ -65,6 +62,6 @@ subprojects {
         testImplementation "org.koin:koin-test:$koin_version"
         testImplementation "io.mockk:mockk:$mockk_version"
         testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
-        testImplementation "org.json:json:$json_version"
-    }
+        testImplementation "com.jayway.jsonpath:json-path-assert:$json_path_assert_version"
+  }
 }
