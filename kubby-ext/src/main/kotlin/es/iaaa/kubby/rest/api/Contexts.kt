@@ -142,14 +142,14 @@ internal fun ApplicationCall.extractHierPart(localPart: String) =
 internal fun ApplicationCall.extractAcceptedTypes() = request.acceptItems().map { ContentType.parse(it.value) }
 
 /**
- * Authority.
+ * Request authority.
  */
 internal val RequestConnectionPoint.authority: String
-    get() = StringBuffer().apply {
-        append(host)
-        if ((scheme == "http" && port != 80) ||
-            (scheme == "https" && port != 443)
-        ) {
-            append(":$port")
-        }
-    }.toString()
+    get() = "$host$lexicalPort"
+
+/**
+ * Request port.
+ */
+
+internal val RequestConnectionPoint.lexicalPort: String
+    get() = if ((scheme == "http" && port != 80) || (scheme == "https" && port != 443)) ":$port" else ""
