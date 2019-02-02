@@ -117,12 +117,20 @@ private fun ApplicationConfig.createSparqlEndpoint() =
 private fun ApplicationConfig.createTDB2Store() =
     Tdb2Location(
         path = Paths.get(property("path").getString()),
-        mode = propertyOrNull("mode")?.getString()?.let { DatasourceMode.valueOf(it) } ?: DatasourceMode.CONNECT,
+        mode = propertyOrNull("mode")?.getString().toMode(),
         data = propertyOrNull("data")?.getString()?.let { Paths.get(it) } ?: Paths.get("data.ttl"),
         namespace = property("dataset-base").getString(),
         addSameAs = propertyOrNull("add-same-as")?.getString()?.toBoolean() ?: false
     )
 
+/**
+ * Helper extension that converts any string to a valid or safe [DatasourceMode].
+ */
+private fun String?.toMode(): DatasourceMode =
+    if (this == null)
+        DatasourceMode.CONNECT
+    else runCatching { DatasourceMode.valueOf(toUpperCase()) }
+        .getOrDefault(DatasourceMode.CONNECT)
 
 /**
  * Transform a [List] of URIs possibly in CURIE form into a list of [Property] with the help of set of [prefixes].

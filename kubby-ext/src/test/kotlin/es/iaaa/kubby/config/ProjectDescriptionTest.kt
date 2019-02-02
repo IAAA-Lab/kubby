@@ -2,35 +2,40 @@ package es.iaaa.kubby.config
 
 import com.typesafe.config.ConfigFactory
 import es.iaaa.kubby.repository.SparqlEndpoint
+import es.iaaa.kubby.repository.Tdb2Location
+import es.iaaa.kubby.repository.source.DatasourceMode
+import es.iaaa.kubby.rest.api.Routes
+import io.ktor.config.ApplicationConfig
 import io.ktor.config.HoconApplicationConfig
 import io.ktor.server.engine.commandLineEnvironment
 import java.io.File
+import java.nio.file.Paths
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ApplicationConfigExtTest {
+class ProjectDescriptionTest {
 
-    lateinit var config: ProjectDescription
+    lateinit var config: ApplicationConfig
 
-    lateinit var runtimeConfig: ProjectDescription
+    lateinit var runtimeConfig: ApplicationConfig
 
     @BeforeTest
     fun before() {
         val classLoader = javaClass.classLoader
         val file = File(classLoader.getResource("config/test.conf").file)
-        config = HoconApplicationConfig(ConfigFactory.parseFile(file)).toProjectDescription()
-        runtimeConfig = commandLineEnvironment(arrayOf("-port=80")).config.toProjectDescription()
+        config = HoconApplicationConfig(ConfigFactory.parseFile(file))
+        runtimeConfig = commandLineEnvironment(arrayOf("-port=80")).config
     }
 
     @Test
     fun `ensure project name has value`() {
-        assertEquals("Test DBpedia.org", config.projectName)
+        assertEquals("Test DBpedia.org", config.toProjectDescription().projectName)
     }
 
     @Test
     fun `ensure the project homepage has value`() {
-        assertEquals("http://dbpedia.org", config.projectHomepage)
+        assertEquals("http://dbpedia.org", config.toProjectDescription().projectHomepage)
     }
 
     @Test
@@ -42,7 +47,7 @@ class ApplicationConfigExtTest {
             "foaf" to "http://xmlns.com/foaf/0.1/",
             "schema" to "http://schema.org/"
         )
-        assertEquals(expected, config.usePrefixes)
+        assertEquals(expected, config.toProjectDescription().usePrefixes)
     }
 
     @Test
@@ -56,17 +61,17 @@ class ApplicationConfigExtTest {
             "foaf" to "http://xmlns.com/foaf/0.1/",
             "schema" to "http://schema.org/"
         )
-        assertEquals(expected, runtimeConfig.usePrefixes)
+        assertEquals(expected, runtimeConfig.toProjectDescription().usePrefixes)
     }
 
     @Test
     fun `ensure the default language is defined`() {
-        assertEquals("en", config.defaultLanguage)
+        assertEquals("en", config.toProjectDescription().defaultLanguage)
     }
 
     @Test
     fun `ensure the index resource is defined`() {
-        assertEquals("http://dbpedia.org/resource/DBpedia", config.indexResource)
+        assertEquals("http://dbpedia.org/resource/DBpedia", config.toProjectDescription().indexResource)
     }
 
     @Test
@@ -78,10 +83,20 @@ class ApplicationConfigExtTest {
             namespace = "http://dbpedia.org/resource/",
             addSameAs = true
         )
-        println(expect)
-        println(config.datasets[0])
-        assertEquals(1, config.datasets.size)
-        assertEquals(expect, config.datasets[0])
+        assertEquals(expect, config.toProjectDescription().datasets[0])
+    }
+
+
+    @Test
+    fun `configure a TDB2 location`() {
+        val expect = Tdb2Location(
+            path = Paths.get("dbpedia"),
+            mode = DatasourceMode.CREATE,
+            data = Paths.get("dbpedia.ttl"),
+            namespace = "http://dbpedia.org/resource/",
+            addSameAs = true
+        )
+        assertEquals(expect, config.toProjectDescription().datasets[1])
     }
 
     @Test
@@ -93,7 +108,17 @@ class ApplicationConfigExtTest {
             "http://xmlns.com/foaf/0.1/projectName",
             "http://schema.org/projectName"
         )
-        assertEquals(expected, runtimeConfig.labelProperties.map { it.uri })
+        assertEquals(expected, runtimeConfig.toProjectDescription().labelProperties.map { it.uri })
+    }
+
+    @Test
+    fun `ensure the default routes are defined`() {
+        val expected = Routes(
+            "/page",
+            "/data",
+            "/resource"
+        )
+        assertEquals(expected, runtimeConfig.toRoutes())
     }
 }
 
