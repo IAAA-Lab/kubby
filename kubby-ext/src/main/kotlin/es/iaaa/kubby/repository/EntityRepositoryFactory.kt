@@ -6,69 +6,60 @@ import java.nio.file.Path
 /**
  * Root of data source configurations.
  */
-open class DataSourceConfiguration
+sealed class DataSourceConfiguration(
+    val namespace: String,
+    val addSameAs: Boolean
+)
 
 /**
  * SPARQL service configuration.
  */
 
-data class SparqlEndpoint(
+class SparqlEndpoint(
     val service: String,
     val dataset: String?,
     val forceTrust: Boolean,
-    val namespace: String,
-    val addSameAs: Boolean
-) : DataSourceConfiguration()
+    namespace: String,
+    addSameAs: Boolean
+) : DataSourceConfiguration(namespace, addSameAs)
 
 /**
  * TDB 2 configuration.
  */
-data class Tdb2Location(
+class Tdb2Location(
     val path: Path,
     val mode: DatasourceMode = DatasourceMode.CONNECT,
     val data: Path,
-    val namespace: String,
-    val addSameAs: Boolean
-) : DataSourceConfiguration()
+    namespace: String,
+    addSameAs: Boolean
+) : DataSourceConfiguration(namespace, addSameAs)
 
 /**
- * The interface of a factory that creates an [EntityRepository] from a list of [DataSourceConfiguration].
+ * Factory as extension of a list of [DataSourceConfiguration].
  */
-interface EntityRepositoryFactory {
-    fun createFrom(list: List<DataSourceConfiguration>): EntityRepository
-}
+fun List<DataSourceConfiguration>.toEntityRepository() = if (isNotEmpty())
+    MergeEntityRepository( map { retrieveEntityRepository(it) })
+else
+    throw EntityRepositoryException("Requires at least one datasource")
 
-/**
- * Basic factory.
- */
-object BasicEntityRepositoryFactory : EntityRepositoryFactory {
-    override fun createFrom(list: List<DataSourceConfiguration>) = if (list.isNotEmpty())
-        MergeEntityRepository(list.map { retrieveEntityRepository(it) })
-    else
-        throw EntityRepositoryException("Requires at least one datasource")
+private fun retrieveEntityRepository(config: DataSourceConfiguration) = RewrittenEntityRepository(
+    repository = buildRepository(config),
+    namespace = config.namespace,
+    addSameAs = config.addSameAs)
 
-    private fun retrieveEntityRepository(config: DataSourceConfiguration) = when (config) {
-        is SparqlEndpoint -> RewrittenEntityRepository(
-            repository = SparqlEntityRepository(
-                service = config.service,
-                dataset = config.dataset,
-                forceTrust = config.forceTrust
-            ),
-            namespace = config.namespace,
-            addSameAs = config.addSameAs
+private fun buildRepository(config: DataSourceConfiguration) =
+    when (config) {
+        is SparqlEndpoint ->  SparqlEntityRepository(
+            service = config.service,
+            dataset = config.dataset,
+            forceTrust = config.forceTrust
         )
-        is Tdb2Location -> RewrittenEntityRepository(
-            repository = Tdb2EntityRepository(
-                path = config.path,
-                mode = config.mode,
-                data = config.data
-            ),
-            namespace = config.namespace,
-            addSameAs = config.addSameAs
+        is Tdb2Location ->  Tdb2EntityRepository(
+            path = config.path,
+            mode = config.mode,
+            data = config.data
         )
-        else -> throw EntityRepositoryException("Unknown configuration")
     }
-}
 
 /**
  * Exception thrown during the creation of an [EntityRepository].

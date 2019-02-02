@@ -1,12 +1,11 @@
 package es.iaaa.kubby.config
 
-import es.iaaa.kubby.repository.BasicEntityRepositoryFactory
 import es.iaaa.kubby.repository.EntityRepository
+import es.iaaa.kubby.repository.toEntityRepository
 import es.iaaa.kubby.services.DescribeEntityService
 import es.iaaa.kubby.services.IndexService
 import es.iaaa.kubby.services.impl.DefaultDescribeEntityServiceImpl
 import es.iaaa.kubby.services.impl.DefaultIndexServiceImpl
-
 import io.ktor.config.ApplicationConfig
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
@@ -15,7 +14,7 @@ fun createKubbyModule(appConf: ApplicationConfig): Module {
     val conf = appConf.toProjectDescription()
     return module(createOnStart = false) {
         single<EntityRepository> {
-            BasicEntityRepositoryFactory.createFrom(conf.datasets)
+            conf.datasets.toEntityRepository()
         }
         single<IndexService> {
             DefaultIndexServiceImpl(get(), conf.indexResource)
