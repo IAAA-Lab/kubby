@@ -17,9 +17,9 @@ import org.apache.jena.rdf.model.Resource
  * Endpoints with self signed certificates and other issues may be trusted by setting [forceTrust] to true.
  */
 class SparqlEntityRepository(
-    private val service: String,
-    private val dataset: String? = null,
-    private val forceTrust: Boolean = false
+    val service: String,
+    val dataset: String? = null,
+    val forceTrust: Boolean = false
 ) : EntityRepository {
 
     override fun getId(uri: String) = EntityId(localPart = uri)

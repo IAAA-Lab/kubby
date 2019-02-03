@@ -1,8 +1,8 @@
 package es.iaaa.kubby.repository.source
 
 import es.iaaa.kubby.repository.EntityId
-import es.iaaa.kubby.repository.source.DatasourceMode.CONNECT
-import es.iaaa.kubby.repository.source.DatasourceMode.CREATE
+import es.iaaa.kubby.repository.source.RepositoryMode.CONNECT
+import es.iaaa.kubby.repository.source.RepositoryMode.CREATE
 import org.apache.jena.dboe.base.file.Location.create
 import org.apache.jena.query.Dataset
 import org.apache.jena.riot.RDFDataMgr.read

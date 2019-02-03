@@ -1,20 +1,16 @@
 package es.iaaa.kubby.config
 
 import com.typesafe.config.ConfigFactory
-import es.iaaa.kubby.repository.SparqlEndpoint
-import es.iaaa.kubby.repository.Tdb2Location
-import es.iaaa.kubby.repository.source.DatasourceMode
 import es.iaaa.kubby.rest.api.Routes
 import io.ktor.config.ApplicationConfig
 import io.ktor.config.HoconApplicationConfig
 import io.ktor.server.engine.commandLineEnvironment
 import java.io.File
-import java.nio.file.Paths
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ProjectDescriptionTest {
+class ProjectDescriptionConfigTest {
 
     lateinit var config: ApplicationConfig
 
@@ -72,27 +68,6 @@ class ProjectDescriptionTest {
     @Test
     fun `ensure the index resource is defined`() {
         assertEquals("http://dbpedia.org/resource/DBpedia", config.toProjectDescription().indexResource)
-    }
-
-    @Test
-    fun `configure a SPARQL endpoint`() {
-        val expect = SparqlEndpoint(
-            service = "https://dbpedia.org/sparql",
-            forceTrust = true,
-            dataset = "http://dbpedia.org"
-        )
-        assertEquals(expect, config.toProjectDescription().datasets[0].source)
-    }
-
-
-    @Test
-    fun `configure a TDB2 location`() {
-        val expect = Tdb2Location(
-            path = Paths.get("dbpedia"),
-            mode = DatasourceMode.CREATE,
-            data = Paths.get("dbpedia.ttl")
-        )
-        assertEquals(expect, config.toProjectDescription().datasets[1].source)
     }
 
     @Test

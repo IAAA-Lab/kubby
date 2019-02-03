@@ -2,8 +2,8 @@ package es.iaaa.kubby.repository.source
 
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
-import es.iaaa.kubby.repository.source.DatasourceMode.CONNECT
-import es.iaaa.kubby.repository.source.DatasourceMode.CREATE
+import es.iaaa.kubby.repository.source.RepositoryMode.CONNECT
+import es.iaaa.kubby.repository.source.RepositoryMode.CREATE
 import org.apache.jena.dboe.base.file.Location
 import org.apache.jena.query.Dataset
 import org.apache.jena.query.QueryExecutionFactory.create
@@ -36,9 +36,9 @@ import java.nio.file.Path
  * otherwise [path] must point to an assembler file.
  */
 class Tdb2EntityRepository(
-    private val path: Path,
-    private val data: Path? = null,
-    mode: DatasourceMode
+    val path: Path,
+    val data: Path? = null,
+    val mode: RepositoryMode
 ) :
     EntityRepository {
 
@@ -87,7 +87,7 @@ class Tdb2EntityRepository(
     }
 }
 
-enum class DatasourceMode {
+enum class RepositoryMode {
     CONNECT, CREATE
 }
 
