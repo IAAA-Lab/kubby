@@ -13,3 +13,19 @@ compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=io.ktor.util.KtorExperimentalAPI"]
 }
+
+configurations { schemagen }
+
+dependencies {
+    schemagen "org.apache.jena:jena-cmds:$jena_version"
+}
+
+task schemagen(type: JavaExec) {
+    classpath = configurations.schemagen
+    main = "jena.schemagen"
+    args '-i', 'http://www.w3.org/ns/prov.owl'
+    args '-n', 'Prov'
+    args '-a', 'http://www.w3.org/ns/prov#'
+    args '--ontology'
+    args '--nostrict'
+}
