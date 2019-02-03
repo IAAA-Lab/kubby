@@ -79,11 +79,9 @@ class ProjectDescriptionTest {
         val expect = SparqlEndpoint(
             service = "https://dbpedia.org/sparql",
             forceTrust = true,
-            dataset = "http://dbpedia.org",
-            namespace = "http://dbpedia.org/resource/",
-            addSameAs = true
+            dataset = "http://dbpedia.org"
         )
-        assertEquals(expect, config.toProjectDescription().datasets[0])
+        assertEquals(expect, config.toProjectDescription().datasets[0].source)
     }
 
 
@@ -92,11 +90,9 @@ class ProjectDescriptionTest {
         val expect = Tdb2Location(
             path = Paths.get("dbpedia"),
             mode = DatasourceMode.CREATE,
-            data = Paths.get("dbpedia.ttl"),
-            namespace = "http://dbpedia.org/resource/",
-            addSameAs = true
+            data = Paths.get("dbpedia.ttl")
         )
-        assertEquals(expect, config.toProjectDescription().datasets[1])
+        assertEquals(expect, config.toProjectDescription().datasets[1].source)
     }
 
     @Test

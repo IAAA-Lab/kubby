@@ -4,24 +4,29 @@ import es.iaaa.kubby.repository.source.*
 import java.nio.file.Path
 
 /**
- * Root of data source configurations.
+ * Data source configurations.
  */
-sealed class DataSourceConfiguration(
+class DataSourceConfiguration(
     val namespace: String,
-    val addSameAs: Boolean
+    val addSameAs: Boolean,
+    val source: DataSource
 )
+
+/**
+ * Data source root
+ */
+
+sealed class DataSource
 
 /**
  * SPARQL service configuration.
  */
 
-class SparqlEndpoint(
+data class SparqlEndpoint(
     val service: String,
     val dataset: String?,
-    val forceTrust: Boolean,
-    namespace: String,
-    addSameAs: Boolean
-) : DataSourceConfiguration(namespace, addSameAs)
+    val forceTrust: Boolean
+) : DataSource()
 
 /**
  * TDB 2 configuration.
@@ -29,10 +34,8 @@ class SparqlEndpoint(
 class Tdb2Location(
     val path: Path,
     val mode: DatasourceMode = DatasourceMode.CONNECT,
-    val data: Path,
-    namespace: String,
-    addSameAs: Boolean
-) : DataSourceConfiguration(namespace, addSameAs)
+    val data: Path
+) : DataSource()
 
 /**
  * Factory as extension of a list of [DataSourceConfiguration].
@@ -43,11 +46,11 @@ else
     throw EntityRepositoryException("Requires at least one datasource")
 
 private fun retrieveEntityRepository(config: DataSourceConfiguration) = RewrittenEntityRepository(
-    repository = buildRepository(config),
+    repository = buildRepository(config.source),
     namespace = config.namespace,
     addSameAs = config.addSameAs)
 
-private fun buildRepository(config: DataSourceConfiguration) =
+private fun buildRepository(config: DataSource) =
     when (config) {
         is SparqlEndpoint ->  SparqlEntityRepository(
             service = config.service,

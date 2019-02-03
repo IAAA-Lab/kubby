@@ -92,11 +92,15 @@ fun ApplicationConfig.toRoutes() =
  */
 private fun List<ApplicationConfig>.toMapToDataSources(): List<DataSourceConfiguration> =
     map {
-        when (it.property("type").getString()) {
-            "sparql" -> it.createSparqlEndpoint()
-            "tdb2" -> it.createTDB2Store()
-            else -> throw ApplicationConfigurationException("Unknown datasource type")
-        }
+        DataSourceConfiguration(
+            namespace = it.property("dataset-base").getString(),
+            addSameAs = it.propertyOrNull("add-same-as")?.getString()?.toBoolean() ?: false,
+            source = when (it.property("type").getString()) {
+                "sparql" -> it.createSparqlEndpoint()
+                "tdb2" -> it.createTDB2Store()
+                else -> throw ApplicationConfigurationException("Unknown datasource type")
+            }
+        )
     }
 
 /**
@@ -106,9 +110,7 @@ private fun ApplicationConfig.createSparqlEndpoint() =
     SparqlEndpoint(
         service = property("endpoint").getString(),
         dataset = propertyOrNull("default-graph")?.getString(),
-        forceTrust = propertyOrNull("trust-endpoint")?.getString()?.toBoolean() ?: false,
-        namespace = property("dataset-base").getString(),
-        addSameAs = propertyOrNull("add-same-as")?.getString()?.toBoolean() ?: false
+        forceTrust = propertyOrNull("trust-endpoint")?.getString()?.toBoolean() ?: false
     )
 
 /**
@@ -118,9 +120,7 @@ private fun ApplicationConfig.createTDB2Store() =
     Tdb2Location(
         path = Paths.get(property("path").getString()),
         mode = propertyOrNull("mode")?.getString().toMode(),
-        data = propertyOrNull("data")?.getString()?.let { Paths.get(it) } ?: Paths.get("data.ttl"),
-        namespace = property("dataset-base").getString(),
-        addSameAs = propertyOrNull("add-same-as")?.getString()?.toBoolean() ?: false
+        data = propertyOrNull("data")?.getString()?.let { Paths.get(it) } ?: Paths.get("data.ttl")
     )
 
 /**
