@@ -11,20 +11,43 @@ import io.ktor.request.acceptItems
 import org.apache.jena.rdf.model.Resource
 import java.util.*
 
+
 /**
  * Root of the context classes.
  */
 sealed class Context
 
 /**
- * Context of the page or data request.
+ * Interface of the context
  */
-data class ContentContext(
-    val resource: Resource,
-    val page: String,
-    val data: String,
-    val time: Calendar = GregorianCalendar.getInstance()
-) : Context()
+
+interface ContentContext {
+    val resource: Resource
+    val page: String
+    val data: String
+    val time: Calendar
+}
+
+/**
+ * Context of the page request.
+ */
+data class PageContentContext(
+    override val resource: Resource,
+    override val page: String,
+    override val data: String,
+    override val time: Calendar = GregorianCalendar.getInstance()
+) : Context(), ContentContext
+
+
+/**
+ * Context of the data request.
+ */
+data class DataContentContext(
+    override val resource: Resource,
+    override val page: String,
+    override val data: String,
+    override val time: Calendar = GregorianCalendar.getInstance()
+) : Context(), ContentContext
 
 /**
  * Context of the redirect request.
@@ -50,17 +73,34 @@ data class EntityUris(
 )
 
 /**
- * Common processRedirects in page and data controllers.
+ * Process page requests.
  */
-internal fun ApplicationCall.processRequests(
+internal fun ApplicationCall.processPageRequests(
     paramName: String,
-    path: String,
     routes: Routes,
     service: DescribeEntityService
 ): Context {
-    val (page, data, namespace, localId) = extractEntityUris(paramName, path, routes)
+    val (page, data, namespace, localId) = extractEntityUris(paramName, routes.pagePath, routes)
     return if (localId.isNotEmpty())
-        ContentContext(
+        PageContentContext(
+            resource = service.findOne(namespace, localId),
+            page = page,
+            data = data
+        )
+    else NoContext
+}
+
+/**
+ * Process data requests.
+ */
+internal fun ApplicationCall.processDataRequests(
+    paramName: String,
+    routes: Routes,
+    service: DescribeEntityService
+): Context {
+    val (page, data, namespace, localId) = extractEntityUris(paramName, routes.dataPath, routes)
+    return if (localId.isNotEmpty())
+        DataContentContext(
             resource = service.findOne(namespace, localId),
             page = page,
             data = data

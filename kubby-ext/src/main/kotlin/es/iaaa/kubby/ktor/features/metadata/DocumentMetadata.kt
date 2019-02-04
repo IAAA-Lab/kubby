@@ -6,6 +6,7 @@ import es.iaaa.kubby.ktor.features.MetadataProcesor
 import es.iaaa.kubby.rdf.addNsIfUndefined
 import es.iaaa.kubby.rdf.getName
 import es.iaaa.kubby.rest.api.ContentContext
+import es.iaaa.kubby.rest.api.DataContentContext
 import es.iaaa.kubby.text.toTitleCase
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.sparql.vocabulary.FOAF
@@ -25,11 +26,12 @@ class DocumentMetadata : MetadataProcesor {
         model.apply {
             addNsIfUndefined("foaf", FOAF.NS)
             addNsIfUndefined("rdfs", RDFS.uri)
-            getResource(context.page).apply {
+            val uri = if (context is DataContentContext) context.data else context.page
+            getResource(uri).apply {
                 addProperty(FOAF.primaryTopic, topic)
                 addProperty(
                     RDFS.label,
-                    projectDescription.getLanguageValue("metadata-document-label").format(title)
+                    projectDescription.getLanguageValue("metadata-document-label").format(title) // LABEL should be generic "Description of ..."
                 )
             }
         }

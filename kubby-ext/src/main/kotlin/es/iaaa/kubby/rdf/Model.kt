@@ -1,6 +1,8 @@
 package es.iaaa.kubby.rdf
 
 import es.iaaa.kubby.text.replacePrefix
+import org.apache.jena.query.QueryExecutionFactory
+import org.apache.jena.query.QueryFactory
 import org.apache.jena.rdf.model.*
 import org.apache.jena.rdf.model.ModelFactory.createDefaultModel
 import org.apache.jena.riot.system.PrefixMap
@@ -139,6 +141,11 @@ fun Model.merge(other: Model): Model {
     other.nsPrefixMap.forEach { prefix, uri -> setNsPrefix(prefix, uri) }
     return this
 }
+
+/**
+ * Ask this model with a ASK [query].
+ */
+infix fun Model.ask(query: String) = QueryExecutionFactory.create(QueryFactory.create(query), this).execAsk()
 
 
 /**

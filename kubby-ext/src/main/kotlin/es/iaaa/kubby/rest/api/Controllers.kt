@@ -88,7 +88,7 @@ fun Route.dataController() {
     val routes by inject<Routes>()
     route(routes.dataPath) {
         get("{$PATH_LOCAL_PART...}") {
-            val ctx = call.processRequests(PATH_LOCAL_PART, routes.dataPath, routes, service)
+            val ctx = call.processDataRequests(PATH_LOCAL_PART, routes, service)
             if (ctx is ContentContext) {
                 call.attributes.put(requestContextKey, ctx)
                 ctx.resource.apply { if (!model.isEmpty) call.respond(model) }
@@ -105,7 +105,7 @@ fun Route.pageController(adapt: PageAdapter) {
     val routes by inject<Routes>()
     route(routes.pagePath) {
         get("{$PATH_LOCAL_PART...}") {
-            val ctx = call.processRequests(PATH_LOCAL_PART, routes.pagePath, routes, service)
+            val ctx = call.processPageRequests(PATH_LOCAL_PART, routes, service)
             if (ctx is ContentContext) {
                 call.attributes.put(requestContextKey, ctx)
                 adapt(ctx).apply { call.respond(status, content) }

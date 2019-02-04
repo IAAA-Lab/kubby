@@ -212,7 +212,7 @@ class ContextsTest {
 
 
     @Test
-    fun `process request with id is findable`() {
+    fun `process data request with id is findable`() {
         val applicationCall = mockk<ApplicationCall>()
         val service = mockk<DescribeEntityService>()
 
@@ -225,23 +225,48 @@ class ContextsTest {
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("1")
         every { service.findOne("http://localhost/r/", "1") } returns resource
 
-        for (i in listOf("d", "p")) {
-            every { applicationCall.request.origin.uri } returns "/$i/1"
+        every { applicationCall.request.origin.uri } returns "/d/1"
 
-            val ctx = applicationCall.processRequests(PATH_LOCAL_PART, "/$i", routes, service)
+        val ctx = applicationCall.processDataRequests(PATH_LOCAL_PART, routes, service)
 
 
-            assertTrue(ctx is ContentContext)
-            assertEquals("http://localhost/d/1", ctx.data)
-            assertEquals("http://localhost/p/1", ctx.page)
-            assertEquals(resource, ctx.resource)
-        }
+        assertTrue(ctx is ContentContext)
+        assertEquals("http://localhost/d/1", ctx.data)
+        assertEquals("http://localhost/p/1", ctx.page)
+        assertEquals(resource, ctx.resource)
 
-        verify(exactly = 2) { service.findOne("http://localhost/r/", "1") }
+        verify { service.findOne("http://localhost/r/", "1") }
     }
 
     @Test
-    fun `process request without id is not findable`() {
+    fun `process page request with id is findable`() {
+        val applicationCall = mockk<ApplicationCall>()
+        val service = mockk<DescribeEntityService>()
+
+        val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
+        val resource = anyResource()
+
+        every { applicationCall.request.origin.scheme } returns "http"
+        every { applicationCall.request.origin.host } returns "localhost"
+        every { applicationCall.request.origin.port } returns 80
+        every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("1")
+        every { service.findOne("http://localhost/r/", "1") } returns resource
+
+        every { applicationCall.request.origin.uri } returns "/p/1"
+
+        val ctx = applicationCall.processPageRequests(PATH_LOCAL_PART, routes, service)
+
+
+        assertTrue(ctx is ContentContext)
+        assertEquals("http://localhost/d/1", ctx.data)
+        assertEquals("http://localhost/p/1", ctx.page)
+        assertEquals(resource, ctx.resource)
+
+        verify { service.findOne("http://localhost/r/", "1") }
+    }
+
+    @Test
+    fun `process data request without id is not findable`() {
         val applicationCall = mockk<ApplicationCall>()
         val service = mockk<DescribeEntityService>()
 
@@ -253,16 +278,37 @@ class ContextsTest {
         every { applicationCall.request.origin.port } returns 80
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
 
-        for (i in listOf("d", "p")) {
-            every { applicationCall.request.origin.uri } returns "/$i/"
-            every { service.findOne("http://localhost/r/", "") } returns resource
+        every { applicationCall.request.origin.uri } returns "/d/"
+        every { service.findOne("http://localhost/r/", "") } returns resource
 
-            val ctx = applicationCall.processRequests(PATH_LOCAL_PART, "/$i", routes, service)
+        val ctx = applicationCall.processDataRequests(PATH_LOCAL_PART, routes, service)
 
-            verify(exactly = 0) { service.findOne("http://localhost/r/", "") }
+        verify(exactly = 0) { service.findOne("http://localhost/r/", "") }
 
-            assertTrue(ctx is NoContext)
-        }
+        assertTrue(ctx is NoContext)
+    }
+
+    @Test
+    fun `process page request without id is not findable`() {
+        val applicationCall = mockk<ApplicationCall>()
+        val service = mockk<DescribeEntityService>()
+
+        val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
+        val resource = anyResource()
+
+        every { applicationCall.request.origin.scheme } returns "http"
+        every { applicationCall.request.origin.host } returns "localhost"
+        every { applicationCall.request.origin.port } returns 80
+        every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
+
+        every { applicationCall.request.origin.uri } returns "/p/"
+        every { service.findOne("http://localhost/r/", "") } returns resource
+
+        val ctx = applicationCall.processPageRequests(PATH_LOCAL_PART, routes, service)
+
+        verify(exactly = 0) { service.findOne("http://localhost/r/", "") }
+
+        assertTrue(ctx is NoContext)
     }
 
     @Test
