@@ -5,6 +5,7 @@ import es.iaaa.kubby.ktor.features.Metadata
 import es.iaaa.kubby.ktor.features.MetadataProcesor
 import es.iaaa.kubby.rdf.addNsIfUndefined
 import es.iaaa.kubby.rest.api.ContentContext
+import es.iaaa.kubby.rest.api.DataContentContext
 import es.iaaa.kubby.vocabulary.PROV
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.vocabulary.RDF
@@ -17,7 +18,7 @@ class ProvenanceMetadata : MetadataProcesor {
 
     override fun process(model: Model, context: ContentContext, projectDescription: ProjectDescription) {
         val date = model.createTypedLiteral(context.time)
-        val document = model.getResource(context.page)
+        val document = model.getResource(if (context is DataContentContext) context.data else context.page)
         val agent = model.createResource()
         val activity = model.createResource()
 

@@ -9,14 +9,13 @@ import java.nio.file.Paths
 /**
  * Create an [EntityRepository] from the [ApplicationConfig].
  */
-fun ApplicationConfig.toEntityRepository() {
+fun ApplicationConfig.toEntityRepository() =
     configList("kubby.datasets").let {
         if (it.isNotEmpty())
             MergeEntityRepository( it.toMapToDataSources() )
         else
             throw EntityRepositoryException("Requires at least one datasource")
     }
-}
 
 
 /**
