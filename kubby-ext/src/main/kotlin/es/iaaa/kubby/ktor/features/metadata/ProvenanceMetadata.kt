@@ -27,7 +27,6 @@ class ProvenanceMetadata : MetadataProcesor {
             addNsIfUndefined("rdfs", RDFS.uri)
             agent.apply {
                 addProperty(RDF.type, PROV.SoftwareAgent)
-                addProperty(RDF.type, PROV.Agent)
                 addLiteral(RDFS.label, projectDescription.softwareName)
             }
             document.apply {
