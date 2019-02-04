@@ -3,8 +3,8 @@ package es.iaaa.kubby.config
 import es.iaaa.kubby.repository.EntityRepository
 import es.iaaa.kubby.services.DescribeEntityService
 import es.iaaa.kubby.services.IndexService
-import es.iaaa.kubby.services.impl.DefaultIndexServiceImpl
 import es.iaaa.kubby.services.impl.DescribeEntityServiceImpl
+import es.iaaa.kubby.services.impl.IndexServiceImpl
 import io.ktor.application.ApplicationEnvironment
 import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
@@ -16,7 +16,7 @@ fun createKubbyModule(env: ApplicationEnvironment): Module {
             env.config.toEntityRepository()
         }
         single<IndexService> {
-            DefaultIndexServiceImpl(get(), conf.indexResource)
+            IndexServiceImpl(get(), conf.indexResource)
         }
         single<DescribeEntityService> {
             DescribeEntityServiceImpl(

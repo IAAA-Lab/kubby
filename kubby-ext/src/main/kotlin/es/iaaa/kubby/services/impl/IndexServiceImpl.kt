@@ -6,7 +6,7 @@ import es.iaaa.kubby.services.IndexService
 /**
  * Default implementation of [IndexService].
  */
-class DefaultIndexServiceImpl(
+class IndexServiceImpl(
     repository: EntityRepository,
     uri: String?
 ) : IndexService {

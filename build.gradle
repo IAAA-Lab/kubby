@@ -63,5 +63,5 @@ subprojects {
         testImplementation "io.mockk:mockk:$mockk_version"
         testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
         testImplementation "com.jayway.jsonpath:json-path-assert:$json_path_assert_version"
-  }
+    }
 }

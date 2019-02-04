@@ -18,19 +18,22 @@ class DescribeEntityServiceImplTest {
 
     }
 
-    @Test fun `find one resource`() {
+    @Test
+    fun `find one resource`() {
         val service = DescribeEntityServiceImpl(repository, emptyMap())
         val resource = service.findOne("http://source/", "JohnSmith")
         assertTrue(aSimpleResource().model.isIsomorphicWith(resource.model))
     }
 
-    @Test fun `merge prefixes`() {
+    @Test
+    fun `merge prefixes`() {
         val service = DescribeEntityServiceImpl(repository, mapOf("src" to "http://source/"))
         val resource = service.findOne("http://source/", "JohnSmith")
         assertEquals("http://source/", resource.model.getNsPrefixURI("src"))
     }
 
-    @Test fun `prune ns prefixes`() {
+    @Test
+    fun `prune ns prefixes`() {
         val service = DescribeEntityServiceImpl(repository, mapOf("ns0" to "http://source/"))
         val resource = service.findOne("http://source/", "JohnSmith")
         assertNull(resource.model.getNsPrefixURI("ns0"))
