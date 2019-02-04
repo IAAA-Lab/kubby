@@ -18,6 +18,6 @@ fun PrefixMapping.uris() = nsPrefixMap.values.toList()
  * Remove prefixes that starts with a pattern.
  */
 @JvmOverloads
-fun PrefixMapping.prunePrefixes(regex: Regex = "ns[1-9]\\d*".toRegex()) =
+fun PrefixMapping.prunePrefixes(regex: Regex = "ns\\d+".toRegex()) =
     nsPrefixMap.keys.filter { regex.matches(it) }.forEach { removeNsPrefix(it) }
 

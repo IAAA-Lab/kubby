@@ -9,7 +9,7 @@ import es.iaaa.kubby.services.DescribeEntityService
 /**
  * Default implementation of [DescribeEntityService].
  */
-class DefaultDescribeEntityServiceImpl(
+class DescribeEntityServiceImpl(
     private val entityRepository: EntityRepository,
     private val prefixes: Map<String, String>
 ) : DescribeEntityService {
