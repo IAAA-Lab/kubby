@@ -4,7 +4,7 @@ import com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import com.jayway.jsonpath.matchers.JsonPathMatchers.isJson
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub
-import es.iaaa.kubby.fixtures.Models.aSimpleResource
+import es.iaaa.kubby.fixtures.Models.johnSmith
 import es.iaaa.kubby.fixtures.Models.anEmptyResource
 import es.iaaa.kubby.ktor.features.rdf
 import es.iaaa.kubby.services.DescribeEntityService
@@ -54,7 +54,7 @@ class DataControllerTests : AutoCloseKoinTest() {
     fun `data controller returns the description of a resource with content`() = withTestApplication(sut) {
         declareMock<DescribeEntityService> {
             stub {
-                on { findOne("http://localhost/r/", "index") } doReturn aSimpleResource()
+                on { findOne("http://localhost/r/", "index") } doReturn johnSmith()
             }
         }
 

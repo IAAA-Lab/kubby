@@ -1,6 +1,6 @@
 package es.iaaa.kubby.repository.source
 
-import es.iaaa.kubby.fixtures.Models.aSimpleModel
+import es.iaaa.kubby.fixtures.Models.johnSmithModel
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import io.mockk.every
@@ -12,7 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class RewrittenDataSourceTest {
+class RewrittenEntityRepositoryTest {
 
     private val anyDs: EntityRepository = mockk(relaxed = true)
 
@@ -25,7 +25,7 @@ class RewrittenDataSourceTest {
                     "JohnSmith"
                 )
             )
-        } returns aSimpleModel().getResource("http://source/JohnSmit")
+        } returns johnSmithModel().getResource("http://source/JohnSmit")
     }
 
     @Test

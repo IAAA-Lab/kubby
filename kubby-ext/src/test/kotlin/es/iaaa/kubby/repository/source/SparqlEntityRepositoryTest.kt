@@ -5,7 +5,7 @@ import org.apache.jena.sparql.vocabulary.FOAF
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class SPARQLDataSourceTest {
+class SparqlEntityRepositoryTest {
 
     @Test
     fun `retrieve the description of a resource from a remote endpoint with issues with its SSL certificate`() {

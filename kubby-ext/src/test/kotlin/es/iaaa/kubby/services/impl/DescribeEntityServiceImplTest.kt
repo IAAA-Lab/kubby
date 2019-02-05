@@ -1,6 +1,6 @@
 package es.iaaa.kubby.services.impl
 
-import es.iaaa.kubby.fixtures.Models.aSimpleResource
+import es.iaaa.kubby.fixtures.Models.johnSmith
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import io.mockk.every
@@ -14,7 +14,7 @@ class DescribeEntityServiceImplTest {
     @BeforeTest
     fun before() {
         repository = mockk()
-        every { repository.findOne(EntityId("http://source/", "JohnSmith")) } returns aSimpleResource()
+        every { repository.findOne(EntityId("http://source/", "JohnSmith")) } returns johnSmith()
 
     }
 
@@ -22,7 +22,7 @@ class DescribeEntityServiceImplTest {
     fun `find one resource`() {
         val service = DescribeEntityServiceImpl(repository, emptyMap())
         val resource = service.findOne("http://source/", "JohnSmith")
-        assertTrue(aSimpleResource().model.isIsomorphicWith(resource.model))
+        assertTrue(johnSmith().model.isIsomorphicWith(resource.model))
     }
 
     @Test

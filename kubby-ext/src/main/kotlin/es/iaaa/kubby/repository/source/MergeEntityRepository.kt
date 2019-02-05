@@ -17,6 +17,7 @@ class MergeEntityRepository(private val repositories: List<EntityRepository>) :
      * Returns an [EntityId] with a non empty namespace if possible.
      */
     override fun getId(uri: String) = repositories
+        .asSequence()
         .map { it.getId(uri) }
         .find { it.namespace.isNotEmpty() }
         ?: EntityId(localPart = uri)
@@ -25,8 +26,8 @@ class MergeEntityRepository(private val repositories: List<EntityRepository>) :
      * Map and merge the responses from the [repositories].
      */
     override fun findOne(id: EntityId): Resource = repositories
-        .map { it.findOne(id).model ?: ModelFactory.createDefaultModel() }
-        .reduce { r, m -> r.merge(m) }
+        .map { it.findOne(id).model ?:  ModelFactory.createDefaultModel()}
+        .fold(ModelFactory.createDefaultModel()) { acc, m -> acc.merge(m) }
         .getResource(id.uri)
 
     /**

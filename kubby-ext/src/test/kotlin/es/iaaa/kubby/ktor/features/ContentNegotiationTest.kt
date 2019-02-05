@@ -14,7 +14,7 @@ class ContentNegotiationTest {
 
     @Test
     fun `generates JSON-LD`() {
-        val obj = Models.aSimpleModel().toString(RDFFormat.JSONLD, JsonLdOptions())
+        val obj = Models.johnSmithModel().toString(RDFFormat.JSONLD, JsonLdOptions())
         assertThat(obj, isJson())
         assertThat(obj, hasJsonPath("$.@id", equalTo("http://source/JohnSmith")))
         assertThat(obj, hasJsonPath("$.vcard:FN", equalTo("John Smith")))

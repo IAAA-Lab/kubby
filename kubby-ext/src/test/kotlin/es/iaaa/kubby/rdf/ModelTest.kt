@@ -1,6 +1,6 @@
 package es.iaaa.kubby.rdf
 
-import es.iaaa.kubby.fixtures.Models.aSimpleModel
+import es.iaaa.kubby.fixtures.Models.johnSmithModel
 
 import org.apache.jena.rdf.model.ModelFactory.createDefaultModel
 import org.apache.jena.vocabulary.VCARD
@@ -73,7 +73,7 @@ class ModelTest {
 
     @Test
     fun `rewrite a simple model`() {
-        val result = aSimpleModel().rewrite("http://source/", "http://target/")
+        val result = johnSmithModel().rewrite("http://source/", "http://target/")
         assertTrue(result.contains(result.createResource("http://target/JohnSmith"), VCARD.FN, "John Smith"))
     }
 

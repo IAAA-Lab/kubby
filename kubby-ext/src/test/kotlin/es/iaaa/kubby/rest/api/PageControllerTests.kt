@@ -2,7 +2,7 @@ package es.iaaa.kubby.rest.api
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub
-import es.iaaa.kubby.fixtures.Models.aSimpleResource
+import es.iaaa.kubby.fixtures.Models.johnSmith
 import es.iaaa.kubby.ktor.features.rdf
 import es.iaaa.kubby.services.DescribeEntityService
 import io.ktor.application.Application
@@ -48,7 +48,7 @@ class PageControllerTests : AutoCloseKoinTest() {
     fun `page controller returns the description of a resource with content`() = withTestApplication(sut) {
         declareMock<DescribeEntityService> {
             stub {
-                on { findOne("http://localhost/r/", "index") } doReturn aSimpleResource()
+                on { findOne("http://localhost/r/", "index") } doReturn johnSmith()
             }
         }
 

@@ -14,7 +14,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.test.*
 
-class Tdb2DataSourceTest {
+class Tdb2EntityRepositoryTest {
 
     private val target: Path = Paths.get("build/datasource/tdb2")
     private val data: Path = Paths.get("src/test/resources/Tetris.n3")
