@@ -28,7 +28,7 @@ data class Routes(
 )
 
 /**
- * Logic in [pageController] for populating the response from the [ContentContext].
+ * Logic in [page] for populating the response from the [ContentContext].
  */
 typealias PageAdapter = ContentContext.() -> PageResponse
 
@@ -44,7 +44,7 @@ data class PageResponse(
 /**
  * Sets up a route to handle the index resource if defined.
  */
-fun Route.indexController() {
+fun Route.index() {
     val service by inject<IndexService>()
     val routes by inject<Routes>()
     get {
@@ -61,7 +61,7 @@ fun Route.indexController() {
 /**
  * Sets up a routing tree to redirect resource content.
  */
-fun Route.resourceController() {
+fun Route.resource() {
     val routes by inject<Routes>()
     route(routes.resourcePath) {
         get("{$PATH_LOCAL_PART...}") {
@@ -83,7 +83,7 @@ fun Route.resourceController() {
 /**
  * Sets up a routing tree to serve data content.
  */
-fun Route.dataController() {
+fun Route.data() {
     val service by inject<DescribeEntityService>()
     val routes by inject<Routes>()
     route(routes.dataPath) {
@@ -100,7 +100,7 @@ fun Route.dataController() {
 /**
  * Sets up a routing tree to serve page content.
  */
-fun Route.pageController(adapt: PageAdapter) {
+fun Route.page(adapt: PageAdapter) {
     val service by inject<DescribeEntityService>()
     val routes by inject<Routes>()
     route(routes.pagePath) {

@@ -1,4 +1,4 @@
-package es.iaaa.kubby.app.pubby.rest.api
+package es.iaaa.kubby.app.pubby
 
 import es.iaaa.kubby.rdf.hasPrefix
 import es.iaaa.kubby.rdf.localName

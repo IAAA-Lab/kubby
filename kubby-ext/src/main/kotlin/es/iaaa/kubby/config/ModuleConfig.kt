@@ -10,22 +10,18 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 
 fun createKubbyModule(env: ApplicationEnvironment): Module {
-    val conf = env.config.toProjectDescription()
     return module(createOnStart = false) {
+        single {
+            env.config.toProjectDescription()
+        }
         single<EntityRepository> {
             env.config.toEntityRepository()
         }
         single<IndexService> {
-            IndexServiceImpl(get(), conf.indexResource)
+            IndexServiceImpl(get(), get<ProjectDescription>().indexResource)
         }
         single<DescribeEntityService> {
-            DescribeEntityServiceImpl(
-                entityRepository = get(),
-                prefixes = conf.usePrefixes
-            )
-        }
-        single {
-            conf
+            DescribeEntityServiceImpl(get(), get<ProjectDescription>().usePrefixes)
         }
         single {
             env.config.toRoutes()

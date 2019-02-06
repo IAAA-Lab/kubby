@@ -22,7 +22,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-class PageControllerTests : AutoCloseKoinTest() {
+class PageRouteTests : AutoCloseKoinTest() {
 
     private lateinit var sut: Application.() -> Unit
 
@@ -36,7 +36,7 @@ class PageControllerTests : AutoCloseKoinTest() {
             }
             ))
             install(Routing) {
-                pageController { PageResponse(HttpStatusCode.OK, "textual context") }
+                page { PageResponse(HttpStatusCode.OK, "textual context") }
             }
             install(ContentNegotiation) {
                 rdf()

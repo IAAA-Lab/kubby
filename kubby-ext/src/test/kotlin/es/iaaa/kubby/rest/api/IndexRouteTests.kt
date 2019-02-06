@@ -21,7 +21,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 
-class IndexControllerTests : AutoCloseKoinTest() {
+class IndexRouteTests : AutoCloseKoinTest() {
 
     private lateinit var sut: Application.() -> Unit
 
@@ -35,7 +35,7 @@ class IndexControllerTests : AutoCloseKoinTest() {
             }
             ))
             install(Routing) {
-                indexController()
+                index()
             }
         }
     }

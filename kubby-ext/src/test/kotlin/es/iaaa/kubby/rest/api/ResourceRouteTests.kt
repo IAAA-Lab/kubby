@@ -16,7 +16,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-class ResourceControllerTests : AutoCloseKoinTest() {
+class ResourceRouteTests : AutoCloseKoinTest() {
 
     private lateinit var sut: Application.() -> Unit
 
@@ -28,7 +28,7 @@ class ResourceControllerTests : AutoCloseKoinTest() {
             }
             ))
             install(Routing) {
-                resourceController()
+                resource()
             }
         }
     }

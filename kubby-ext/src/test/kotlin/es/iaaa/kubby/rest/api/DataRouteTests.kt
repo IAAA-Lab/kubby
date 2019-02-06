@@ -4,8 +4,8 @@ import com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import com.jayway.jsonpath.matchers.JsonPathMatchers.isJson
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub
-import es.iaaa.kubby.fixtures.Models.johnSmith
 import es.iaaa.kubby.fixtures.Models.anEmptyResource
+import es.iaaa.kubby.fixtures.Models.johnSmith
 import es.iaaa.kubby.ktor.features.rdf
 import es.iaaa.kubby.services.DescribeEntityService
 import io.ktor.application.Application
@@ -28,7 +28,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 
-class DataControllerTests : AutoCloseKoinTest() {
+class DataRouteTests : AutoCloseKoinTest() {
 
     private lateinit var sut: Application.() -> Unit
 
@@ -42,7 +42,7 @@ class DataControllerTests : AutoCloseKoinTest() {
             }
             ))
             install(Routing) {
-                dataController()
+                data()
             }
             install(ContentNegotiation) {
                 rdf()
