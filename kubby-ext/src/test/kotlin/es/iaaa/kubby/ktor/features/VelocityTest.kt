@@ -16,20 +16,22 @@ class VelocityTest {
     @BeforeTest
     fun before() {
         engine = VelocityEngine()
-        conf = VelocityConfiguration(VelocityTest::class.java.classLoader,"template/", ".vm", Charset.forName("UTF-8"))
+        conf = VelocityConfiguration(VelocityTest::class.java.classLoader, "template/", ".vm", Charset.forName("UTF-8"))
     }
 
     @Test
     fun `verify that resources are loaded after the setup`() {
         engine.setup(conf)
-        val loader = engine.getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT) as StringResourceRepositoryImpl
+        val loader =
+            engine.getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT) as StringResourceRepositoryImpl
         assertNotNull(loader.getStringResource("first.vm"))
     }
 
     @Test
     fun `verify that nested resources are loaded after the setup`() {
         engine.setup(conf)
-        val loader = engine.getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT) as StringResourceRepositoryImpl
+        val loader =
+            engine.getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT) as StringResourceRepositoryImpl
         assertNotNull(loader.getStringResource("folder/second.vm"))
     }
 }

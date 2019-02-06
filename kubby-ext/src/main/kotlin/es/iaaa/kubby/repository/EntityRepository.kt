@@ -16,7 +16,6 @@ interface EntityRepository : Closeable {
      */
     fun getId(uri: String): EntityId
 
-
     /**
      * Get the [Model] describing one resource based on the [id].
      */

@@ -26,7 +26,7 @@ class MergeEntityRepository(private val repositories: List<EntityRepository>) :
      * Map and merge the responses from the [repositories].
      */
     override fun findOne(id: EntityId): Resource = repositories
-        .map { it.findOne(id).model ?:  ModelFactory.createDefaultModel()}
+        .map { it.findOne(id).model ?: ModelFactory.createDefaultModel() }
         .fold(ModelFactory.createDefaultModel()) { acc, m -> acc.merge(m) }
         .getResource(id.uri)
 

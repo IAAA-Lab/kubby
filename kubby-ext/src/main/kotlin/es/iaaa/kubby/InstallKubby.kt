@@ -1,6 +1,6 @@
 package es.iaaa.kubby
 
-import es.iaaa.kubby.config.createKubbyModule
+import es.iaaa.kubby.config.module
 import es.iaaa.kubby.ktor.features.*
 import es.iaaa.kubby.ktor.features.metadata.document
 import es.iaaa.kubby.ktor.features.metadata.provenance
@@ -27,7 +27,7 @@ fun Application.installKubby(
     properties: KoinProperties = KoinProperties(),
     logger: Logger = PrintLogger()
 ) {
-    installKoin(listOf(createKubbyModule(environment)) + list, properties, logger)
+    installKoin(listOf(module(environment)) + list, properties, logger)
 
     install(Velocity) {
         val config by inject<VelocityConfiguration>()

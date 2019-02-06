@@ -2,9 +2,9 @@ package es.iaaa.kubby.app.pubby.rest.api
 
 import com.typesafe.config.ConfigFactory
 import es.iaaa.kubby.app.pubby.fixtures.Models.aSimpleModel
-import es.iaaa.kubby.config.toProjectDescription
 import es.iaaa.kubby.app.pubby.toEntityDto
 import es.iaaa.kubby.app.pubby.toMap
+import es.iaaa.kubby.config.toProjectDescription
 import io.ktor.config.HoconApplicationConfig
 import org.junit.Before
 import org.junit.Test

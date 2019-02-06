@@ -42,11 +42,8 @@ data class ValueLiteralDto(
  * [RDFNode] to [PropertyValueDto] or [ValueLiteralDto] mapper.
  */
 fun RDFNode.toPropertyValueDto(): PropertyValueDto =
-    if (isLiteral) {
-        (this as Literal).toValueLiteralDto()
-    } else {
-        (this as Resource).toValueResourceDto()
-    }
+    if (isLiteral) (this as Literal).toValueLiteralDto() else (this as Resource).toValueResourceDto()
+
 
 /**
  * [Literal] to [ValueLiteralDto] mapper.

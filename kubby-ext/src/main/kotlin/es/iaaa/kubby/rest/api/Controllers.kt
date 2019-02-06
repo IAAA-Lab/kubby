@@ -68,11 +68,7 @@ fun Route.resource() {
             val ctx = call.processRedirects(PATH_LOCAL_PART, routes)
             if (ctx is RedirectContext) {
                 val requestPage = call.extractAcceptedTypes().any { Text.Html.match(it) }
-                val url = if (requestPage) {
-                    ctx.pageUri
-                } else {
-                    ctx.dataUri
-                }
+                val url = if (requestPage) ctx.pageUri else ctx.dataUri
                 call.response.headers.append(HttpHeaders.Location, url)
                 call.respond(HttpStatusCode.SeeOther)
             }

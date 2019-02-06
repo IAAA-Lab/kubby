@@ -151,7 +151,6 @@ internal fun ApplicationCall.extractEntityUris(
 
 internal fun String.toNormalizedUrlString() = Url(this).toURI().normalize().toString()
 
-
 /**
  * Extracts the local part of the request.
  */
@@ -168,11 +167,7 @@ internal fun ApplicationCall.extractHierPart(localPart: String) =
     with(request.origin) {
         val sb = StringBuilder()
         sb.append("$scheme://$authority")
-        if (uri.endsWith(localPart)) {
-            sb.append(uri.dropLast(localPart.length))
-        } else {
-            sb.append(uri)
-        }
+        sb.append(if (uri.endsWith(localPart)) uri.dropLast(localPart.length) else uri)
         sb.toString()
     }
 

@@ -23,11 +23,10 @@ class RewrittenEntityRepository(
     val addSameAs: Boolean
 ) : EntityRepository {
 
-    override fun getId(uri: String) = if (uri.startsWith(namespace)) {
+    override fun getId(uri: String) = if (uri.startsWith(namespace))
         EntityId(namespace, uri.substring(namespace.length))
-    } else {
+    else
         repository.getId(uri)
-    }
 
     /**
      * Describe a resource identified by [id] querying the [repository] and then retuning
@@ -37,16 +36,11 @@ class RewrittenEntityRepository(
     override fun findOne(id: EntityId) =
         id.copy(namespace = namespace).let { rewrittenId ->
             repository
-                .findOne(rewrittenId)
-                .model
-                .rewrite(namespace, id.namespace)
-                .getResource(id.uri)
+                .findOne(rewrittenId).model
+                .rewrite(namespace, id.namespace).getResource(id.uri)
                 .apply {
-                    if (addSameAs && namespace != id.namespace && !model.isEmpty) {
-                        addSameAs(rewrittenId.uri)
-                    }
+                    if (addSameAs && namespace != id.namespace && !model.isEmpty) addSameAs(rewrittenId.uri)
                 }
-
         }
 
     override fun close() {

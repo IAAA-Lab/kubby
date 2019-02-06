@@ -41,9 +41,7 @@ class Metadata(val registrations: List<MetadataProcesor>) {
                     call.application.apply {
                         val projectDesc by inject<ProjectDescription>()
                         call.attributes.getOrNull(requestContextKey)?.let { ctx ->
-                            feature.registrations.forEach {
-                                it.process(subject, ctx, projectDesc)
-                            }
+                            feature.registrations.forEach { it.process(subject, ctx, projectDesc) }
                         }
                     }
                 }

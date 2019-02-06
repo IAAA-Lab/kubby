@@ -19,7 +19,7 @@ fun VelocityEngine.setup(conf: VelocityConfiguration) {
     val repository = getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT) as StringResourceRepository
     from(conf.classLoader).resources
         .filter {
-            it.toString().run { startsWith(conf.resourceLoaderPath) && endsWith(conf.suffix) }
+            it.toString().run { startsWith(conf.resourceLoaderPath) and endsWith(conf.suffix) }
         }.forEach {
             repository.putStringResource(
                 it.resourceName.substring(conf.resourceLoaderPath.length),

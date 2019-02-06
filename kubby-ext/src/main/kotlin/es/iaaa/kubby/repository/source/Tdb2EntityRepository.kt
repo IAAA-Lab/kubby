@@ -6,7 +6,7 @@ import es.iaaa.kubby.repository.source.RepositoryMode.CONNECT
 import es.iaaa.kubby.repository.source.RepositoryMode.CREATE
 import org.apache.jena.dboe.base.file.Location
 import org.apache.jena.query.Dataset
-import org.apache.jena.query.QueryExecutionFactory.create
+import org.apache.jena.query.QueryExecutionFactory
 import org.apache.jena.query.QueryFactory
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
@@ -52,10 +52,7 @@ class Tdb2EntityRepository(
     override fun getId(uri: String) = EntityId(localPart = uri)
 
     override fun findOne(id: EntityId): Resource = calculateRead(dataset) {
-        val query = QueryFactory.create("DESCRIBE <${id.uri}>")
-        create(query, dataset).use {
-            it.execDescribe()
-        }.getResource(id.uri)
+        dataset.describe("DESCRIBE <${id.uri}>").getResource(id.uri)
     }
 
     override fun close() {
@@ -67,16 +64,14 @@ class Tdb2EntityRepository(
         CONNECT -> connectDataset()
     }
 
-    private fun connectDataset() = if (isRegularFile(path)) {
+    private fun connectDataset() = if (isRegularFile(path))
         assembleDataset(path.toString())
-    } else {
+    else
         connectDataset(Location.create(path))
-    }
+
 
     private fun createDataset(): Dataset {
-        if (isDirectory(path)) {
-            path.deleteRecursivelyIfExists()
-        }
+        if (isDirectory(path)) path.deleteRecursivelyIfExists()
         val newDataset = connectDataset()
         if (data != null && isRegularFile(data)) {
             Txn.executeWrite(newDataset) {
@@ -92,23 +87,23 @@ enum class RepositoryMode {
 }
 
 /**
+ * Ask this model with a ASK [query].
+ */
+infix fun Dataset.describe(query: String) =
+    QueryExecutionFactory.create(QueryFactory.create(query), this).execDescribe()
+
+/**
  * Deletes recursively a directory.
  */
 fun Path.deleteRecursivelyIfExists() {
-    if (exists(this)) {
-        walk(this)
-            .sorted(Comparator.reverseOrder())
-            .forEach { deleteIfExists(it) }
-    }
+    if (exists(this)) walk(this).sorted(Comparator.reverseOrder()).forEach { deleteIfExists(it) }
 }
 
 /**
  * Backward forward describe handler factory.
  */
 class BackwardForwardDescribeFactory : DescribeHandlerFactory {
-    override fun create(): DescribeHandler {
-        return BackwardForwardDescribe()
-    }
+    override fun create() = BackwardForwardDescribe()
 }
 
 /**

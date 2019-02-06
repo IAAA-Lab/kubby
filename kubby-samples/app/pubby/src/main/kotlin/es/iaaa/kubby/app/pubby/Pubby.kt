@@ -38,14 +38,14 @@ fun Application.main() {
         page {
             val projectDesc by inject<ProjectDescription>()
             val content = resource.toEntityDto(projectDesc, dataUri).toMap()
-            if (!resource.model.isEmpty) {
+            if (!resource.model.isEmpty)
                 PageResponse(HttpStatusCode.OK, VelocityContent("page.vm", content))
-            } else {
+            else
                 PageResponse(HttpStatusCode.NotFound, VelocityContent("404.vm", content))
-            }
         }
     }
 }
+
 /**
  * Start embedded Netty with [args] and launch Ktor.
  */

@@ -8,11 +8,7 @@ fun String.toTitleCase(except: List<String> = emptyList()) =
         .filter { !it.isEmpty() }
         .map { it.toLowerCase() }
         .fold("") { acc, word ->
-            "$acc " + if (acc.isEmpty() || !except.contains(word)) {
-                word.capitalize()
-            } else {
-                word
-            }
+            "$acc " + if (acc.isEmpty() || !except.contains(word)) word.capitalize() else word
         }
         .trimStart()
 

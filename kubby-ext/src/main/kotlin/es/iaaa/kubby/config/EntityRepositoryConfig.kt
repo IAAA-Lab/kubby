@@ -9,7 +9,7 @@ import java.nio.file.Paths
 /**
  * Create an [EntityRepository] from the [ApplicationConfig].
  */
-fun ApplicationConfig.toEntityRepository() : EntityRepository =
+fun ApplicationConfig.toEntityRepository(): EntityRepository =
     configList("kubby.datasets").let {
         if (it.isNotEmpty())
             MergeEntityRepository(it.toEntityRepositories())

@@ -34,15 +34,12 @@ class SparqlEntityRepository(
         ).execDescribe().getResource(id.uri)
 
     private fun buildClient() = if (forceTrust) {
-        val sslContext = SSLContexts.custom()
-            .loadTrustMaterial { _, _ -> true }.build()
+        val sslContext = SSLContexts.custom().loadTrustMaterial { _, _ -> true }.build()
         val sslConnectionSocketFactory = SSLConnectionSocketFactory(
             sslContext, arrayOf("SSLv2Hello", "SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"), null,
             NoopHostnameVerifier.INSTANCE
         )
-        HttpClients.custom()
-            .setSSLSocketFactory(sslConnectionSocketFactory)
-            .build()
+        HttpClients.custom().setSSLSocketFactory(sslConnectionSocketFactory).build()
     } else {
         null
     }

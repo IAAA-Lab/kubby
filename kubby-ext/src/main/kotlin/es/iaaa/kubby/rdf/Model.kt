@@ -120,16 +120,14 @@ fun Model.addNsIfUndefined(prefix: String, uri: String) {
  */
 fun Model.rewrite(old: String, new: String): Model =
     createDefaultModel().let { model ->
-        model.setNsPrefixes(nsPrefixMap
-            .mapValues { (_, uri) -> uri.replacePrefix(old, new) })
-        listStatements()
-            .forEach { stmt ->
-                model.add(
-                    stmt.subject.rewrite(old, new),
-                    stmt.predicate.rewrite(old, new) as Property,
-                    stmt.`object`.rewrite(old, new)
-                )
-            }
+        model.setNsPrefixes(nsPrefixMap.mapValues { (_, uri) -> uri.replacePrefix(old, new) })
+        listStatements().forEach { stmt ->
+            model.add(
+                stmt.subject.rewrite(old, new),
+                stmt.predicate.rewrite(old, new) as Property,
+                stmt.`object`.rewrite(old, new)
+            )
+        }
         model
     }
 
@@ -146,7 +144,6 @@ fun Model.merge(other: Model): Model {
  * Ask this model with a ASK [query].
  */
 infix fun Model.ask(query: String) = QueryExecutionFactory.create(QueryFactory.create(query), this).execAsk()
-
 
 /**
  * JSON-LD context holder derived from [prefixes].

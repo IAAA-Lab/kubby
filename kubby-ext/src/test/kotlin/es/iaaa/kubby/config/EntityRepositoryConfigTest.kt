@@ -48,7 +48,6 @@ class EntityRepositoryConfigTest {
     }
 
 
-
     @Test
     fun `build SPARQL backed repository`() {
         sparqlConfig.toSparqlEntityRepository().apply {
