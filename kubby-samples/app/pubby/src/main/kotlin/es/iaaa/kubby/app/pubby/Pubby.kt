@@ -39,7 +39,7 @@ fun Application.main() {
             val projectDesc by inject<ProjectDescription>()
             val content = resource.toEntityDto(projectDesc, dataUri).toMap()
             if (!resource.model.isEmpty) {
-                PageResponse(HttpStatusCode.OK, VelocityContent("pageUri.vm", content))
+                PageResponse(HttpStatusCode.OK, VelocityContent("page.vm", content))
             } else {
                 PageResponse(HttpStatusCode.NotFound, VelocityContent("404.vm", content))
             }
