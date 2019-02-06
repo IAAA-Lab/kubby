@@ -47,10 +47,10 @@ fun ApplicationConfig.toProjectDescription(): ProjectDescription {
             prefix to uri
         }.toMap()
         val supportedLanguages = node.property("supported-languages").getList()
-        val languageProperties = node.property("language-data.properties").getList()
+        val languageProperties = node.property("language-dataUri.properties").getList()
         val language = supportedLanguages.associate { lang ->
             lang to languageProperties
-                .associate { prop -> prop to node.property("language-data.$lang.$prop").getList() }
+                .associate { prop -> prop to node.property("language-dataUri.$lang.$prop").getList() }
         }
         return ProjectDescription(
             projectName = node.propertyOrNull("project-name")?.getString() ?: "",
@@ -74,8 +74,8 @@ fun ApplicationConfig.toProjectDescription(): ProjectDescription {
 fun ApplicationConfig.toRoutes() =
     config("kubby.route").let {
         Routes(
-            pagePath = it.property("page").getString(),
-            dataPath = it.property("data").getString(),
+            pagePath = it.property("pageUri").getString(),
+            dataPath = it.property("dataUri").getString(),
             resourcePath = it.property("resource").getString()
         )
     }

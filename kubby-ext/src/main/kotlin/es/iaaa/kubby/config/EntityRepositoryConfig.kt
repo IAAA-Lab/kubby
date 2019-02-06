@@ -57,7 +57,7 @@ internal fun ApplicationConfig.toTDB2EntityRepository() =
     Tdb2EntityRepository(
         path = Paths.get(property("path").getString()),
         mode = propertyOrNull("mode")?.getString().toMode(),
-        data = propertyOrNull("data")?.getString()?.let { Paths.get(it) } ?: Paths.get("data.ttl")
+        data = propertyOrNull("dataUri")?.getString()?.let { Paths.get(it) } ?: Paths.get("dataUri.ttl")
     )
 
 /**

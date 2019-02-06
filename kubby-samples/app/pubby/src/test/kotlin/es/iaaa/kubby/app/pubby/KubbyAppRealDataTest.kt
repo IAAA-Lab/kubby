@@ -20,7 +20,7 @@ class KubbyAppRealDataTest : AutoCloseKoinTest() {
 
     @Test
     fun testData() = withApplication(commandLineEnvironment(emptyArray())) {
-        with(handleRequest(HttpMethod.Get, "data/Tetris")) {
+        with(handleRequest(HttpMethod.Get, "dataUri/Tetris")) {
             assertEquals(HttpStatusCode.OK, response.status())
             val model = ModelFactory.createDefaultModel()
             RDFDataMgr.read(model, StringReader(response.content), null, Lang.JSONLD)
@@ -32,7 +32,7 @@ class KubbyAppRealDataTest : AutoCloseKoinTest() {
             )
             assertTrue(
                 model.contains(
-                    model.createResource("http://localhost/data/Tetris"),
+                    model.createResource("http://localhost/dataUri/Tetris"),
                     FOAF.primaryTopic, model.createResource("http://localhost/resource/Tetris")
                 )
             )

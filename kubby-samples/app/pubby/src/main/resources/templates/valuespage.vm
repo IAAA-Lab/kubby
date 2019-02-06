@@ -1,4 +1,4 @@
-## Renders a page showing the values of a single ResourceProperty,
+## Renders a pageUri showing the values of a single ResourceProperty,
 ## given in $property. Simple values are shown first as a list,
 ## complex values (i.e., descriptions of blank nodes) as complete
 ## resource descriptions underneath.

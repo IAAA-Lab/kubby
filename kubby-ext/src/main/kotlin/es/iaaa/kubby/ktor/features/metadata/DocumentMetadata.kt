@@ -26,7 +26,7 @@ class DocumentMetadata : MetadataProcesor {
         model.apply {
             addNsIfUndefined("foaf", FOAF.NS)
             addNsIfUndefined("rdfs", RDFS.uri)
-            val uri = if (context is DataContentContext) context.data else context.page
+            val uri = if (context is DataContentContext) context.dataUri else context.pageUri
             getResource(uri).apply {
                 addProperty(FOAF.primaryTopic, topic)
                 addProperty(

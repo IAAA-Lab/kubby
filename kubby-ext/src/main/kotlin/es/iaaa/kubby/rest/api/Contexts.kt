@@ -23,29 +23,29 @@ sealed class Context
 
 interface ContentContext {
     val resource: Resource
-    val page: String
-    val data: String
+    val pageUri: String
+    val dataUri: String
     val time: Calendar
 }
 
 /**
- * Context of the page request.
+ * Context of the pageUri request.
  */
 data class PageContentContext(
     override val resource: Resource,
-    override val page: String,
-    override val data: String,
+    override val pageUri: String,
+    override val dataUri: String,
     override val time: Calendar = GregorianCalendar.getInstance()
 ) : Context(), ContentContext
 
 
 /**
- * Context of the data request.
+ * Context of the dataUri request.
  */
 data class DataContentContext(
     override val resource: Resource,
-    override val page: String,
-    override val data: String,
+    override val pageUri: String,
+    override val dataUri: String,
     override val time: Calendar = GregorianCalendar.getInstance()
 ) : Context(), ContentContext
 
@@ -53,8 +53,8 @@ data class DataContentContext(
  * Context of the redirect request.
  */
 data class RedirectContext(
-    val page: String,
-    val data: String
+    val pageUri: String,
+    val dataUri: String
 ) : Context()
 
 /**
@@ -66,14 +66,14 @@ object NoContext : Context()
  * Uris related to an entity
  */
 data class EntityUris(
-    val page: String,
-    val data: String,
+    val pageUri: String,
+    val dataUri: String,
     val namespace: String,
     val localId: String
 )
 
 /**
- * Process page requests.
+ * Process pageUri requests.
  */
 internal fun ApplicationCall.processPageRequests(
     paramName: String,
@@ -84,14 +84,14 @@ internal fun ApplicationCall.processPageRequests(
     return if (localId.isNotEmpty())
         PageContentContext(
             resource = service.findOne(namespace, localId),
-            page = page,
-            data = data
+            pageUri = page,
+            dataUri = data
         )
     else NoContext
 }
 
 /**
- * Process data requests.
+ * Process dataUri requests.
  */
 internal fun ApplicationCall.processDataRequests(
     paramName: String,
@@ -102,8 +102,8 @@ internal fun ApplicationCall.processDataRequests(
     return if (localId.isNotEmpty())
         DataContentContext(
             resource = service.findOne(namespace, localId),
-            page = page,
-            data = data
+            pageUri = page,
+            dataUri = data
         )
     else NoContext
 }
@@ -123,8 +123,8 @@ internal fun ApplicationCall.processRedirects(
     )
     return if (effectiveId.isNotEmpty() xor alternativeId.isNotEmpty())
         RedirectContext(
-            page = "$page$alternativeId",
-            data = "$data$alternativeId"
+            pageUri = "$page$alternativeId",
+            dataUri = "$data$alternativeId"
         )
     else NoContext
 }
@@ -142,8 +142,8 @@ internal fun ApplicationCall.extractEntityUris(
         if (it.endsWith(path)) it.dropLast(path.length) else it
     }
     return EntityUris(
-        page = "$base${routes.pagePath}/$localId".toNormalizedUrlString(),
-        data = "$base${routes.dataPath}/$localId".toNormalizedUrlString(),
+        pageUri = "$base${routes.pagePath}/$localId".toNormalizedUrlString(),
+        dataUri = "$base${routes.dataPath}/$localId".toNormalizedUrlString(),
         namespace = "$base${routes.resourcePath}/".toNormalizedUrlString(),
         localId = localId
     )

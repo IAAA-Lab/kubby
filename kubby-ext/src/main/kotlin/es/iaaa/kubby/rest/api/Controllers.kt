@@ -51,7 +51,7 @@ fun Route.index() {
         service.indexLocalPart()?.let { localPart ->
             val ctx = call.processRedirects(PATH_LOCAL_PART, routes, localPart)
             if (ctx is RedirectContext) {
-                call.response.headers.append(HttpHeaders.Location, ctx.page)
+                call.response.headers.append(HttpHeaders.Location, ctx.pageUri)
                 call.respond(HttpStatusCode.SeeOther)
             }
         }
@@ -69,9 +69,9 @@ fun Route.resource() {
             if (ctx is RedirectContext) {
                 val requestPage = call.extractAcceptedTypes().any { Text.Html.match(it) }
                 val url = if (requestPage) {
-                    ctx.page
+                    ctx.pageUri
                 } else {
-                    ctx.data
+                    ctx.dataUri
                 }
                 call.response.headers.append(HttpHeaders.Location, url)
                 call.respond(HttpStatusCode.SeeOther)
@@ -81,7 +81,7 @@ fun Route.resource() {
 }
 
 /**
- * Sets up a routing tree to serve data content.
+ * Sets up a routing tree to serve dataUri content.
  */
 fun Route.data() {
     val service by inject<DescribeEntityService>()
@@ -98,7 +98,7 @@ fun Route.data() {
 }
 
 /**
- * Sets up a routing tree to serve page content.
+ * Sets up a routing tree to serve pageUri content.
  */
 fun Route.page(adapt: PageAdapter) {
     val service by inject<DescribeEntityService>()

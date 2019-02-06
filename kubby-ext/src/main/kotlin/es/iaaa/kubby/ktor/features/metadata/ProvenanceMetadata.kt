@@ -18,7 +18,7 @@ class ProvenanceMetadata : MetadataProcesor {
 
     override fun process(model: Model, context: ContentContext, projectDescription: ProjectDescription) {
         val date = model.createTypedLiteral(context.time)
-        val document = model.getResource(if (context is DataContentContext) context.data else context.page)
+        val document = model.getResource(if (context is DataContentContext) context.dataUri else context.pageUri)
         val agent = model.createResource()
         val activity = model.createResource()
 

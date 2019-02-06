@@ -6,13 +6,13 @@ import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 
 /**
- * Wraps a data source and applies a rewrite.
+ * Wraps a dataUri source and applies a rewrite.
  *
- * The result is a data source that contains the same data as the original,
+ * The result is a dataUri source that contains the same dataUri as the original,
  * but with all IRIs starting with [namespace] are replaced with
  * IRIs starting with a different namespace.
  *
- * @property repository the wrapped data source.
+ * @property repository the wrapped dataUri source.
  * @property namespace the namespace to be rewritten.
  * @property addSameAs add a `owl:sameAs` statement to indicate that
  * the rewritten and the original IRIs identify the same entity.
@@ -31,7 +31,7 @@ class RewrittenEntityRepository(
 
     /**
      * Describe a resource identified by [id] querying the [repository] and then retuning
-     * a result that contains the same data but with all IRI starting with [namespace] replaced
+     * a result that contains the same dataUri but with all IRI starting with [namespace] replaced
      * with IRIs starting with the namespace of [id].
      */
     override fun findOne(id: EntityId) =

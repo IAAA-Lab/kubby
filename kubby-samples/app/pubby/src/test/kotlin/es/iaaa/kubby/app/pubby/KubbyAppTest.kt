@@ -53,7 +53,7 @@ class KubbyAppTest : AutoCloseKoinTest() {
     fun testPage() = withApplication(commandLineEnvironment(emptyArray())) {
         with(handleRequest(HttpMethod.Get, "${runtimeConfig.toRoutes().pagePath}/1")) {
             assertEquals(HttpStatusCode.OK, response.status())
-            assertEquals("page", response.content)
+            assertEquals("pageUri", response.content)
         }
     }
 }

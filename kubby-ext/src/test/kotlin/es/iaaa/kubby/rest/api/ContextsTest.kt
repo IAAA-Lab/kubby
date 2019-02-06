@@ -156,8 +156,8 @@ class ContextsTest {
 
             val uris = applicationCall.extractEntityUris(PATH_LOCAL_PART, i, routes)
 
-            assertEquals("http://localhost/d/1", uris.data)
-            assertEquals("http://localhost/p/1", uris.page)
+            assertEquals("http://localhost/d/1", uris.dataUri)
+            assertEquals("http://localhost/p/1", uris.pageUri)
             assertEquals("http://localhost/r/", uris.namespace)
             assertEquals("1", uris.localId)
         }
@@ -179,8 +179,8 @@ class ContextsTest {
 
             val uris = applicationCall.extractEntityUris(PATH_LOCAL_PART, i, routes)
 
-            assertEquals("http://localhost/d/", uris.data)
-            assertEquals("http://localhost/p/", uris.page)
+            assertEquals("http://localhost/d/", uris.dataUri)
+            assertEquals("http://localhost/p/", uris.pageUri)
             assertEquals("http://localhost/r/", uris.namespace)
             assertEquals("", uris.localId)
         }
@@ -202,8 +202,8 @@ class ContextsTest {
 
             val uris = applicationCall.extractEntityUris(PATH_LOCAL_PART, i, routes)
 
-            assertEquals("http://localhost/d/", uris.data)
-            assertEquals("http://localhost/p/", uris.page)
+            assertEquals("http://localhost/d/", uris.dataUri)
+            assertEquals("http://localhost/p/", uris.pageUri)
             assertEquals("http://localhost/r/", uris.namespace)
             assertEquals("", uris.localId)
         }
@@ -231,8 +231,8 @@ class ContextsTest {
 
 
         assertTrue(ctx is ContentContext)
-        assertEquals("http://localhost/d/1", ctx.data)
-        assertEquals("http://localhost/p/1", ctx.page)
+        assertEquals("http://localhost/d/1", ctx.dataUri)
+        assertEquals("http://localhost/p/1", ctx.pageUri)
         assertEquals(resource, ctx.resource)
 
         verify { service.findOne("http://localhost/r/", "1") }
@@ -258,8 +258,8 @@ class ContextsTest {
 
 
         assertTrue(ctx is ContentContext)
-        assertEquals("http://localhost/d/1", ctx.data)
-        assertEquals("http://localhost/p/1", ctx.page)
+        assertEquals("http://localhost/d/1", ctx.dataUri)
+        assertEquals("http://localhost/p/1", ctx.pageUri)
         assertEquals(resource, ctx.resource)
 
         verify { service.findOne("http://localhost/r/", "1") }
@@ -325,8 +325,8 @@ class ContextsTest {
         val ctx = applicationCall.processRedirects(PATH_LOCAL_PART, routes)
 
         assertTrue(ctx is RedirectContext)
-        assertEquals("http://localhost/d/1", ctx.data)
-        assertEquals("http://localhost/p/1", ctx.page)
+        assertEquals("http://localhost/d/1", ctx.dataUri)
+        assertEquals("http://localhost/p/1", ctx.pageUri)
     }
 
     @Test
@@ -375,8 +375,8 @@ class ContextsTest {
         val ctx = applicationCall.processRedirects(PATH_LOCAL_PART, routes, "1")
 
         assertTrue(ctx is RedirectContext)
-        assertEquals("http://localhost/d/1", ctx.data)
-        assertEquals("http://localhost/p/1", ctx.page)
+        assertEquals("http://localhost/d/1", ctx.dataUri)
+        assertEquals("http://localhost/p/1", ctx.pageUri)
     }
 
     @Test

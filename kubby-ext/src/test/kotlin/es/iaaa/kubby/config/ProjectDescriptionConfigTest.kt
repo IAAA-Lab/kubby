@@ -85,8 +85,8 @@ class ProjectDescriptionConfigTest {
     @Test
     fun `ensure the default routes are defined`() {
         val expected = Routes(
-            "/page",
-            "/data",
+            "/pageUri",
+            "/dataUri",
             "/resource"
         )
         assertEquals(expected, runtimeConfig.toRoutes())

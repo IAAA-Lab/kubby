@@ -25,7 +25,7 @@ class ProvenanceMetadataTest {
         project = mockk()
 
         every { context.time } returns GregorianCalendar.getInstance()
-        every { context.page } returns "http://localhost/document"
+        every { context.pageUri } returns "http://localhost/document"
         every { project.softwareName } returns "software"
     }
 

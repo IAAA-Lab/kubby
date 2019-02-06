@@ -29,7 +29,7 @@ class DataDocumentMetadataTest {
         every { project.getLanguageList("uncapitalized-words") } returns listOf("of", "an")
         every { project.getLanguageValue("metadata-document-label", "en") } returns "Description of %1\$s"
         every { project.getLanguageValue("metadata-document-label-anon", "en") } returns "an unnamed resource"
-        every { context.data } returns "http://localhost/data/DocumentAboutSomething"
+        every { context.dataUri } returns "http://localhost/dataUri/DocumentAboutSomething"
     }
 
     @Test
@@ -38,11 +38,11 @@ class DataDocumentMetadataTest {
 
         val query = """
             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-            PREFIX data: <http://localhost/data/>
+            PREFIX dataUri: <http://localhost/dataUri/>
             PREFIX resource: <http://localhost/resource/>
             ASK
             {
-                data:DocumentAboutSomething foaf:primaryTopic resource:ResourceOfSomething
+                dataUri:DocumentAboutSomething foaf:primaryTopic resource:ResourceOfSomething
             }
         """.trimIndent()
         assertTrue(model ask query)
@@ -54,10 +54,10 @@ class DataDocumentMetadataTest {
 
         val query = """
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX data: <http://localhost/data/>
+            PREFIX dataUri: <http://localhost/dataUri/>
             ASK
             {
-                data:DocumentAboutSomething rdfs:label "Description of Resource of Something"
+                dataUri:DocumentAboutSomething rdfs:label "Description of Resource of Something"
             }
         """.trimIndent()
         assertTrue(model ask query)
@@ -72,10 +72,10 @@ class DataDocumentMetadataTest {
 
         val query = """
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX data: <http://localhost/data/>
+            PREFIX dataUri: <http://localhost/dataUri/>
             ASK
             {
-                data:DocumentAboutSomething rdfs:label "Description of Title"
+                dataUri:DocumentAboutSomething rdfs:label "Description of Title"
             }
         """.trimIndent()
         assertTrue(model ask query)
@@ -90,10 +90,10 @@ class DataDocumentMetadataTest {
 
         val query = """
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX data: <http://localhost/data/>
+            PREFIX dataUri: <http://localhost/dataUri/>
             ASK
             {
-                data:DocumentAboutSomething rdfs:label "Description of an unnamed resource"
+                dataUri:DocumentAboutSomething rdfs:label "Description of an unnamed resource"
             }
         """.trimIndent()
         assertTrue(model ask query)

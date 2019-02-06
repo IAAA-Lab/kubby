@@ -37,15 +37,12 @@ fun Application.main() {
         }
         page {
             val projectDesc by inject<ProjectDescription>()
-            val (status, page) = if (!resource.model.isEmpty) {
-                Pair(HttpStatusCode.OK, "page.vm")
+            val content = resource.toEntityDto(projectDesc, dataUri).toMap()
+            if (!resource.model.isEmpty) {
+                PageResponse(HttpStatusCode.OK, VelocityContent("pageUri.vm", content))
             } else {
-                Pair(HttpStatusCode.NotFound, "404.vm")
+                PageResponse(HttpStatusCode.NotFound, VelocityContent("404.vm", content))
             }
-            PageResponse(
-                status = status,
-                content = VelocityContent(page, resource.toEntityDto(projectDesc, data).toMap())
-            )
         }
     }
 }

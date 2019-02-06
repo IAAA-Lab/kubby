@@ -19,7 +19,7 @@ class EntityDtoTest {
         val config = HoconApplicationConfig(ConfigFactory.load("test.conf")).toProjectDescription()
         val model = aSimpleModel("http://example.com/sample")
         node = model.getResource("http://example.com/sample")
-            .toEntityDto(config, "http://example.com/data/sample")
+            .toEntityDto(config, "http://example.com/dataUri/sample")
             .toMap()
     }
 
@@ -40,7 +40,7 @@ class EntityDtoTest {
 
     @Test
     fun `ensure RDF link is defined`() {
-        assertEquals("http://example.com/data/sample", node["rdfLink"])
+        assertEquals("http://example.com/dataUri/sample", node["rdfLink"])
     }
 
     @Test

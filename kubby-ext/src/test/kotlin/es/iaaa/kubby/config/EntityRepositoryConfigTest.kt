@@ -31,7 +31,7 @@ class EntityRepositoryConfigTest {
         val config: ApplicationConfig = MapApplicationConfig(
             "path" to "dbpedia",
             "mode" to "create",
-            "data" to "dbpedia.ttl"
+            "dataUri" to "dbpedia.ttl"
         )
         config.toTDB2EntityRepository().apply {
             assertEquals(Paths.get("dbpedia"), path)
