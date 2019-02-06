@@ -18,9 +18,9 @@ import es.iaaa.kubby.repository.EntityRepository
  * the rewritten and the original IRIs identify the same entity.
  */
 class RewrittenEntityRepository(
-    private val repository: EntityRepository,
-    private val namespace: String,
-    private val addSameAs: Boolean
+    val repository: EntityRepository,
+    val namespace: String,
+    val addSameAs: Boolean
 ) : EntityRepository {
 
     override fun getId(uri: String) = if (uri.startsWith(namespace)) {
