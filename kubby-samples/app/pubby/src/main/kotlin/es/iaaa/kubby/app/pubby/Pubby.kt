@@ -6,10 +6,7 @@ import es.iaaa.kubby.rest.api.PageResponse
 import es.iaaa.kubby.rest.api.page
 import io.ktor.application.Application
 import io.ktor.application.install
-import io.ktor.features.CallLogging
-import io.ktor.features.DefaultHeaders
-import io.ktor.features.ForwardedHeaderSupport
-import io.ktor.features.XForwardedHeaderSupport
+import io.ktor.features.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
@@ -28,6 +25,9 @@ fun Application.main() {
     install(CallLogging)
     install(ForwardedHeaderSupport)
     install(XForwardedHeaderSupport)
+    install(CORS) {
+        anyHost()
+    }
 
     installKubby()
 

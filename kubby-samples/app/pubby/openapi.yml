@@ -1,0 +1,149 @@
+openapi: 3.0.3
+servers:
+  - description: Pubby doppelgänger run local.
+    url: 'http://localhost:8080'
+info:
+  title: Pubby doppelgänger
+  description: >
+    This [Pubby](http://wifo5-03.informatik.uni-mannheim.de/pubby/) doppelgänger can be used to add
+    **Linked Data interfaces** to SPARQL endpoints.
+
+    ## Features
+
+    * Provides a **Linked Data interface** to [Apache Jena TDB2](https://jena.apache.org/documentation/tdb2/)
+      RDF storages and remote SPARQL protocol servers.
+
+    * Provides **deferenceable URIs** by rewriting URIs found in the exposed RDF dataset into URIs in the server's namespace.
+
+    * Provides a simple and customizable **HTML interface** based on [Apache Velocity](http://velocity.apache.org/) showing the data available about each resource.
+
+    * Takes care of handling **303 redirects and content negotiation**.
+
+    * [Deployable to several providers and containers](https://ktor.io/servers/deploy.html).
+
+    * Provides basic metadata to the provided data.
+
+    ## How it works
+
+    This doppelgänger works similar to the original [Pubby](http://wifo5-03.informatik.uni-mannheim.de/pubby/).
+
+    ## Configuration
+
+    The configuration files uses [HOCON](https://github.com/lightbend/config/blob/master/HOCON.md) syntax.
+
+  version: 0.1.0
+
+paths:
+  /:
+    get:
+      operationId: Routes.index
+      summary: Forwards to the HTML description of the index resource.
+      tags:
+        - API
+      responses:
+        303:
+          $ref: "#/components/responses/forwarding"
+
+
+  /resource/{id}:
+    get:
+      operationId: Routes.resource
+      summary: Content negotiation forwarding to the RDF or the HTML description of the resource.
+      description: >
+        Content negotiation is based on the `Accept` header of the request.
+        If `text/html` wins the negotiation, the server returns a 303 status code and a `Location` HTTP header with the URI of the HTML description.
+        Otherwise, the server returns a 303 status code and a `Location` HTTP header with the URI of the RDF description.
+      tags:
+        - API
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        303:
+          $ref: "#/components/responses/forwarding"
+
+  /page/{id}:
+    get:
+      operationId: Routes.page
+      summary: Returns the HTML description of the resource.
+      tags:
+        - API
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        200:
+          description: The HTML representation of the resource.
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+        404:
+          description: >
+            A description of the resource has not been found.
+          content:
+            text/html:
+              schema:
+                type: string
+                format: html
+
+  /data/{id}:
+    get:
+      operationId: Routes.data
+      summary: Returns an RDF description of a resource.
+      description: >
+        Content negotiation is based on the `Accept` header of the request. Allowed formats are
+      tags:
+        - API
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        200:
+          description: >
+            An RDF description of the resource.
+          content:
+            application/ld+json:
+              schema:
+                type: string
+                format: json-ld
+            text/turtle:
+              schema:
+                type: string
+                format: turtle
+        404:
+          description: >
+            A description of the resource has not been found.
+
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      explode: true
+      description: >
+        **Local part**. The local part of the published identifier.
+        It may include slashs ("/") and question marks ("%3F").
+
+
+        Note that multisegment path parameters (i.e. parameters that include slashs) are not supported in the OpenAPI specification yet (see [this proposal](https://github.com/OAI/OpenAPI-Specification/issues/1459)) but Kubby allows them in this parameter.
+
+
+        Examples:
+
+        * `DBPedia` is the straightforward example.
+
+        * `PL/SQL` and `PL%2FSQL` are valid values and are equivalent.
+
+        * `Where's_Wally%3F` is a good example of a complex value.
+
+      schema:
+        type: string
+  responses:
+    forwarding:
+      description: Forwards to a description of the resource.
+      headers:
+        Location:
+          description: The URI of a document that describes the resource.
+          schema:
+            type: string
+            format: uri

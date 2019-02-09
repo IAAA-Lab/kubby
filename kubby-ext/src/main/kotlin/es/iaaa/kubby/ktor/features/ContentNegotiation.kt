@@ -77,7 +77,7 @@ class RdfConverterConfiguration {
  * Known RDF content types.
  */
 object RDF {
-    val JSON_LD = ContentType("application", "ld+toJson")
+    val JSON_LD = ContentType("application", "ld+json")
     val TURTLE = ContentType("text", "turtle")
     val RDF_XML = ContentType("application", "rdf+xml")
     val N_TRIPLES = ContentType("application", "n-triples")
