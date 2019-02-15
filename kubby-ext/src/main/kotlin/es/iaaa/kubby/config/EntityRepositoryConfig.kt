@@ -1,16 +1,18 @@
 package es.iaaa.kubby.config
 
+import com.typesafe.config.Config
 import es.iaaa.kubby.repository.EntityRepository
 import es.iaaa.kubby.repository.source.*
 import io.ktor.config.ApplicationConfig
 import io.ktor.config.ApplicationConfigurationException
+import io.ktor.config.tryGetString
 import java.nio.file.Paths
 
 /**
  * Create an [EntityRepository] from the [ApplicationConfig].
  */
-fun ApplicationConfig.toEntityRepository(): EntityRepository =
-    configList("kubby.datasets").let {
+fun Config.toEntityRepository(): EntityRepository =
+    getConfigList("kubby.datasets").let {
         if (it.isNotEmpty())
             MergeEntityRepository(it.toEntityRepositories())
         else
@@ -27,12 +29,12 @@ class EntityRepositoryException(msg: String) : Exception(msg)
 /**
  * Maps the [List] of configuration nodes to a list of [EntityRepository].
  */
-internal fun List<ApplicationConfig>.toEntityRepositories(): List<EntityRepository> =
+internal fun List<Config>.toEntityRepositories(): List<EntityRepository> =
     map {
         RewrittenEntityRepository(
-            namespace = it.property("dataset-base").getString(),
-            addSameAs = it.propertyOrNull("add-same-as")?.getString()?.toBoolean() ?: false,
-            repository = when (it.property("type").getString()) {
+            namespace = it.getString("dataset-base"),
+            addSameAs = it.tryGetString("add-same-as")?.toBoolean() ?: false,
+            repository = when (it.getString("type")) {
                 "sparql" -> it.toSparqlEntityRepository()
                 "tdb2" -> it.toTDB2EntityRepository()
                 else -> throw ApplicationConfigurationException("Unknown datasource type")
@@ -43,21 +45,21 @@ internal fun List<ApplicationConfig>.toEntityRepositories(): List<EntityReposito
 /**
  * Create a SPARQL endpoint from the node.
  */
-internal fun ApplicationConfig.toSparqlEntityRepository() =
+internal fun Config.toSparqlEntityRepository() =
     SparqlEntityRepository(
-        service = property("endpoint").getString(),
-        dataset = propertyOrNull("default-graph")?.getString(),
-        forceTrust = propertyOrNull("trust-endpoint")?.getString()?.toBoolean() ?: false
+        service = getString("endpoint"),
+        dataset = tryGetString("default-graph"),
+        forceTrust = tryGetString("trust-endpoint")?.toBoolean() ?: false
     )
 
 /**
  * Create a TDB2 store from the node.
  */
-internal fun ApplicationConfig.toTDB2EntityRepository() =
+internal fun Config.toTDB2EntityRepository() =
     Tdb2EntityRepository(
-        path = Paths.get(property("path").getString()),
-        mode = propertyOrNull("mode")?.getString().toMode(),
-        data = propertyOrNull("dataUri")?.getString()?.let { Paths.get(it) } ?: Paths.get("dataUri.ttl")
+        path = Paths.get(getString("path")),
+        mode = tryGetString("mode").toMode(),
+        data = tryGetString("dataUri")?.let { Paths.get(it) } ?: Paths.get("dataUri.ttl")
     )
 
 /**

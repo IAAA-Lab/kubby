@@ -1,10 +1,9 @@
 package es.iaaa.kubby.config
 
+import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
+import es.iaaa.kubby.commandLineConfig
 import es.iaaa.kubby.rest.api.Routes
-import io.ktor.config.ApplicationConfig
-import io.ktor.config.HoconApplicationConfig
-import io.ktor.server.engine.commandLineEnvironment
 import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -12,16 +11,16 @@ import kotlin.test.assertEquals
 
 class ProjectDescriptionConfigTest {
 
-    lateinit var config: ApplicationConfig
+    lateinit var config: Config
 
-    lateinit var runtimeConfig: ApplicationConfig
+    lateinit var runtimeConfig: Config
 
     @BeforeTest
     fun before() {
         val classLoader = javaClass.classLoader
         val file = File(classLoader.getResource("config/test.conf").file)
-        config = HoconApplicationConfig(ConfigFactory.parseFile(file))
-        runtimeConfig = commandLineEnvironment(arrayOf("-port=80")).config
+        config = ConfigFactory.parseFile(file)
+        runtimeConfig = commandLineConfig(arrayOf("-port=80"))
     }
 
     @Test

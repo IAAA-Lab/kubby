@@ -17,6 +17,20 @@ import io.ktor.server.netty.Netty
 import io.ktor.velocity.VelocityContent
 import org.koin.ktor.ext.inject
 
+lateinit var argsKubby: Array<String>
+
+/**
+ * Start embedded Netty with [args] and launch Ktor.
+ */
+fun main(args: Array<String>) {
+    argsKubby = args
+    embeddedServer(
+        factory = Netty,
+        environment = commandLineEnvironment(args),
+        configure = {}
+    ).start(wait = true)
+}
+
 /**
  * [Application] configuration.
  */
@@ -29,7 +43,7 @@ fun Application.main() {
         anyHost()
     }
 
-    installKubby()
+    installKubby(argsKubby)
 
     routing {
         static("static") {
@@ -46,13 +60,4 @@ fun Application.main() {
     }
 }
 
-/**
- * Start embedded Netty with [args] and launch Ktor.
- */
-fun main(args: Array<String>) {
-    embeddedServer(
-        factory = Netty,
-        environment = commandLineEnvironment(args),
-        configure = {}
-    ).start(wait = true)
-}
+

@@ -1,29 +1,29 @@
 package es.iaaa.kubby.config
 
+import com.typesafe.config.ConfigFactory
 import es.iaaa.kubby.repository.source.*
-import io.ktor.config.MapApplicationConfig
 import java.nio.file.Paths
 import kotlin.test.*
 
 class EntityRepositoryConfigTest {
 
-    val sparqlConfig = MapApplicationConfig(
+    val sparqlConfig = ConfigFactory.parseMap(mapOf(
         "dataset-base" to "https://dbpedia.org/",
         "add-same-as" to "true",
         "type" to "sparql",
         "endpoint" to "https://dbpedia.org/sparql",
         "default-graph" to "http://dbpedia.org",
-        "trust-endpoint" to "true"
+        "trust-endpoint" to "true")
     )
 
-    val tdb2Config = MapApplicationConfig(
+    val tdb2Config = ConfigFactory.parseMap(mapOf(
         "dataset-base" to "https://dbpedia.org/",
         "add-same-as" to "true",
         "type" to "tdb2",
         "path" to "dbpedia",
         "mode" to "create",
         "dataUri" to "dbpedia.ttl"
-    )
+    ))
 
     @Test
     fun `map configuration to repositories`() {

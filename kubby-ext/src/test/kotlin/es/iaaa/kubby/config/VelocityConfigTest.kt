@@ -1,8 +1,8 @@
 package es.iaaa.kubby.config
 
+import com.typesafe.config.Config
+import com.typesafe.config.ConfigFactory
 import es.iaaa.kubby.ktor.features.VelocityConfiguration
-import io.ktor.application.ApplicationEnvironment
-import io.ktor.config.MapApplicationConfig
 import io.mockk.every
 import io.mockk.mockk
 import java.nio.charset.Charset
@@ -12,17 +12,16 @@ import kotlin.test.assertEquals
 
 class VelocityConfigTest {
 
-    lateinit var env: ApplicationEnvironment
+    lateinit var config: Config
 
     @BeforeTest
     fun before() {
-        env = mockk()
-        every { env.config.config("kubby.velocity") } returns MapApplicationConfig(
+        config = mockk()
+        every { config.getConfig("kubby.velocity") } returns ConfigFactory.parseMap(mapOf(
             "resource-loader-path" to "templates/",
             "suffix" to ".vm",
             "charset" to "UTF-8"
-        )
-        every { env.classLoader } returns VelocityConfigTest::class.java.classLoader
+        ))
     }
 
     @Test
@@ -33,6 +32,6 @@ class VelocityConfigTest {
             suffix = ".vm",
             charset = Charset.forName("UTF-8")
         )
-        assertEquals(expect, env.toVelocityConfiguration())
+        assertEquals(expect, velocityConfig(VelocityConfigTest::class.java.classLoader, config))
     }
 }

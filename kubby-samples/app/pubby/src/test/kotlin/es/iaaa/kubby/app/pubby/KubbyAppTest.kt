@@ -1,8 +1,8 @@
 package es.iaaa.kubby.app.pubby
 
+import com.typesafe.config.Config
+import es.iaaa.kubby.commandLineConfig
 import es.iaaa.kubby.config.toRoutes
-import es.iaaa.kubby.repository.EntityRepository
-import io.ktor.config.ApplicationConfig
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -10,20 +10,17 @@ import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withApplication
 import org.junit.Before
-import org.koin.standalone.inject
 import org.koin.test.AutoCloseKoinTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class KubbyAppTest : AutoCloseKoinTest() {
 
-    private val dao by inject<EntityRepository>()
-
-    lateinit var runtimeConfig: ApplicationConfig
+    lateinit var runtimeConfig: Config
 
     @Before
     fun before() {
-        runtimeConfig = commandLineEnvironment(arrayOf("-port=80")).config
+        runtimeConfig = commandLineConfig(arrayOf("-port=80"))
     }
 
     @Test

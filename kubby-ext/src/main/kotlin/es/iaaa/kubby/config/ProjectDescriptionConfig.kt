@@ -1,8 +1,10 @@
 package es.iaaa.kubby.config
 
+import com.typesafe.config.Config
 import es.iaaa.kubby.rest.api.Routes
 import io.ktor.config.ApplicationConfig
 import io.ktor.config.ApplicationConfigurationException
+import io.ktor.config.tryGetString
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.Property
 
@@ -39,31 +41,31 @@ data class ProjectDescription(
 /**
  * Maps the [ApplicationConfig] into a [ProjectDescription] object.
  */
-fun ApplicationConfig.toProjectDescription(): ProjectDescription {
-    config("kubby").let { node ->
-        val usePrefixes = node.configList("use-prefixes").map {
-            val prefix = it.property("prefix").getString()
-            val uri = it.property("uri").getString()
+fun Config.toProjectDescription(): ProjectDescription {
+    getConfig("kubby").let { node ->
+        val usePrefixes = node.getConfigList("use-prefixes").map {
+            val prefix = it.getString("prefix")
+            val uri = it.getString("uri")
             prefix to uri
         }.toMap()
-        val supportedLanguages = node.property("supported-languages").getList()
-        val languageProperties = node.property("language-data.properties").getList()
+        val supportedLanguages = node.getStringList("supported-languages")
+        val languageProperties = node.getStringList("language-data.properties")
         val language = supportedLanguages.associate { lang ->
             lang to languageProperties
-                .associate { prop -> prop to node.property("language-data.$lang.$prop").getList() }
+                .associate { prop -> prop to node.getStringList("language-data.$lang.$prop") }
         }
         return ProjectDescription(
-            projectName = node.propertyOrNull("project-name")?.getString() ?: "",
-            projectHomepage = node.propertyOrNull("project-homepage")?.getString() ?: "",
+            projectName = node.tryGetString("project-name") ?: "",
+            projectHomepage = node.tryGetString("project-homepage") ?: "",
             usePrefixes = usePrefixes,
-            defaultLanguage = node.property("default-language").getString(),
-            supportedLanguages = node.property("supported-languages").getList(),
-            labelProperties = node.property("label-properties").getList().toProperties(usePrefixes),
-            commentProperties = node.property("comment-properties").getList().toProperties(usePrefixes),
-            imageProperties = node.property("image-properties").getList().toProperties(usePrefixes),
-            softwareName = node.property("software-name").getString(),
+            defaultLanguage = node.getString("default-language"),
+            supportedLanguages = node.getStringList("supported-languages"),
+            labelProperties = node.getStringList("label-properties").toProperties(usePrefixes),
+            commentProperties = node.getStringList("comment-properties").toProperties(usePrefixes),
+            imageProperties = node.getStringList("image-properties").toProperties(usePrefixes),
+            softwareName = node.getString("software-name"),
             language = language,
-            indexResource = node.propertyOrNull("index-resource")?.getString()
+            indexResource = node.tryGetString("index-resource")
         )
     }
 }
@@ -71,12 +73,12 @@ fun ApplicationConfig.toProjectDescription(): ProjectDescription {
 /**
  * Maps the [ApplicationConfig] into a [Routes] object.
  */
-fun ApplicationConfig.toRoutes() =
-    config("kubby.route").let {
+fun Config.toRoutes() =
+    getConfig("kubby.route").let {
         Routes(
-            pagePath = it.property("page").getString(),
-            dataPath = it.property("data").getString(),
-            resourcePath = it.property("resource").getString()
+            pagePath = it.getString("page"),
+            dataPath = it.getString("data"),
+            resourcePath = it.getString("resource")
         )
     }
 
