@@ -1,16 +1,23 @@
-## Renders the projectName of a ResourceProperty, given in $property
 <span class="property-name">
-#if ($property.inverse && !($showLabels && $property.inverseLabel))
-    <small>Is</small>
-#end
+    #if ($property.inverse && !($showLabels && $property.inverseLabel))
+        <small>Is</small>
+    #end
     #if ($showLabels && $property.inverse && $property.inverseLabel)
-        <a class="uri" href="$property.url" title="$property.uri">$property.inverseLabel</a>
+        <a class="uri" href="$property.url" title="$property.uri">
+            $property.inverseLabel
+        </a>
     #elseif ($showLabels && $property.label)
-        <a class="uri" href="$property.url" title="$property.uri">$property.label</a>
+        <a class="uri" href="$property.url" title="$property.uri">
+            $property.label
+        </a>
     #elseif ($property.hasPrefix)
-        <a class="uri" href="$property.url" title="$property.uri"><small>$property.prefix:</small>$property.localName</a>
+        <a class="uri" href="$property.url" title="$property.uri">
+            <small>$property.prefix:</small>$property.localName
+        </a>
     #else
-        <a class="uri" href="$property.url" title="$property.uri"><small>?:</small>$property.LocalName</a>
+        <a class="uri" href="$property.url" title="$property.uri">
+            <small>?:</small>$property.LocalName
+        </a>
     #end
     #if ($property.Inverse && !($showLabels && $property.InverseLabel))
         <small>of</small>

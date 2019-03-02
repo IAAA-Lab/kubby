@@ -1,12 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>
-        $title
-        #if ($projectName)
-            | $projectName
-        #end
-    </title>
-    #if ($rdfLink) <!-- TODO RDF_LINK -->
+    <title>$title #if ($projectName) | $projectName #end</title>
+    #if ($rdfLink)
         <link rel="alternate" type="$rdfFormat" href="$rdfLink" title="RDF"/>
     #end
     <link rel="stylesheet" type="text/css" href="/static/style.css"/>
@@ -18,17 +13,26 @@
         <h1 id="title">$title</h1>
         #if ($projectName)
             #if ($projectHomepage)
-                <div id="homelink">at <a href="$projectHomepage">$projectName</a></div>
+                <div id="homelink">
+                    at <a href="$projectHomepage">$projectName</a>
+                </div>
             #else
-                <div id="homelink">at <a href="$server_base">$projectName</a></div> <!-- TODO SERVER_BASE -->
+                <div id="homelink">
+                    at <a href="$server_base">$projectName</a>
+                </div>
             #end
         #end
     </div>
     #if ($uri)
-        <div class="page-resource-uri"><a href="$uri">$uri</a></div>
+        <div class="page-resource-uri">
+            <a href="$uri">$uri</a>
+        </div>
     #end
     #if ($rdfLink)
-        <div id="rdficon"><a href="$rdfLink" title="RDF data"><img src="/static/rdf-icon.gif"
-                                                                   alt="[This page as RDF]"/></a></div>
+        <div id="rdficon">
+            <a href="$rdfLink" title="RDF data">
+                <img src="/static/rdf-icon.gif" alt="This page as RDF"/>
+            </a>
+        </div>
     #end
 </div>

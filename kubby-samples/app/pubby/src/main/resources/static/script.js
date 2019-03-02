@@ -9,7 +9,7 @@ var long_literal_texts = {};
 function init_long_literals() {
     var spans = document.getElementsByTagName('span');
     for (i = 0; i < spans.length; i++) {
-        if (spans[i].className != 'literal') continue;
+        if (spans[i].className !== 'literal') continue;
         var span = spans[i];
         var textNode = span.firstChild;
         var text = textNode.data;
@@ -34,13 +34,4 @@ function expand(i) {
     span.removeChild(span.firstChild);
     span.removeChild(span.firstChild);
     span.insertBefore(long_literal_texts[i], span.firstChild);
-}
-
-function showAllMetadata(name) {
-    var ele = document.getElementById(name);
-    if (ele == null) return;
-    var tables = document.getElementsByTagName('table');
-    for (i = 0; i < tables.length; i++) {
-        tables[i].style.display = 'block';
-    }
 }

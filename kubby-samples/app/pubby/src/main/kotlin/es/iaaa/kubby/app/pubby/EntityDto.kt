@@ -9,8 +9,8 @@ import org.apache.jena.rdf.model.Resource
  * Entity DTO.
  */
 data class EntityDto(
-    val projectName: String,
-    val projectHomepage: String,
+    val projectName: String?,
+    val projectHomepage: String?,
     val uri: String? = null,
     val title: String? = null,
     val comment: String? = null,

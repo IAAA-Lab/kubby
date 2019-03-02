@@ -1,18 +1,26 @@
 package es.iaaa.kubby.config
 
 import com.typesafe.config.Config
+import es.iaaa.kubby.config.SourceType.*
 import es.iaaa.kubby.repository.EntityRepository
 import es.iaaa.kubby.repository.source.*
 import io.ktor.config.ApplicationConfig
 import io.ktor.config.ApplicationConfigurationException
-import io.ktor.config.tryGetString
 import java.nio.file.Paths
+
+/**
+ * Supported sources.
+ */
+
+enum class SourceType {
+    SPARQL, TDB2, UNKNOWN
+}
 
 /**
  * Create an [EntityRepository] from the [ApplicationConfig].
  */
 fun Config.toEntityRepository(): EntityRepository =
-    getConfigList("kubby.datasets").let {
+    getConfigList("kubby.dataset").let {
         if (it.isNotEmpty())
             MergeEntityRepository(it.toEntityRepositories())
         else
@@ -32,24 +40,34 @@ class EntityRepositoryException(msg: String) : Exception(msg)
 internal fun List<Config>.toEntityRepositories(): List<EntityRepository> =
     map {
         RewrittenEntityRepository(
-            namespace = it.getString("dataset-base"),
-            addSameAs = it.tryGetString("add-same-as")?.toBoolean() ?: false,
-            repository = when (it.getString("type")) {
-                "sparql" -> it.toSparqlEntityRepository()
-                "tdb2" -> it.toTDB2EntityRepository()
-                else -> throw ApplicationConfigurationException("Unknown datasource type")
+            namespace = it.getString("datasetBase"),
+            addSameAs = runCatching { it.getBoolean("addSameAsStatements") }.getOrDefault(false),
+            repository = when (heuristic(it)) {
+                SPARQL -> it.toSparqlEntityRepository()
+                TDB2 -> it.toTDB2EntityRepository()
+                UNKNOWN -> throw ApplicationConfigurationException("Unknown datasource type")
             }
         )
     }
+
+private fun heuristic(config: Config) =
+    if (runCatching { config.getString("sparqlEndpoint") }.isSuccess) {
+        SPARQL
+    } else if (runCatching { config.getString("type") == "tdb2" }.isSuccess) {
+        TDB2
+    } else {
+        UNKNOWN
+    }
+
 
 /**
  * Create a SPARQL endpoint from the node.
  */
 internal fun Config.toSparqlEntityRepository() =
     SparqlEntityRepository(
-        service = getString("endpoint"),
-        dataset = tryGetString("default-graph"),
-        forceTrust = tryGetString("trust-endpoint")?.toBoolean() ?: false
+        service = getString("sparqlEndpoint"),
+        dataset = runCatching { getString("sparqlDefaultGraph") }.getOrNull(),
+        forceTrust = runCatching { getBoolean("trustEndpoint") }.getOrDefault(false)
     )
 
 /**
@@ -57,16 +75,28 @@ internal fun Config.toSparqlEntityRepository() =
  */
 internal fun Config.toTDB2EntityRepository() =
     Tdb2EntityRepository(
-        path = Paths.get(getString("path")),
-        mode = tryGetString("mode").toMode(),
-        data = tryGetString("dataUri")?.let { Paths.get(it) } ?: Paths.get("dataUri.ttl")
+        path = toPath("path"),
+        mode = toMode("mode"),
+        data = toPath("data", "data.ttl")
     )
 
 /**
- * Helper extension that converts any string to a valid or safe [RepositoryMode].
+ * Helper extension that converts any string in [key] to a valid or safe [RepositoryMode].
  */
-private fun String?.toMode(): RepositoryMode =
-    if (this == null)
-        RepositoryMode.CONNECT
-    else runCatching { RepositoryMode.valueOf(toUpperCase()) }
-        .getOrDefault(RepositoryMode.CONNECT)
+private fun Config.toMode(key: String) = RepositoryMode.valueOf(
+    runCatching { getString(key).toUpperCase() }
+        .getOrDefault("CONNECT")
+)
+
+/**
+ * Helper extension that converts any string in [key] to a [Path].
+ * The [key] is required unless a [devault] value is set.
+ */
+private fun Config.toPath(key: String, default: String? = null) = Paths.get(
+    if (default == null) {
+        runCatching { getString(key) }.getOrDefault(default)
+    } else {
+        getString(key)
+    }
+)
+

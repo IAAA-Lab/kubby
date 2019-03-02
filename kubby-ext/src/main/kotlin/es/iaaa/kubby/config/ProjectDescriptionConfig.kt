@@ -4,7 +4,6 @@ import com.typesafe.config.Config
 import es.iaaa.kubby.rest.api.Routes
 import io.ktor.config.ApplicationConfig
 import io.ktor.config.ApplicationConfigurationException
-import io.ktor.config.tryGetString
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.Property
 
@@ -12,8 +11,8 @@ import org.apache.jena.rdf.model.Property
  * Description of the project.
  */
 data class ProjectDescription(
-    val projectName: String,
-    val projectHomepage: String,
+    val projectName: String?,
+    val projectHomepage: String?,
     val usePrefixes: Map<String, String>,
     val defaultLanguage: String,
     val labelProperties: List<Property>,
@@ -43,30 +42,29 @@ data class ProjectDescription(
  */
 fun Config.toProjectDescription(): ProjectDescription {
     getConfig("kubby").let { node ->
-        val usePrefixes = node.getConfigList("use-prefixes").map {
-            val prefix = it.getString("prefix")
-            val uri = it.getString("uri")
-            prefix to uri
-        }.toMap()
+        val usePrefixes = node.getConfig("usePrefixes")
+            .entrySet().map{it.key to it.value.unwrapped().toString()}.toMap()
         val supportedLanguages = node.getStringList("supported-languages")
         val languageProperties = node.getStringList("language-data.properties")
         val language = supportedLanguages.associate { lang ->
             lang to languageProperties
                 .associate { prop -> prop to node.getStringList("language-data.$lang.$prop") }
         }
-        return ProjectDescription(
-            projectName = node.tryGetString("project-name") ?: "",
-            projectHomepage = node.tryGetString("project-homepage") ?: "",
-            usePrefixes = usePrefixes,
-            defaultLanguage = node.getString("default-language"),
-            supportedLanguages = node.getStringList("supported-languages"),
-            labelProperties = node.getStringList("label-properties").toProperties(usePrefixes),
-            commentProperties = node.getStringList("comment-properties").toProperties(usePrefixes),
-            imageProperties = node.getStringList("image-properties").toProperties(usePrefixes),
-            softwareName = node.getString("software-name"),
-            language = language,
-            indexResource = node.tryGetString("index-resource")
-        )
+        node.run {
+            return ProjectDescription(
+                projectName = runCatching { getString("projectName") }.getOrNull(),
+                projectHomepage = runCatching { getString("projectHomepage") }.getOrNull(),
+                usePrefixes = usePrefixes,
+                defaultLanguage = getString("defaultLanguage"),
+                indexResource = runCatching { getString("indexResource") }.getOrNull(),
+                supportedLanguages = getStringList("supported-languages"),
+                labelProperties = getStringList("labelProperty").toProperties(usePrefixes),
+                commentProperties = getStringList("commentProperty").toProperties(usePrefixes),
+                imageProperties = getStringList("imageProperty").toProperties(usePrefixes),
+                softwareName = getString("software-name"),
+                language = language
+            )
+        }
     }
 }
 

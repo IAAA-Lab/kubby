@@ -8,17 +8,16 @@ import kotlin.test.*
 class EntityRepositoryConfigTest {
 
     val sparqlConfig = ConfigFactory.parseMap(mapOf(
-        "dataset-base" to "https://dbpedia.org/",
-        "add-same-as" to "true",
-        "type" to "sparql",
-        "endpoint" to "https://dbpedia.org/sparql",
-        "default-graph" to "http://dbpedia.org",
-        "trust-endpoint" to "true")
+        "sparqlEndpoint" to "https://dbpedia.org/sparql",
+        "sparqlDefaultGraph" to "http://dbpedia.org",
+        "datasetBase" to "https://dbpedia.org/",
+        "addSameAsStatements" to "true",
+        "trustEndpoint" to "true")
     )
 
     val tdb2Config = ConfigFactory.parseMap(mapOf(
-        "dataset-base" to "https://dbpedia.org/",
-        "add-same-as" to "true",
+        "datasetBase" to "https://dbpedia.org/",
+        "addSameAsStatements" to "true",
         "type" to "tdb2",
         "path" to "dbpedia",
         "mode" to "create",

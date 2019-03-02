@@ -1,4 +1,3 @@
-## Renders a set of ResourceProperties, given in $properties, as a property-value table
 <table class="description">
     <colgroup>
         <col class="property-column" span="1">

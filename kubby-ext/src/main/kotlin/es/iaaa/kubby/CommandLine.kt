@@ -16,10 +16,11 @@ fun commandLineConfig(args: Array<String>): Config {
     val configFile = argsMap["-config"]?.let { File(it) }
     val commandLineMap = argsMap.filterKeys { it.startsWith("-P:") }.mapKeys { it.key.removePrefix("-P:") }
 
+    val defaultConfig = ConfigFactory.load()
     val environmentConfig = ConfigFactory.systemProperties().withOnlyPath("ktor")
     val fileConfig = configFile?.let { ConfigFactory.parseFile(it) } ?: ConfigFactory.load()
     val argConfig = ConfigFactory.parseMap(commandLineMap, "Command-line options")
-    val combinedConfig = argConfig.withFallback(fileConfig).withFallback(environmentConfig).resolve()
+    val combinedConfig = argConfig.withFallback(fileConfig).withFallback(environmentConfig).withFallback(defaultConfig).resolve()
 
     val applicationIdPath = "ktor.application.id"
     val applicationId = combinedConfig.tryGetString(applicationIdPath) ?: "Application"

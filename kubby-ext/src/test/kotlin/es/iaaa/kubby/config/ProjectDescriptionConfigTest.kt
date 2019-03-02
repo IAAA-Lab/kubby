@@ -1,10 +1,8 @@
 package es.iaaa.kubby.config
 
 import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
 import es.iaaa.kubby.commandLineConfig
-import es.iaaa.kubby.rest.api.Routes
-import java.io.File
+import es.iaaa.kubby.fixtures.defaultUsePrefixes
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,82 +11,62 @@ class ProjectDescriptionConfigTest {
 
     lateinit var config: Config
 
-    lateinit var runtimeConfig: Config
-
     @BeforeTest
     fun before() {
-        val classLoader = javaClass.classLoader
-        val file = File(classLoader.getResource("config/test.conf").file)
-        config = ConfigFactory.parseFile(file)
-        runtimeConfig = commandLineConfig(arrayOf("-port=80"))
+        val file =ProjectDescriptionConfigTest::class.java.getResource("/config/test.conf").file
+        config = commandLineConfig(arrayOf("-config=$file"))
     }
 
     @Test
-    fun `ensure project name has value`() {
+    fun `project name can be configured`() {
         assertEquals("Test DBpedia.org", config.toProjectDescription().projectName)
     }
 
     @Test
-    fun `ensure the project homepage has value`() {
+    fun `project homepage can be configured`() {
         assertEquals("http://dbpedia.org", config.toProjectDescription().projectHomepage)
     }
 
     @Test
-    fun `ensure the prefixes are defined`() {
-        val expected = mapOf(
-            "rdf" to "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-            "dc" to "http://purl.org/dc/elements/1.1/",
-            "dcterms" to "http://purl.org/dc/terms/",
-            "foaf" to "http://xmlns.com/foaf/0.1/",
-            "schema" to "http://schema.org/"
-        )
-        assertEquals(expected, config.toProjectDescription().usePrefixes)
+    fun `label properties can be configured`() {
+        val expected = listOf("http://example.com/ns#label")
+        assertEquals(expected, config.toProjectDescription().labelProperties.map { it.uri })
     }
 
     @Test
-    fun `ensure the default prefixes are defined`() {
-        val expected = mapOf(
-            "xs" to "http://www.w3.org/2001/XMLSchema#",
-            "rdfs" to "http://www.w3.org/2000/01/rdf-schema#",
-            "rdf" to "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-            "dc" to "http://purl.org/dc/elements/1.1/",
-            "dcterms" to "http://purl.org/dc/terms/",
-            "foaf" to "http://xmlns.com/foaf/0.1/",
-            "schema" to "http://schema.org/"
-        )
-        assertEquals(expected, runtimeConfig.toProjectDescription().usePrefixes)
+    fun `comment properties can be configured`() {
+        val expected = listOf("http://example.com/ns#comment")
+        assertEquals(expected, config.toProjectDescription().commentProperties.map { it.uri })
     }
 
     @Test
-    fun `ensure the default language is defined`() {
-        assertEquals("en", config.toProjectDescription().defaultLanguage)
+    fun `image properties can be configured`() {
+        val expected = listOf("http://example.com/ns#image")
+        assertEquals(expected, config.toProjectDescription().imageProperties.map { it.uri })
+    }
+
+
+    @Test
+    fun `use prefixes can be expanded`() {
+        assertEquals("http://example.com/ns#", config.toProjectDescription().usePrefixes["ex"])
     }
 
     @Test
-    fun `ensure the index resource is defined`() {
+    fun `default prefixes are available`() {
+        defaultUsePrefixes.forEach { prefix, uri ->
+            assertEquals(uri, config.toProjectDescription().usePrefixes[prefix])
+        }
+    }
+
+    @Test
+    fun `default language can be configured`() {
+        assertEquals("es", config.toProjectDescription().defaultLanguage)
+    }
+
+
+    @Test
+    fun `index resource can be configured`() {
         assertEquals("http://dbpedia.org/resource/DBpedia", config.toProjectDescription().indexResource)
-    }
-
-    @Test
-    fun `ensure to the default label properties are defined`() {
-        val expected = listOf(
-            "http://www.w3.org/2000/01/rdf-schema#label",
-            "http://purl.org/dc/elements/1.1/title",
-            "http://purl.org/dc/terms/title",
-            "http://xmlns.com/foaf/0.1/projectName",
-            "http://schema.org/projectName"
-        )
-        assertEquals(expected, runtimeConfig.toProjectDescription().labelProperties.map { it.uri })
-    }
-
-    @Test
-    fun `ensure the default routes are defined`() {
-        val expected = Routes(
-            "/page",
-            "/data",
-            "/resource"
-        )
-        assertEquals(expected, runtimeConfig.toRoutes())
     }
 }
 

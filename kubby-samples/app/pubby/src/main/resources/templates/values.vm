@@ -5,15 +5,18 @@
             #if ($value.literal)
                 <span class="literal">$value.lexicalForm
                     #if ($value.datatypeLabel)
-                        <small>#if ($value.hasPrefix)
-                        ($value.prefix:$value.datatypeLabel)
-                        #else
-                            ($value.datatypeLabel)
-                        #end
+                        <small>
+                            #if ($value.hasPrefix)
+                                ($value.prefix:$value.datatypeLabel)
+                            #else
+                                ($value.datatypeLabel)
+                            #end
                         </small>
                     #end
                     #if ($value.language != "")
-                        <small> ($value.language)</small>
+                        <small>
+                            ($value.language)
+                        </small>
                     #end
                 </span>
             #else
@@ -21,11 +24,10 @@
                     <a class="uri" href="$value.uri" title="$value.uri">$value.label</a>
                 #elseif ($value.hasPrefix)
                     <a class="uri" href="$value.uri" title="$value.uri">
-                        <small>$value.prefix:</small>$value.localName</a>
+                        <small>$value.prefix:</small>$value.localName
+                    </a>
                 #else
-                    <small>&lt;</small>
-                    <a class="uri" href="$value.uri">$value.uri</a>
-                    <small>&gt;</small>
+                    <small>&lt;</small><a class="uri" href="$value.uri">$value.uri</a><small>&gt;</small>
                 #end
             #end
         </li>
