@@ -1,5 +1,6 @@
 package es.iaaa.kubby.rest.api
 
+import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.services.DescribeEntityService
 import io.ktor.application.ApplicationCall
 import io.ktor.features.origin
@@ -8,7 +9,6 @@ import io.ktor.http.RequestConnectionPoint
 import io.ktor.http.Url
 import io.ktor.http.toURI
 import io.ktor.request.acceptItems
-import org.apache.jena.rdf.model.Resource
 import java.util.*
 
 
@@ -22,7 +22,7 @@ sealed class Context
  */
 
 interface ContentContext {
-    val resource: Resource
+    val entity: Entity
     val pageUri: String
     val dataUri: String
     val time: Calendar
@@ -32,7 +32,7 @@ interface ContentContext {
  * Context of the pageUri request.
  */
 data class PageContentContext(
-    override val resource: Resource,
+    override val entity: Entity,
     override val pageUri: String,
     override val dataUri: String,
     override val time: Calendar = GregorianCalendar.getInstance()
@@ -43,7 +43,7 @@ data class PageContentContext(
  * Context of the dataUri request.
  */
 data class DataContentContext(
-    override val resource: Resource,
+    override val entity: Entity,
     override val pageUri: String,
     override val dataUri: String,
     override val time: Calendar = GregorianCalendar.getInstance()
@@ -83,7 +83,7 @@ internal fun ApplicationCall.processPageRequests(
     val (page, data, namespace, localId) = extractEntityUris(paramName, routes.pagePath, routes)
     return if (localId.isNotEmpty())
         PageContentContext(
-            resource = service.findOne(namespace, localId),
+            entity = service.findOne(namespace, localId),
             pageUri = page,
             dataUri = data
         )
@@ -101,7 +101,7 @@ internal fun ApplicationCall.processDataRequests(
     val (page, data, namespace, localId) = extractEntityUris(paramName, routes.dataPath, routes)
     return if (localId.isNotEmpty())
         DataContentContext(
-            resource = service.findOne(namespace, localId),
+            entity = service.findOne(namespace, localId),
             pageUri = page,
             dataUri = data
         )

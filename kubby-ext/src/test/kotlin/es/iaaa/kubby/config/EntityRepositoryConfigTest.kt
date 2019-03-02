@@ -12,8 +12,9 @@ class EntityRepositoryConfigTest {
         "sparqlDefaultGraph" to "http://dbpedia.org",
         "datasetBase" to "https://dbpedia.org/",
         "addSameAsStatements" to "true",
-        "trustEndpoint" to "true")
-    )
+        "trustEndpoint" to "true",
+        "attribution" to "mine"
+    ))
 
     val tdb2Config = ConfigFactory.parseMap(mapOf(
         "datasetBase" to "https://dbpedia.org/",
@@ -21,7 +22,8 @@ class EntityRepositoryConfigTest {
         "type" to "tdb2",
         "path" to "dbpedia",
         "mode" to "create",
-        "dataUri" to "dbpedia.ttl"
+        "data" to "dbpedia.ttl",
+        "attribution" to "mine"
     ))
 
     @Test
@@ -52,6 +54,7 @@ class EntityRepositoryConfigTest {
         sparqlConfig.toSparqlEntityRepository().apply {
             assertEquals("https://dbpedia.org/sparql", service)
             assertEquals("http://dbpedia.org", dataset)
+            assertEquals(listOf("mine"), attributionList)
             assertTrue(forceTrust)
         }
     }
@@ -61,6 +64,7 @@ class EntityRepositoryConfigTest {
         tdb2Config.toTDB2EntityRepository().apply {
             assertEquals(Paths.get("dbpedia"), path)
             assertEquals(RepositoryMode.CREATE, mode)
+            assertEquals(listOf("mine"), attributionList)
             assertEquals(Paths.get("dbpedia.ttl"), data)
         }
     }

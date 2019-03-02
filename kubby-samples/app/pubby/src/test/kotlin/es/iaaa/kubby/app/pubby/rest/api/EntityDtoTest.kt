@@ -5,6 +5,7 @@ import es.iaaa.kubby.app.pubby.fixtures.Models.aSimpleModel
 import es.iaaa.kubby.app.pubby.toEntityDto
 import es.iaaa.kubby.app.pubby.toMap
 import es.iaaa.kubby.config.toProjectDescription
+import es.iaaa.kubby.repository.Entity
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -17,7 +18,7 @@ class EntityDtoTest {
     fun before() {
         val config = ConfigFactory.load("test.conf").toProjectDescription()
         val model = aSimpleModel("http://example.com/sample")
-        node = model.getResource("http://example.com/sample")
+        node = Entity(model.getResource("http://example.com/sample"))
             .toEntityDto(config, "http://example.com/dataUri/sample")
             .toMap()
     }

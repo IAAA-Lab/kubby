@@ -1,5 +1,6 @@
 package es.iaaa.kubby.repository.source
 
+import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import org.apache.http.conn.ssl.NoopHostnameVerifier
@@ -8,7 +9,6 @@ import org.apache.http.impl.client.HttpClients
 import org.apache.http.ssl.SSLContexts
 import org.apache.jena.query.QueryExecutionFactory.sparqlService
 import org.apache.jena.query.QueryFactory
-import org.apache.jena.rdf.model.Resource
 
 /**
  * Access to a remote SPARQL repository at [service].
@@ -19,19 +19,24 @@ import org.apache.jena.rdf.model.Resource
 class SparqlEntityRepository(
     val service: String,
     val dataset: String? = null,
-    val forceTrust: Boolean = false
+    val forceTrust: Boolean = false,
+    attribution: String? = null
 ) : EntityRepository {
+
+    val attributionList = attribution?.let{ listOf(it) } ?: emptyList()
 
     override fun getId(uri: String) = EntityId(localPart = uri)
 
-    override fun findOne(id: EntityId): Resource =
-        sparqlService(
+    override fun findOne(id: EntityId): Entity {
+        val resource =        sparqlService(
             service,
             QueryFactory.create("DESCRIBE <${id.uri}>"),
             dataset,
             buildClient(),
             null
         ).execDescribe().getResource(id.uri)
+        return Entity(resource = resource, attribution = attributionList).normalize()
+    }
 
     private fun buildClient() = if (forceTrust) {
         val sslContext = SSLContexts.custom().loadTrustMaterial { _, _ -> true }.build()

@@ -3,10 +3,12 @@ package es.iaaa.kubby.repository.source
 import es.iaaa.kubby.fixtures.Models.johnSmith
 import es.iaaa.kubby.fixtures.Models.marySmith
 import es.iaaa.kubby.rdf.ask
+import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import io.mockk.every
 import io.mockk.mockk
+import org.apache.jena.rdf.model.ModelFactory
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -37,7 +39,7 @@ class MergeEntityRepositoryTest {
         emptyRepository = mockk()
         emptyRepository.apply {
             every { getId("http://localhost/resource/DBpedia") } returns dbpediaRaw
-            every { findOne(johnSmithId).model } returns null
+            every { findOne(johnSmithId) } returns Entity(ModelFactory.createDefaultModel().createResource())
         }
 
         johnRepository = mockk()
@@ -75,7 +77,7 @@ class MergeEntityRepositoryTest {
     @Test
     fun `empty lists never fails and returns an empty model`() {
         val repository = MergeEntityRepository(listOf())
-        val resource = repository.findOne(johnSmithId)
+        val resource = repository.findOne(johnSmithId).resource
         assertEquals("http://source/JohnSmith", resource.uri)
         assertTrue(resource.model.isEmpty)
     }
@@ -83,7 +85,7 @@ class MergeEntityRepositoryTest {
     @Test
     fun `if no data is found, returns an empty model`() {
         val repository = MergeEntityRepository(listOf(emptyRepository))
-        val resource = repository.findOne(johnSmithId)
+        val resource = repository.findOne(johnSmithId).resource
         assertEquals("http://source/JohnSmith", resource.uri)
         assertTrue(resource.model.isEmpty)
     }
@@ -91,7 +93,7 @@ class MergeEntityRepositoryTest {
     @Test
     fun `returns information about an entity`() {
         val repository = MergeEntityRepository(listOf(johnRepository))
-        val resource = repository.findOne(johnSmithId)
+        val resource = repository.findOne(johnSmithId).resource
         assertEquals("http://source/JohnSmith", resource.uri)
         val query = """
             PREFIX src: <http://source/>
@@ -106,7 +108,7 @@ class MergeEntityRepositoryTest {
     @Test
     fun `informacion about an entity in two repositories is merged`() {
         val repository = MergeEntityRepository(listOf(johnRepository, maryRepository))
-        val resource = repository.findOne(johnSmithId)
+        val resource = repository.findOne(johnSmithId).resource
         assertEquals("http://source/JohnSmith", resource.uri)
         val query = """
             PREFIX src: <http://source/>

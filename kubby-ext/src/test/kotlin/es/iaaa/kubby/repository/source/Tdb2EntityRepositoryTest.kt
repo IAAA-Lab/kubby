@@ -45,7 +45,7 @@ class Tdb2EntityRepositoryTest {
     fun `create and load a new TDB2 dataset`() {
 
         val ds = Tdb2EntityRepository(target, data, CREATE)
-        val result = ds.findOne(EntityId("http://dbpedia.org/resource/", "Tetris"))
+        val result = ds.findOne(EntityId("http://dbpedia.org/resource/", "Tetris")).resource
 
         assertFalse { result.model.isEmpty }
     }
@@ -67,7 +67,7 @@ class Tdb2EntityRepositoryTest {
 
         val ds = Tdb2EntityRepository(target, null, CONNECT)
 
-        val result = ds.findOne(EntityId("http://dbpedia.org/resource/", "Tetris"))
+        val result = ds.findOne(EntityId("http://dbpedia.org/resource/", "Tetris")).resource
 
         assertFalse { result.model.isEmpty }
     }
@@ -80,7 +80,7 @@ class Tdb2EntityRepositoryTest {
 
         val result = ds.findOne(EntityId("http://example.com/resource/", "Tetris"))
 
-        assertTrue { result.model.isEmpty }
+        assertTrue { result.isEmpty }
     }
 
 

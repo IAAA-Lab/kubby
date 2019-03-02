@@ -2,6 +2,7 @@ package es.iaaa.kubby.services.impl
 
 import es.iaaa.kubby.rdf.mergePrefixes
 import es.iaaa.kubby.rdf.prunePrefixes
+import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import es.iaaa.kubby.services.DescribeEntityService
@@ -14,9 +15,11 @@ class DescribeEntityServiceImpl(
     private val prefixes: Map<String, String>
 ) : DescribeEntityService {
 
-    override fun findOne(baseUri: String, localPart: String) =
+    override fun findOne(baseUri: String, localPart: String) : Entity =
         entityRepository.findOne(EntityId(baseUri, localPart)).apply {
-            model.mergePrefixes(prefixes)
-            model.prunePrefixes()
+            resource.run {
+                model.mergePrefixes(prefixes)
+                model.prunePrefixes()
+            }
         }
 }

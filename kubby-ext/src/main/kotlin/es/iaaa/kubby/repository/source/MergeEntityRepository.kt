@@ -1,10 +1,8 @@
 package es.iaaa.kubby.repository.source
 
-import es.iaaa.kubby.rdf.merge
+import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
-import org.apache.jena.rdf.model.ModelFactory
-import org.apache.jena.rdf.model.Resource
 
 /**
  * [EntityRepository] backed by other [repositories] that map and reduces operations.
@@ -25,10 +23,10 @@ class MergeEntityRepository(private val repositories: List<EntityRepository>) :
     /**
      * Map and merge the responses from the [repositories].
      */
-    override fun findOne(id: EntityId): Resource = repositories
-        .map { it.findOne(id).model ?: ModelFactory.createDefaultModel() }
-        .fold(ModelFactory.createDefaultModel()) { acc, m -> acc.merge(m) }
-        .getResource(id.uri)
+    override fun findOne(id: EntityId): Entity = repositories
+            .map { it.findOne(id) }
+            .filter { !it.isEmpty }
+            .fold(id.toEntity()) { acc, m -> acc.merge(m) }
 
     /**
      * Closes underlying [repositories].

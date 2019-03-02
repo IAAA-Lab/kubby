@@ -1,6 +1,7 @@
 package es.iaaa.kubby.fixtures
 
 import es.iaaa.kubby.rdf.addNsIfUndefined
+import es.iaaa.kubby.repository.Entity
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.vocabulary.DC_11
@@ -20,7 +21,7 @@ object Models {
         return model
     }
 
-    fun johnSmith() = johnSmithModel().getResource("http://source/JohnSmith")
+    fun johnSmith() = Entity(johnSmithModel().getResource("http://source/JohnSmith"))
 
     fun marySmithModel(): Model {
         val model = ModelFactory.createDefaultModel()
@@ -34,7 +35,7 @@ object Models {
         return model
     }
 
-    fun marySmith() = marySmithModel().getResource("http://source/MarySmith")
+    fun marySmith() = Entity(marySmithModel().getResource("http://source/MarySmith"))
 
-    fun anEmptyResource() = ModelFactory.createDefaultModel().createResource()
+    fun anEmptyResource() = Entity(ModelFactory.createDefaultModel().createResource())
 }

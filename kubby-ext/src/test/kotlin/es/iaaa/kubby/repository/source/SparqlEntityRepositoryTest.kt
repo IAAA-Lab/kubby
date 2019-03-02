@@ -14,7 +14,7 @@ class SparqlEntityRepositoryTest {
             "http://dbpedia.org",
             true
         )
-        val model = ds.findOne(EntityId("http://dbpedia.org/resource/", "Aragón")).model
+        val model = ds.findOne(EntityId("http://dbpedia.org/resource/", "Aragón")).resource.model
         model.apply {
             assertTrue(
                 contains(
@@ -29,7 +29,7 @@ class SparqlEntityRepositoryTest {
     @Test
     fun `retrieve the description of a resource from a remote endpoint`() {
         val ds = SparqlEntityRepository("http://datos.bne.es/sparql")
-        val model = ds.findOne(EntityId("http://datos.bne.es/resource/", "XX85148")).model
+        val model = ds.findOne(EntityId("http://datos.bne.es/resource/", "XX85148")).resource.model
         model.apply {
             assertTrue(
                 contains(

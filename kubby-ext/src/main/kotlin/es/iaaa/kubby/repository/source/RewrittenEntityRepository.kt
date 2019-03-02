@@ -2,6 +2,7 @@ package es.iaaa.kubby.repository.source
 
 import es.iaaa.kubby.rdf.addSameAs
 import es.iaaa.kubby.rdf.rewrite
+import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 
@@ -33,13 +34,13 @@ class RewrittenEntityRepository(
      * a result that contains the same dataUri but with all IRI starting with [namespace] replaced
      * with IRIs starting with the namespace of [id].
      */
-    override fun findOne(id: EntityId) =
+    override fun findOne(id: EntityId): Entity =
         id.copy(namespace = namespace).let { rewrittenId ->
             repository
-                .findOne(rewrittenId).model
-                .rewrite(namespace, id.namespace).getResource(id.uri)
+                .findOne(rewrittenId)
+                .rewrite(namespace, id.namespace)
                 .apply {
-                    if (addSameAs && namespace != id.namespace && !model.isEmpty) addSameAs(rewrittenId.uri)
+                    if (addSameAs && namespace != id.namespace && !isEmpty) addSameAs(rewrittenId)
                 }
         }
 
@@ -48,4 +49,15 @@ class RewrittenEntityRepository(
     }
 }
 
+/**
+ * Rewrites an Entity from a [old] namespace to a [new] namespace.
+ */
+private fun Entity.rewrite(old: String, new: String) = resource.run {
+        val newUri = rewrite(old, new).uri
+        Entity(model.rewrite(old, new).getResource(newUri), attribution)
+    }
 
+/**
+ * Adds owl:sameAs statement between this [Entity] and the [Entity] identified by [id].
+ */
+private fun Entity.addSameAs(id: EntityId) = resource.run { addSameAs(id.uri) }

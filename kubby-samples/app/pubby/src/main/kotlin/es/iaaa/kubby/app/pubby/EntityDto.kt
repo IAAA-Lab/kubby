@@ -2,8 +2,8 @@ package es.iaaa.kubby.app.pubby
 
 import es.iaaa.kubby.config.ProjectDescription
 import es.iaaa.kubby.rdf.*
+import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.text.toTitleCase
-import org.apache.jena.rdf.model.Resource
 
 /**
  * Entity DTO.
@@ -16,25 +16,27 @@ data class EntityDto(
     val comment: String? = null,
     val image: String? = null,
     val properties: List<PropertyDto>? = null,
+    val attribution: List<String> = emptyList(),
     val showLabels: Boolean,
     val rdfLink: String? = null,
     val rdfFormat: String? = null
 )
 
 /**
- * [Resource] to [EntityDto] mapper.
+ * [Entity] to [EntityDto] mapper.
  */
-fun Resource?.toEntityDto(config: ProjectDescription, data: String) =
+fun Entity?.toEntityDto(config: ProjectDescription, data: String) =
     if (this != null)
         EntityDto(
             projectName = config.projectName,
             projectHomepage = config.projectHomepage,
-            uri = uri,
-            title = getName(config.labelProperties, config.defaultLanguage)
+            uri = resource.uri,
+            title = resource.getName(config.labelProperties, config.defaultLanguage)
                 .toTitleCase(config.getLanguageList("uncapitalized-words")),
-            comment = findBestLiteral(config.commentProperties, config.defaultLanguage)?.formattedLexicalForm() ?: "",
-            image = findAllDistinctObjectsFrom(config.imageProperties).firstUriOrNull() ?: "",
-            properties = toListContentNodeDto(config),
+            comment = resource.findBestLiteral(config.commentProperties, config.defaultLanguage)?.formattedLexicalForm() ?: "",
+            image = resource.findAllDistinctObjectsFrom(config.imageProperties).firstUriOrNull() ?: "",
+            properties = resource.toListContentNodeDto(config),
+            attribution = attribution,
             showLabels = false,
             rdfLink = data,
             rdfFormat = "application/ld+toJson"
@@ -60,7 +62,8 @@ fun EntityDto.toMap(): Map<String, Any> =
         "properties" to properties,
         "showLabels" to showLabels,
         "rdfLink" to rdfLink,
-        "rdfFormat" to rdfFormat
+        "rdfFormat" to rdfFormat,
+        "attribution" to attribution
     )
         .filterValues { it != null }
         .mapValues { it.value as Any }

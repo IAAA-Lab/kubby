@@ -1,5 +1,6 @@
 package es.iaaa.kubby.repository.source
 
+import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import es.iaaa.kubby.repository.source.RepositoryMode.CONNECT
@@ -38,9 +39,11 @@ import java.nio.file.Path
 class Tdb2EntityRepository(
     val path: Path,
     val data: Path? = null,
-    val mode: RepositoryMode
-) :
-    EntityRepository {
+    val mode: RepositoryMode,
+    attribution: String? = null
+) : EntityRepository {
+
+    val attributionList = attribution?.let{ listOf(it) } ?: emptyList()
 
     init {
         with(DescribeHandlerRegistry.get()) {
@@ -51,8 +54,11 @@ class Tdb2EntityRepository(
 
     override fun getId(uri: String) = EntityId(localPart = uri)
 
-    override fun findOne(id: EntityId): Resource = calculateRead(dataset) {
-        dataset.describe("DESCRIBE <${id.uri}>").getResource(id.uri)
+    override fun findOne(id: EntityId): Entity {
+        val resource = calculateRead(dataset) {
+            dataset.describe("DESCRIBE <${id.uri}>").getResource(id.uri)
+        }
+        return Entity(resource = resource, attribution = attributionList).normalize()
     }
 
     override fun close() {

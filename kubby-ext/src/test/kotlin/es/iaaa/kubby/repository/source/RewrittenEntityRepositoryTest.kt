@@ -2,6 +2,7 @@ package es.iaaa.kubby.repository.source
 
 import es.iaaa.kubby.fixtures.Models.johnSmithModel
 import es.iaaa.kubby.rdf.ask
+import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import io.mockk.every
@@ -24,13 +25,13 @@ class RewrittenEntityRepositoryTest {
                     "JohnSmith"
                 )
             )
-        } returns johnSmithModel().getResource("http://source/JohnSmit")
+        } returns Entity(johnSmithModel().getResource("http://source/JohnSmith"))
     }
 
     @Test
     fun `describe and rewrite a simple model`() {
         val rdw = RewrittenEntityRepository(anyDs, "http://source/", false)
-        val result = rdw.findOne(EntityId("http://target/", "JohnSmith"))
+        val result = rdw.findOne(EntityId("http://target/", "JohnSmith")).resource
         val query = """
             PREFIX target: <http://target/>
             PREFIX vcard: <http://www.w3.org/2001/vcard-rdf/3.0#>
@@ -44,7 +45,7 @@ class RewrittenEntityRepositoryTest {
     @Test
     fun `verify that the rewritten source doesn't have an unrequested owl sameAs`() {
         val rdw = RewrittenEntityRepository(anyDs, "http://source/", false)
-        val result = rdw.findOne(EntityId("http://target/", "JohnSmith"))
+        val result = rdw.findOne(EntityId("http://target/", "JohnSmith")).resource
         val query = """
             PREFIX target: <http://target/>
             PREFIX source: <http://source/>
@@ -59,7 +60,7 @@ class RewrittenEntityRepositoryTest {
     @Test
     fun `verify that the rewritten source has the expected owl sameAs`() {
         val rdw = RewrittenEntityRepository(anyDs, "http://source/", true)
-        val result = rdw.findOne(EntityId("http://target/", "JohnSmith"))
+        val result = rdw.findOne(EntityId("http://target/", "JohnSmith")).resource
         val query = """
             PREFIX target: <http://target/>
             PREFIX source: <http://source/>

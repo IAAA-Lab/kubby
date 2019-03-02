@@ -87,7 +87,7 @@ fun Route.data() {
             val ctx = call.processDataRequests(PATH_LOCAL_PART, routes, service)
             if (ctx is ContentContext) {
                 call.attributes.put(requestContextKey, ctx)
-                ctx.resource.apply { if (!model.isEmpty) call.respond(model) }
+                ctx.entity.apply { if (!isEmpty) call.respond(this) }
             }
         }
     }

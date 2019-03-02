@@ -67,7 +67,8 @@ internal fun Config.toSparqlEntityRepository() =
     SparqlEntityRepository(
         service = getString("sparqlEndpoint"),
         dataset = runCatching { getString("sparqlDefaultGraph") }.getOrNull(),
-        forceTrust = runCatching { getBoolean("trustEndpoint") }.getOrDefault(false)
+        forceTrust = runCatching { getBoolean("trustEndpoint") }.getOrDefault(false),
+        attribution = runCatching { getString("attribution") }.getOrNull()
     )
 
 /**
@@ -77,7 +78,8 @@ internal fun Config.toTDB2EntityRepository() =
     Tdb2EntityRepository(
         path = toPath("path"),
         mode = toMode("mode"),
-        data = toPath("data", "data.ttl")
+        data = toPath("data", "data.ttl"),
+        attribution = runCatching { getString("attribution") }.getOrNull()
     )
 
 /**

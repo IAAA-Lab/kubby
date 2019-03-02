@@ -23,7 +23,7 @@ class PageDocumentMetadataTest {
         context = mockk()
         project = mockk()
 
-        every { context.resource.uri } returns "http://localhost/resource/ResourceOfSomething"
+        every { context.entity.resource.uri } returns "http://localhost/resource/ResourceOfSomething"
         every { project.labelProperties } returns listOf(RDFS.label)
         every { project.defaultLanguage } returns "en"
         every { project.getLanguageList("uncapitalized-words") } returns listOf("of", "an")
