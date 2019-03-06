@@ -1,9 +1,10 @@
 package es.iaaa.kubby.app.pubby
 
 import es.iaaa.kubby.config.ProjectDescription
+import es.iaaa.kubby.domain.Entity
 import es.iaaa.kubby.rdf.*
-import es.iaaa.kubby.repository.Entity
 import es.iaaa.kubby.text.toTitleCase
+import org.apache.jena.rdf.model.Model
 
 /**
  * Entity DTO.
@@ -26,22 +27,33 @@ data class EntityDto(
  * [Entity] to [EntityDto] mapper.
  */
 fun Entity?.toEntityDto(config: ProjectDescription, data: String) =
-    if (this != null)
-        EntityDto(
+    if (this != null) {
+        (toGraphModel() as? Model)?.let {
+            val resource = it.getResource(uri)
+            EntityDto(
+                projectName = config.projectName,
+                projectHomepage = config.projectHomepage,
+                uri = uri,
+                title = resource.getName(config.labelProperties, config.defaultLanguage)
+                    .toTitleCase(config.getLanguageList("uncapitalized-words")),
+                comment = resource.findBestLiteral(
+                    config.commentProperties,
+                    config.defaultLanguage
+                )?.formattedLexicalForm()
+                    ?: "",
+                image = resource.findAllDistinctObjectsFrom(config.imageProperties).firstUriOrNull() ?: "",
+                properties = resource.toListContentNodeDto(config),
+                attribution = attributions,
+                showLabels = false,
+                rdfLink = data,
+                rdfFormat = "application/ld+toJson"
+            )
+        } ?: EntityDto(
             projectName = config.projectName,
             projectHomepage = config.projectHomepage,
-            uri = resource.uri,
-            title = resource.getName(config.labelProperties, config.defaultLanguage)
-                .toTitleCase(config.getLanguageList("uncapitalized-words")),
-            comment = resource.findBestLiteral(config.commentProperties, config.defaultLanguage)?.formattedLexicalForm() ?: "",
-            image = resource.findAllDistinctObjectsFrom(config.imageProperties).firstUriOrNull() ?: "",
-            properties = resource.toListContentNodeDto(config),
-            attribution = attribution,
-            showLabels = false,
-            rdfLink = data,
-            rdfFormat = "application/ld+toJson"
+            showLabels = false
         )
-    else
+    } else
         EntityDto(
             projectName = config.projectName,
             projectHomepage = config.projectHomepage,

@@ -7,24 +7,28 @@ import kotlin.test.*
 
 class EntityRepositoryConfigTest {
 
-    val sparqlConfig = ConfigFactory.parseMap(mapOf(
-        "sparqlEndpoint" to "https://dbpedia.org/sparql",
-        "sparqlDefaultGraph" to "http://dbpedia.org",
-        "datasetBase" to "https://dbpedia.org/",
-        "addSameAsStatements" to "true",
-        "trustEndpoint" to "true",
-        "attribution" to "mine"
-    ))
+    val sparqlConfig = ConfigFactory.parseMap(
+        mapOf(
+            "sparqlEndpoint" to "https://dbpedia.org/sparql",
+            "sparqlDefaultGraph" to "http://dbpedia.org",
+            "datasetBase" to "https://dbpedia.org/",
+            "addSameAsStatements" to "true",
+            "trustEndpoint" to "true",
+            "attribution" to "mine"
+        )
+    )
 
-    val tdb2Config = ConfigFactory.parseMap(mapOf(
-        "datasetBase" to "https://dbpedia.org/",
-        "addSameAsStatements" to "true",
-        "type" to "tdb2",
-        "path" to "dbpedia",
-        "mode" to "create",
-        "data" to "dbpedia.ttl",
-        "attribution" to "mine"
-    ))
+    val tdb2Config = ConfigFactory.parseMap(
+        mapOf(
+            "datasetBase" to "https://dbpedia.org/",
+            "addSameAsStatements" to "true",
+            "type" to "tdb2",
+            "path" to "dbpedia",
+            "mode" to "create",
+            "data" to "dbpedia.ttl",
+            "attribution" to "mine"
+        )
+    )
 
     @Test
     fun `map configuration to repositories`() {
@@ -54,7 +58,7 @@ class EntityRepositoryConfigTest {
         sparqlConfig.toSparqlEntityRepository().apply {
             assertEquals("https://dbpedia.org/sparql", service)
             assertEquals("http://dbpedia.org", dataset)
-            assertEquals(listOf("mine"), attributionList)
+            assertEquals("mine", attribution)
             assertTrue(forceTrust)
         }
     }
@@ -64,7 +68,7 @@ class EntityRepositoryConfigTest {
         tdb2Config.toTDB2EntityRepository().apply {
             assertEquals(Paths.get("dbpedia"), path)
             assertEquals(RepositoryMode.CREATE, mode)
-            assertEquals(listOf("mine"), attributionList)
+            assertEquals("mine", attribution)
             assertEquals(Paths.get("dbpedia.ttl"), data)
         }
     }

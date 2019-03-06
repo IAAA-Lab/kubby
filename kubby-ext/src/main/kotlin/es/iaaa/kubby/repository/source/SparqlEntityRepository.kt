@@ -1,7 +1,8 @@
 package es.iaaa.kubby.repository.source
 
-import es.iaaa.kubby.repository.Entity
-import es.iaaa.kubby.repository.EntityId
+import es.iaaa.kubby.domain.Entity
+import es.iaaa.kubby.domain.EntityId
+import es.iaaa.kubby.domain.impl.ResourceEntityImpl
 import es.iaaa.kubby.repository.EntityRepository
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory
@@ -20,22 +21,20 @@ class SparqlEntityRepository(
     val service: String,
     val dataset: String? = null,
     val forceTrust: Boolean = false,
-    attribution: String? = null
+    val attribution: String? = null
 ) : EntityRepository {
-
-    val attributionList = attribution?.let{ listOf(it) } ?: emptyList()
 
     override fun getId(uri: String) = EntityId(localPart = uri)
 
     override fun findOne(id: EntityId): Entity {
-        val resource =        sparqlService(
+        val resource = sparqlService(
             service,
             QueryFactory.create("DESCRIBE <${id.uri}>"),
             dataset,
             buildClient(),
             null
-        ).execDescribe().getResource(id.uri)
-        return Entity(resource = resource, attribution = attributionList).normalize()
+        ).execDescribe()
+        return ResourceEntityImpl(uri = id.uri, model = resource, attribution = attribution)
     }
 
     private fun buildClient() = if (forceTrust) {

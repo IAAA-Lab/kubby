@@ -27,7 +27,9 @@
                         <small>$value.prefix:</small>$value.localName
                     </a>
                 #else
-                    <small>&lt;</small><a class="uri" href="$value.uri">$value.uri</a><small>&gt;</small>
+                    <small>&lt;</small>
+                    <a class="uri" href="$value.uri">$value.uri</a>
+                    <small>&gt;</small>
                 #end
             #end
         </li>

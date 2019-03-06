@@ -17,11 +17,13 @@ class VelocityConfigTest {
     @BeforeTest
     fun before() {
         config = mockk()
-        every { config.getConfig("kubby.velocity") } returns ConfigFactory.parseMap(mapOf(
-            "resource-loader-path" to "templates/",
-            "suffix" to ".vm",
-            "charset" to "UTF-8"
-        ))
+        every { config.getConfig("kubby.velocity") } returns ConfigFactory.parseMap(
+            mapOf(
+                "resource-loader-path" to "templates/",
+                "suffix" to ".vm",
+                "charset" to "UTF-8"
+            )
+        )
     }
 
     @Test

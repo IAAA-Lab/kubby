@@ -1,8 +1,8 @@
 package es.iaaa.kubby.ktor.features
 
 import com.github.jsonldjava.core.JsonLdOptions
+import es.iaaa.kubby.domain.Entity
 import es.iaaa.kubby.rdf.JsonLDContext
-import es.iaaa.kubby.repository.Entity
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.features.ContentConverter
@@ -41,15 +41,18 @@ class RdfConverter(private val config: RdfConverterConfiguration) : ContentConve
         contentType: ContentType,
         value: Any
     ): Any? = if (value is Entity && config.contentTypes.contains(contentType)) {
-        if (isVaryRequired) {
-            context.call.response.headers.append("Vary", "Accept")
-        }
-        value.resource.model.run {
-            when (contentType) {
-                RDF.TURTLE -> toString(config.turtleFormatVariant)
-                RDF.N_TRIPLES -> toString(config.ntriplesFormatVariant)
-                RDF.RDF_XML -> toString(config.rdfxmlFormatVariant)
-                else -> toString(config.jsonldFormatVariant, config.options)
+        val graph = value.toGraphModel() as? Model
+        graph?.let {
+            if (isVaryRequired) {
+                context.call.response.headers.append("Vary", "Accept")
+            }
+            graph.run {
+                when (contentType) {
+                    RDF.TURTLE -> toString(config.turtleFormatVariant)
+                    RDF.N_TRIPLES -> toString(config.ntriplesFormatVariant)
+                    RDF.RDF_XML -> toString(config.rdfxmlFormatVariant)
+                    else -> toString(config.jsonldFormatVariant, config.options)
+                }
             }
         }
     } else {

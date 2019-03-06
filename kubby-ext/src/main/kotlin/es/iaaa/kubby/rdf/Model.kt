@@ -6,7 +6,6 @@ import org.apache.jena.query.QueryFactory
 import org.apache.jena.rdf.model.*
 import org.apache.jena.rdf.model.ModelFactory.createDefaultModel
 import org.apache.jena.riot.system.PrefixMap
-import org.apache.jena.vocabulary.OWL
 import java.util.*
 import java.util.stream.Collectors
 
@@ -68,14 +67,6 @@ fun Resource.rewrite(old: String, new: String): Resource =
         this
     }
 
-/**
- * State that this [Resource] is the same as the resource identified by [uri].
- */
-fun Resource.addSameAs(uri: String) {
-    model.add(this, OWL.sameAs, model.createResource(uri))
-    model.addNsIfUndefined("owl", OWL.NS)
-}
-
 
 /**
  * Formats a representation of the lexical form of a [Literal] as capitalized if available.
@@ -111,9 +102,19 @@ fun List<RDFNode>.toLiteralList() = filter { it.isLiteral }.map { it.asLiteral()
 /**
  * Add the map of [prefix] to [uri] if undefined.
  */
-fun Model.addNsIfUndefined(prefix: String, uri: String) {
+fun Model.addNsIfUndefined(prefix: String, uri: String): Model {
     if (getNsURIPrefix(uri) == null && getNsPrefixURI(prefix) == null) setNsPrefix(prefix, uri)
+    return this
 }
+
+/**
+ * Add the map of [prefixes].
+ */
+fun Model.addNsIfUndefined(prefixes: Map<String, String>): Model {
+    prefixes.forEach { prefix, uri -> addNsIfUndefined(prefix, uri) }
+    return this
+}
+
 
 /**
  * Rewrites the [Model] from the [old] namespace to the [new] namespace.

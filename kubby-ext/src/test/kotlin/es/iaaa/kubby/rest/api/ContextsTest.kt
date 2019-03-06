@@ -1,6 +1,7 @@
 package es.iaaa.kubby.rest.api
 
-import es.iaaa.kubby.repository.Entity
+import es.iaaa.kubby.domain.impl.ResourceEntityImpl
+import es.iaaa.kubby.fixtures.Models.marySmith
 import es.iaaa.kubby.services.DescribeEntityService
 import io.ktor.application.ApplicationCall
 import io.ktor.features.origin
@@ -8,6 +9,7 @@ import io.ktor.http.RequestConnectionPoint
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -218,13 +220,13 @@ class ContextsTest {
         val service = mockk<DescribeEntityService>()
 
         val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
-        val resource = anyResource()
+        val entity = marySmith()
 
         every { applicationCall.request.origin.scheme } returns "http"
         every { applicationCall.request.origin.host } returns "localhost"
         every { applicationCall.request.origin.port } returns 80
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("1")
-        every { service.findOne("http://localhost/r/", "1") } returns Entity(resource)
+        every { service.findOne("http://localhost/r/", "1") } returns ResourceEntityImpl(entity.uri, entity.model)
 
         every { applicationCall.request.origin.uri } returns "/d/1"
 
@@ -234,7 +236,7 @@ class ContextsTest {
         assertTrue(ctx is ContentContext)
         assertEquals("http://localhost/d/1", ctx.dataUri)
         assertEquals("http://localhost/p/1", ctx.pageUri)
-        assertEquals(resource, ctx.entity.resource)
+        assertTrue(entity.model.isIsomorphicWith(ctx.entity.toGraphModel() as Model))
 
         verify { service.findOne("http://localhost/r/", "1") }
     }
@@ -245,13 +247,13 @@ class ContextsTest {
         val service = mockk<DescribeEntityService>()
 
         val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
-        val resource = anyResource()
+        val entity = marySmith()
 
         every { applicationCall.request.origin.scheme } returns "http"
         every { applicationCall.request.origin.host } returns "localhost"
         every { applicationCall.request.origin.port } returns 80
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns listOf("1")
-        every { service.findOne("http://localhost/r/", "1") } returns Entity(resource)
+        every { service.findOne("http://localhost/r/", "1") } returns ResourceEntityImpl(entity.uri, entity.model)
 
         every { applicationCall.request.origin.uri } returns "/p/1"
 
@@ -261,7 +263,7 @@ class ContextsTest {
         assertTrue(ctx is ContentContext)
         assertEquals("http://localhost/d/1", ctx.dataUri)
         assertEquals("http://localhost/p/1", ctx.pageUri)
-        assertEquals(resource, ctx.entity.resource)
+        assertTrue(entity.model.isIsomorphicWith(ctx.entity.toGraphModel() as Model))
 
         verify { service.findOne("http://localhost/r/", "1") }
     }
@@ -272,7 +274,7 @@ class ContextsTest {
         val service = mockk<DescribeEntityService>()
 
         val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
-        val resource = anyResource()
+        val entity = marySmith()
 
         every { applicationCall.request.origin.scheme } returns "http"
         every { applicationCall.request.origin.host } returns "localhost"
@@ -280,7 +282,7 @@ class ContextsTest {
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
 
         every { applicationCall.request.origin.uri } returns "/d/"
-        every { service.findOne("http://localhost/r/", "") } returns Entity(resource)
+        every { service.findOne("http://localhost/r/", "") } returns ResourceEntityImpl(entity.uri, entity.model)
 
         val ctx = applicationCall.processDataRequests(PATH_LOCAL_PART, routes, service)
 
@@ -295,7 +297,7 @@ class ContextsTest {
         val service = mockk<DescribeEntityService>()
 
         val routes = Routes(dataPath = "/d", resourcePath = "/r", pagePath = "/p")
-        val resource = anyResource()
+        val entity = marySmith()
 
         every { applicationCall.request.origin.scheme } returns "http"
         every { applicationCall.request.origin.host } returns "localhost"
@@ -303,7 +305,7 @@ class ContextsTest {
         every { applicationCall.parameters.getAll(PATH_LOCAL_PART) } returns null
 
         every { applicationCall.request.origin.uri } returns "/p/"
-        every { service.findOne("http://localhost/r/", "") } returns Entity(resource)
+        every { service.findOne("http://localhost/r/", "") } returns ResourceEntityImpl(entity.uri, entity.model)
 
         val ctx = applicationCall.processPageRequests(PATH_LOCAL_PART, routes, service)
 

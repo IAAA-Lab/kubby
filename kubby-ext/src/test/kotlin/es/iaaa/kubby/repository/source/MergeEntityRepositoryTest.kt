@@ -1,14 +1,14 @@
 package es.iaaa.kubby.repository.source
 
+import es.iaaa.kubby.domain.EntityId
+import es.iaaa.kubby.fixtures.Models.emptyEntity
 import es.iaaa.kubby.fixtures.Models.johnSmith
-import es.iaaa.kubby.fixtures.Models.marySmith
+import es.iaaa.kubby.fixtures.Models.marySmithAboutJohnSmith
 import es.iaaa.kubby.rdf.ask
-import es.iaaa.kubby.repository.Entity
-import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import io.mockk.every
 import io.mockk.mockk
-import org.apache.jena.rdf.model.ModelFactory
+import org.apache.jena.rdf.model.Model
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -39,14 +39,14 @@ class MergeEntityRepositoryTest {
         emptyRepository = mockk()
         emptyRepository.apply {
             every { getId("http://localhost/resource/DBpedia") } returns dbpediaRaw
-            every { findOne(johnSmithId) } returns Entity(ModelFactory.createDefaultModel().createResource())
+            every { findOne(johnSmithId) } returns emptyEntity(johnSmithId)
         }
 
         johnRepository = mockk()
         every { johnRepository.findOne(johnSmithId) } returns johnSmith()
 
         maryRepository = mockk()
-        every { maryRepository.findOne(johnSmithId) } returns marySmith()
+        every { maryRepository.findOne(johnSmithId) } returns marySmithAboutJohnSmith()
     }
 
     @Test
@@ -77,24 +77,24 @@ class MergeEntityRepositoryTest {
     @Test
     fun `empty lists never fails and returns an empty model`() {
         val repository = MergeEntityRepository(listOf())
-        val resource = repository.findOne(johnSmithId).resource
-        assertEquals("http://source/JohnSmith", resource.uri)
-        assertTrue(resource.model.isEmpty)
+        val entity = repository.findOne(johnSmithId)
+        assertEquals("http://source/JohnSmith", entity.uri)
+        assertTrue(entity.isEmpty)
     }
 
     @Test
     fun `if no data is found, returns an empty model`() {
         val repository = MergeEntityRepository(listOf(emptyRepository))
-        val resource = repository.findOne(johnSmithId).resource
-        assertEquals("http://source/JohnSmith", resource.uri)
-        assertTrue(resource.model.isEmpty)
+        val entity = repository.findOne(johnSmithId)
+        assertEquals("http://source/JohnSmith", entity.uri)
+        assertTrue(entity.isEmpty)
     }
 
     @Test
     fun `returns information about an entity`() {
         val repository = MergeEntityRepository(listOf(johnRepository))
-        val resource = repository.findOne(johnSmithId).resource
-        assertEquals("http://source/JohnSmith", resource.uri)
+        val entity = repository.findOne(johnSmithId)
+        assertEquals("http://source/JohnSmith", entity.uri)
         val query = """
             PREFIX src: <http://source/>
             PREFIX vcard: <http://www.w3.org/2001/vcard-rdf/3.0#>
@@ -102,14 +102,14 @@ class MergeEntityRepositoryTest {
                 src:JohnSmith vcard:FN "John Smith"
             }
         """.trimIndent()
-        assertTrue(resource.model.ask(query))
+        assertTrue((entity.toGraphModel() as Model).ask(query))
     }
 
     @Test
-    fun `informacion about an entity in two repositories is merged`() {
+    fun `information about an entity in two repositories is merged`() {
         val repository = MergeEntityRepository(listOf(johnRepository, maryRepository))
-        val resource = repository.findOne(johnSmithId).resource
-        assertEquals("http://source/JohnSmith", resource.uri)
+        val entity = repository.findOne(johnSmithId)
+        assertEquals("http://source/JohnSmith", entity.uri)
         val query = """
             PREFIX src: <http://source/>
             PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -119,6 +119,6 @@ class MergeEntityRepositoryTest {
                 ?x vcard:FN "Mary Smith"
             }
         """.trimIndent()
-        assertTrue(resource.model.ask(query))
+        assertTrue((entity.toGraphModel() as Model).ask(query))
     }
 }

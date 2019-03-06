@@ -1,6 +1,6 @@
 package es.iaaa.kubby.rest.api
 
-import es.iaaa.kubby.repository.Entity
+import es.iaaa.kubby.domain.Entity
 import es.iaaa.kubby.services.DescribeEntityService
 import io.ktor.application.ApplicationCall
 import io.ktor.features.origin

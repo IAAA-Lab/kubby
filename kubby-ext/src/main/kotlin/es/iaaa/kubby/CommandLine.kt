@@ -20,7 +20,8 @@ fun commandLineConfig(args: Array<String>): Config {
     val environmentConfig = ConfigFactory.systemProperties().withOnlyPath("ktor")
     val fileConfig = configFile?.let { ConfigFactory.parseFile(it) } ?: ConfigFactory.load()
     val argConfig = ConfigFactory.parseMap(commandLineMap, "Command-line options")
-    val combinedConfig = argConfig.withFallback(fileConfig).withFallback(environmentConfig).withFallback(defaultConfig).resolve()
+    val combinedConfig =
+        argConfig.withFallback(fileConfig).withFallback(environmentConfig).withFallback(defaultConfig).resolve()
 
     val applicationIdPath = "ktor.application.id"
     val applicationId = combinedConfig.tryGetString(applicationIdPath) ?: "Application"
@@ -30,10 +31,12 @@ fun commandLineConfig(args: Array<String>): Config {
         if (combinedConfig.hasPath("kubby"))
             trace(combinedConfig.getObject("kubby").render())
         else
-            trace("""
+            trace(
+                """
                 No configuration provided for Kubby: neither application.conf
                 nor system properties nor command line options (-config or -P:kubby...=) provided
-            """.trimIndent())
+            """.trimIndent()
+            )
     }
     return combinedConfig
 }

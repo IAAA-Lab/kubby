@@ -13,7 +13,7 @@ class ProjectDescriptionConfigTest {
 
     @BeforeTest
     fun before() {
-        val file =ProjectDescriptionConfigTest::class.java.getResource("/config/test.conf").file
+        val file = ProjectDescriptionConfigTest::class.java.getResource("/config/test.conf").file
         config = commandLineConfig(arrayOf("-config=$file"))
     }
 

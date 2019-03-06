@@ -18,7 +18,7 @@ import org.apache.jena.vocabulary.RDFS
 class DocumentMetadata : MetadataProcesor {
 
     override fun process(model: Model, context: ContentContext, projectDescription: ProjectDescription) {
-        val topic = model.getResource(context.entity.resource.uri)
+        val topic = model.getResource(context.entity.uri)
         val title: String =
             topic.getName(projectDescription.labelProperties, projectDescription.defaultLanguage)
                 .toTitleCase(projectDescription.getLanguageList("uncapitalized-words"))

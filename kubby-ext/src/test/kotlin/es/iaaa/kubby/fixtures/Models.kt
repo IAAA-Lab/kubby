@@ -1,7 +1,9 @@
 package es.iaaa.kubby.fixtures
 
+import es.iaaa.kubby.domain.Entity
+import es.iaaa.kubby.domain.EntityId
+import es.iaaa.kubby.domain.impl.ResourceEntityImpl
 import es.iaaa.kubby.rdf.addNsIfUndefined
-import es.iaaa.kubby.repository.Entity
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.vocabulary.DC_11
@@ -21,7 +23,9 @@ object Models {
         return model
     }
 
-    fun johnSmith() = Entity(johnSmithModel().getResource("http://source/JohnSmith"))
+    fun emptyEntity(id: EntityId) = ResourceEntityImpl(id.uri, ModelFactory.createDefaultModel())
+
+    fun johnSmith() = ResourceEntityImpl("http://source/JohnSmith", johnSmithModel())
 
     fun marySmithModel(): Model {
         val model = ModelFactory.createDefaultModel()
@@ -35,7 +39,12 @@ object Models {
         return model
     }
 
-    fun marySmith() = Entity(marySmithModel().getResource("http://source/MarySmith"))
+    fun marySmith() = ResourceEntityImpl("http://source/MarySmith", marySmithModel())
 
-    fun anEmptyResource() = Entity(ModelFactory.createDefaultModel().createResource())
+    fun marySmithAboutJohnSmith() = ResourceEntityImpl("http://source/JohnSmith", marySmithModel())
+
+    fun anEmptyEntity(): Entity {
+        val resource = ModelFactory.createDefaultModel().createResource("urn:empty")
+        return ResourceEntityImpl(resource.uri, resource.model)
+    }
 }

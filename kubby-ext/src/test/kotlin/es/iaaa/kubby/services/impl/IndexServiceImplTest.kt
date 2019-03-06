@@ -1,6 +1,6 @@
 package es.iaaa.kubby.services.impl
 
-import es.iaaa.kubby.repository.EntityId
+import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import io.mockk.every
 import io.mockk.mockk

@@ -1,12 +1,13 @@
 package es.iaaa.kubby.repository.source
 
+import es.iaaa.kubby.domain.EntityId
+import es.iaaa.kubby.domain.impl.ResourceEntityImpl
 import es.iaaa.kubby.fixtures.Models.johnSmithModel
 import es.iaaa.kubby.rdf.ask
-import es.iaaa.kubby.repository.Entity
-import es.iaaa.kubby.repository.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import io.mockk.every
 import io.mockk.mockk
+import org.apache.jena.rdf.model.Model
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -25,13 +26,13 @@ class RewrittenEntityRepositoryTest {
                     "JohnSmith"
                 )
             )
-        } returns Entity(johnSmithModel().getResource("http://source/JohnSmith"))
+        } returns ResourceEntityImpl("http://source/JohnSmith", johnSmithModel())
     }
 
     @Test
     fun `describe and rewrite a simple model`() {
         val rdw = RewrittenEntityRepository(anyDs, "http://source/", false)
-        val result = rdw.findOne(EntityId("http://target/", "JohnSmith")).resource
+        val entity = rdw.findOne(EntityId("http://target/", "JohnSmith"))
         val query = """
             PREFIX target: <http://target/>
             PREFIX vcard: <http://www.w3.org/2001/vcard-rdf/3.0#>
@@ -39,28 +40,22 @@ class RewrittenEntityRepositoryTest {
                 target:JohnSmith vcard:FN "John Smith"
             }
         """.trimIndent()
-        assertTrue(result.model.ask(query))
+        assertTrue((entity.toGraphModel() as Model).ask(query))
     }
 
     @Test
     fun `verify that the rewritten source doesn't have an unrequested owl sameAs`() {
-        val rdw = RewrittenEntityRepository(anyDs, "http://source/", false)
-        val result = rdw.findOne(EntityId("http://target/", "JohnSmith")).resource
-        val query = """
-            PREFIX target: <http://target/>
-            PREFIX source: <http://source/>
-            PREFIX owl: <http://www.w3.org/2002/07/owl#>
-            ASK {
-                target:JohnSmith owl:sameAs source:JohnSmith
-            }
-        """.trimIndent()
-        assertFalse(result.model.ask(query))
+        assertFalse(testSameAs(false))
     }
 
     @Test
     fun `verify that the rewritten source has the expected owl sameAs`() {
-        val rdw = RewrittenEntityRepository(anyDs, "http://source/", true)
-        val result = rdw.findOne(EntityId("http://target/", "JohnSmith")).resource
+        assertTrue(testSameAs(true))
+    }
+
+    private fun testSameAs(addSameAs: Boolean): Boolean {
+        val rdw = RewrittenEntityRepository(anyDs, "http://source/", addSameAs)
+        val entity = rdw.findOne(EntityId("http://target/", "JohnSmith"))
         val query = """
             PREFIX target: <http://target/>
             PREFIX source: <http://source/>
@@ -69,7 +64,7 @@ class RewrittenEntityRepositoryTest {
                 target:JohnSmith owl:sameAs source:JohnSmith
             }
         """.trimIndent()
-        assertTrue(result.model.ask(query))
+        return (entity.toGraphModel() as Model).ask(query)
     }
 
 }

@@ -1,6 +1,6 @@
 package es.iaaa.kubby.services
 
-import es.iaaa.kubby.repository.Entity
+import es.iaaa.kubby.domain.Entity
 
 /**
  * Describes an entity.

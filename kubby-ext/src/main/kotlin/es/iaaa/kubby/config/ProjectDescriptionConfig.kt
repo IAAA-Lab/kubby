@@ -43,7 +43,7 @@ data class ProjectDescription(
 fun Config.toProjectDescription(): ProjectDescription {
     getConfig("kubby").let { node ->
         val usePrefixes = node.getConfig("usePrefixes")
-            .entrySet().map{it.key to it.value.unwrapped().toString()}.toMap()
+            .entrySet().map { it.key to it.value.unwrapped().toString() }.toMap()
         val supportedLanguages = node.getStringList("supported-languages")
         val languageProperties = node.getStringList("language-data.properties")
         val language = supportedLanguages.associate { lang ->

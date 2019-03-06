@@ -4,7 +4,7 @@ import com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import com.jayway.jsonpath.matchers.JsonPathMatchers.isJson
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub
-import es.iaaa.kubby.fixtures.Models.anEmptyResource
+import es.iaaa.kubby.fixtures.Models.anEmptyEntity
 import es.iaaa.kubby.fixtures.Models.johnSmith
 import es.iaaa.kubby.ktor.features.rdf
 import es.iaaa.kubby.services.DescribeEntityService
@@ -70,7 +70,7 @@ class DataRouteTests : AutoCloseKoinTest() {
     fun `data controller do not respond to empty resources`() = withTestApplication(sut) {
         declareMock<DescribeEntityService> {
             stub {
-                on { findOne("http://localhost/r/", "index") } doReturn anEmptyResource()
+                on { findOne("http://localhost/r/", "index") } doReturn anEmptyEntity()
             }
         }
 
