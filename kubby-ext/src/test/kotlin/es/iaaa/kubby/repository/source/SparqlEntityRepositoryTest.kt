@@ -1,6 +1,5 @@
 package es.iaaa.kubby.repository.source
 
-import es.iaaa.kubby.domain.EntityId
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.sparql.vocabulary.FOAF
 import kotlin.test.Test
@@ -15,7 +14,7 @@ class SparqlEntityRepositoryTest {
             "http://dbpedia.org",
             true
         )
-        val model = ds.findOne(EntityId("http://dbpedia.org/resource/", "Aragón")).toGraphModel() as Model
+        val model = ds.findOne("http://dbpedia.org/resource/", "Aragón").toGraphModel() as Model
         model.apply {
             assertTrue(
                 contains(
@@ -30,7 +29,7 @@ class SparqlEntityRepositoryTest {
     @Test
     fun `retrieve the description of a resource from a remote endpoint`() {
         val ds = SparqlEntityRepository("http://datos.bne.es/sparql")
-        val model = ds.findOne(EntityId("http://datos.bne.es/resource/", "XX85148")).toGraphModel() as Model
+        val model = ds.findOne("http://datos.bne.es/resource/", "XX85148").toGraphModel() as Model
         model.apply {
             assertTrue(
                 contains(

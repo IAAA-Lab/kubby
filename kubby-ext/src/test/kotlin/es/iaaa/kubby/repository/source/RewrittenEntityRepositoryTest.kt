@@ -1,6 +1,5 @@
 package es.iaaa.kubby.repository.source
 
-import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.domain.impl.ResourceEntityImpl
 import es.iaaa.kubby.fixtures.Models.johnSmithModel
 import es.iaaa.kubby.rdf.ask
@@ -19,20 +18,13 @@ class RewrittenEntityRepositoryTest {
 
     @BeforeTest
     fun before() {
-        every {
-            anyDs.findOne(
-                EntityId(
-                    "http://source/",
-                    "JohnSmith"
-                )
-            )
-        } returns ResourceEntityImpl("http://source/JohnSmith", johnSmithModel())
+        every { anyDs.findOne("http://source/", "JohnSmith") } returns ResourceEntityImpl("http://source/JohnSmith", johnSmithModel())
     }
 
     @Test
     fun `describe and rewrite a simple model`() {
         val rdw = RewrittenEntityRepository(anyDs, "http://source/", false)
-        val entity = rdw.findOne(EntityId("http://target/", "JohnSmith"))
+        val entity = rdw.findOne("http://target/", "JohnSmith")
         val query = """
             PREFIX target: <http://target/>
             PREFIX vcard: <http://www.w3.org/2001/vcard-rdf/3.0#>
@@ -55,7 +47,7 @@ class RewrittenEntityRepositoryTest {
 
     private fun testSameAs(addSameAs: Boolean): Boolean {
         val rdw = RewrittenEntityRepository(anyDs, "http://source/", addSameAs)
-        val entity = rdw.findOne(EntityId("http://target/", "JohnSmith"))
+        val entity = rdw.findOne("http://target/", "JohnSmith")
         val query = """
             PREFIX target: <http://target/>
             PREFIX source: <http://source/>

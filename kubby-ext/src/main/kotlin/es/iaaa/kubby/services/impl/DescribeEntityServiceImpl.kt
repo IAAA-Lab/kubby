@@ -1,6 +1,5 @@
 package es.iaaa.kubby.services.impl
 
-import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import es.iaaa.kubby.services.DescribeEntityService
 
@@ -13,6 +12,6 @@ class DescribeEntityServiceImpl(
 ) : DescribeEntityService {
 
     override fun findOne(baseUri: String, localPart: String) = entityRepository
-        .findOne(EntityId(baseUri, localPart))
+        .findOne(baseUri, localPart)
         .merge(prefixes)
 }

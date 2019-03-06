@@ -39,14 +39,14 @@ class MergeEntityRepositoryTest {
         emptyRepository = mockk()
         emptyRepository.apply {
             every { getId("http://localhost/resource/DBpedia") } returns dbpediaRaw
-            every { findOne(johnSmithId) } returns emptyEntity(johnSmithId)
+            every { findOne("http://source/", "JohnSmith") } returns emptyEntity(johnSmithId)
         }
 
         johnRepository = mockk()
-        every { johnRepository.findOne(johnSmithId) } returns johnSmith()
+        every { johnRepository.findOne("http://source/", "JohnSmith") } returns johnSmith()
 
         maryRepository = mockk()
-        every { maryRepository.findOne(johnSmithId) } returns marySmithAboutJohnSmith()
+        every { maryRepository.findOne("http://source/", "JohnSmith") } returns marySmithAboutJohnSmith()
     }
 
     @Test
@@ -77,7 +77,7 @@ class MergeEntityRepositoryTest {
     @Test
     fun `empty lists never fails and returns an empty model`() {
         val repository = MergeEntityRepository(listOf())
-        val entity = repository.findOne(johnSmithId)
+        val entity = repository.findOne("http://source/", "JohnSmith")
         assertEquals("http://source/JohnSmith", entity.uri)
         assertTrue(entity.isEmpty)
     }
@@ -85,7 +85,7 @@ class MergeEntityRepositoryTest {
     @Test
     fun `if no data is found, returns an empty model`() {
         val repository = MergeEntityRepository(listOf(emptyRepository))
-        val entity = repository.findOne(johnSmithId)
+        val entity = repository.findOne("http://source/", "JohnSmith")
         assertEquals("http://source/JohnSmith", entity.uri)
         assertTrue(entity.isEmpty)
     }
@@ -93,7 +93,7 @@ class MergeEntityRepositoryTest {
     @Test
     fun `returns information about an entity`() {
         val repository = MergeEntityRepository(listOf(johnRepository))
-        val entity = repository.findOne(johnSmithId)
+        val entity = repository.findOne("http://source/", "JohnSmith")
         assertEquals("http://source/JohnSmith", entity.uri)
         val query = """
             PREFIX src: <http://source/>
@@ -108,7 +108,7 @@ class MergeEntityRepositoryTest {
     @Test
     fun `information about an entity in two repositories is merged`() {
         val repository = MergeEntityRepository(listOf(johnRepository, maryRepository))
-        val entity = repository.findOne(johnSmithId)
+        val entity = repository.findOne("http://source/", "JohnSmith")
         assertEquals("http://source/JohnSmith", entity.uri)
         val query = """
             PREFIX src: <http://source/>

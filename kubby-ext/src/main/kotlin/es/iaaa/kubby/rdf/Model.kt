@@ -10,7 +10,7 @@ import java.util.*
 import java.util.stream.Collectors
 
 /**
- * Rewrites the [RDFNode] from the [old] namespace to the [new] namespace.
+ * Rewrites the [RDFNode] from the [old] prefix to the [new] prefix.
  */
 fun RDFNode.rewrite(old: String, new: String): RDFNode =
     when (this) {
@@ -38,7 +38,7 @@ fun Resource.getName(properties: Collection<Property>, language: String?): Strin
     findBestLiteral(properties, language)?.lexicalForm ?: localName
 
 /**
- * Returns the namespace that matches with this [Resource].
+ * Returns the prefix that matches with this [Resource].
  */
 fun Resource.namespace() = model.uris().firstOrNull { uri.startsWith(it) } ?: ""
 
@@ -58,7 +58,7 @@ fun Resource.hasPrefix() = uri != localName()
 fun Resource.prefix(): String? = model.getNsURIPrefix(namespace())
 
 /**
- * Rewrites the [Resource] from the [old] namespace to the [new] namespace.
+ * Rewrites the [Resource] from the [old] prefix to the [new] prefix.
  */
 fun Resource.rewrite(old: String, new: String): Resource =
     if (uri?.startsWith(old) == true) {
@@ -74,7 +74,7 @@ fun Resource.rewrite(old: String, new: String): Resource =
 fun Literal.formattedLexicalForm() = lexicalForm?.trim()?.capitalize()
 
 /**
- * Rewrites the [Literal] from the [old] namespace to the [new] namespace.
+ * Rewrites the [Literal] from the [old] prefix to the [new] prefix.
  */
 fun Literal.rewrite(old: String, new: String): Literal =
     if (datatypeURI?.startsWith(old) == true) {
@@ -117,7 +117,7 @@ fun Model.addNsIfUndefined(prefixes: Map<String, String>): Model {
 
 
 /**
- * Rewrites the [Model] from the [old] namespace to the [new] namespace.
+ * Rewrites the [Model] from the [old] prefix to the [new] prefix.
  */
 fun Model.rewrite(old: String, new: String): Model =
     createDefaultModel().let { model ->

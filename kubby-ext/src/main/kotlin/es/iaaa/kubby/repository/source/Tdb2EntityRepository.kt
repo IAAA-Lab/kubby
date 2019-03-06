@@ -53,11 +53,12 @@ class Tdb2EntityRepository(
 
     override fun getId(uri: String) = EntityId(localPart = uri)
 
-    override fun findOne(id: EntityId): Entity {
+    override fun findOne(namespace: String, localId: String): Entity {
+        val uri = "$namespace$localId"
         val model = calculateRead(dataset) {
-            dataset.describe("DESCRIBE <${id.uri}>")
+            dataset.describe("DESCRIBE <$uri>")
         }
-        return ResourceEntityImpl(uri = id.uri, model = model, attribution = attribution)
+        return ResourceEntityImpl(uri = uri, model = model, attribution = attribution)
     }
 
     override fun close() {

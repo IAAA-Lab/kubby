@@ -1,6 +1,5 @@
 package es.iaaa.kubby.services.impl
 
-import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.fixtures.Models.johnSmith
 import es.iaaa.kubby.repository.EntityRepository
 import io.mockk.every
@@ -18,7 +17,7 @@ class DescribeEntityServiceImplTest {
     @BeforeTest
     fun before() {
         repository = mockk()
-        every { repository.findOne(EntityId("http://source/", "JohnSmith")) } returns johnSmith()
+        every { repository.findOne("http://source/", "JohnSmith") } returns johnSmith()
 
     }
 

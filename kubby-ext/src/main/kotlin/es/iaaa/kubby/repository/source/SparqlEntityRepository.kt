@@ -26,15 +26,16 @@ class SparqlEntityRepository(
 
     override fun getId(uri: String) = EntityId(localPart = uri)
 
-    override fun findOne(id: EntityId): Entity {
+    override fun findOne(namespace: String, localId: String): Entity {
+        val uri = "$namespace$localId"
         val resource = sparqlService(
             service,
-            QueryFactory.create("DESCRIBE <${id.uri}>"),
+            QueryFactory.create("DESCRIBE <$uri>"),
             dataset,
             buildClient(),
             null
         ).execDescribe()
-        return ResourceEntityImpl(uri = id.uri, model = resource, attribution = attribution)
+        return ResourceEntityImpl(uri = uri, model = resource, attribution = attribution)
     }
 
     private fun buildClient() = if (forceTrust) {

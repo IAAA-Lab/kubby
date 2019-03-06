@@ -36,7 +36,7 @@ class EntityRepositoryConfigTest {
         assertEquals(2, list.size)
         val sparql = list[0]
         if (sparql is RewrittenEntityRepository) {
-            assertEquals("https://dbpedia.org/", sparql.namespace)
+            assertEquals("https://dbpedia.org/", sparql.prefix)
             assertEquals(true, sparql.addSameAs)
             assertTrue(sparql.repository is SparqlEntityRepository)
         } else {
@@ -44,7 +44,7 @@ class EntityRepositoryConfigTest {
         }
         val tdb2 = list[1]
         if (tdb2 is RewrittenEntityRepository) {
-            assertEquals("https://dbpedia.org/", tdb2.namespace)
+            assertEquals("https://dbpedia.org/", tdb2.prefix)
             assertEquals(true, tdb2.addSameAs)
             assertTrue(tdb2.repository is Tdb2EntityRepository)
         } else {

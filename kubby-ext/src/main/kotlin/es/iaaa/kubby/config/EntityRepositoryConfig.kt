@@ -40,7 +40,7 @@ class EntityRepositoryException(msg: String) : Exception(msg)
 internal fun List<Config>.toEntityRepositories(): List<EntityRepository> =
     map {
         RewrittenEntityRepository(
-            namespace = it.getString("datasetBase"),
+            prefix = it.getString("datasetBase"),
             addSameAs = runCatching { it.getBoolean("addSameAsStatements") }.getOrDefault(false),
             repository = when (heuristic(it)) {
                 SPARQL -> it.toSparqlEntityRepository()

@@ -14,7 +14,7 @@ interface Entity {
     fun merge(other: Map<String, String>): Entity
 
     /**
-     * Rewrites an Entity from a [old] namespace to a [new] namespace.
+     * Rewrites an Entity from a [old] prefix to a [new] prefix.
      */
     fun rewrite(old: String, new: String): Entity
 

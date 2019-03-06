@@ -1,6 +1,5 @@
 package es.iaaa.kubby.repository.source
 
-import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.repository.source.RepositoryMode.CONNECT
 import es.iaaa.kubby.repository.source.RepositoryMode.CREATE
 import org.apache.jena.dboe.base.file.Location.create
@@ -45,7 +44,7 @@ class Tdb2EntityRepositoryTest {
     fun `create and load a new TDB2 dataset`() {
 
         val ds = Tdb2EntityRepository(target, data, CREATE)
-        val entity = ds.findOne(EntityId("http://dbpedia.org/resource/", "Tetris"))
+        val entity = ds.findOne("http://dbpedia.org/resource/", "Tetris")
 
         assertFalse { entity.isEmpty }
     }
@@ -67,7 +66,7 @@ class Tdb2EntityRepositoryTest {
 
         val ds = Tdb2EntityRepository(target, null, CONNECT)
 
-        val entity = ds.findOne(EntityId("http://dbpedia.org/resource/", "Tetris"))
+        val entity = ds.findOne("http://dbpedia.org/resource/", "Tetris")
 
         assertFalse { entity.isEmpty }
     }
@@ -78,7 +77,7 @@ class Tdb2EntityRepositoryTest {
 
         val ds = Tdb2EntityRepository(target, null, CONNECT)
 
-        val result = ds.findOne(EntityId("http://example.com/resource/", "Tetris"))
+        val result = ds.findOne("http://example.com/resource/", "Tetris")
 
         assertTrue { result.isEmpty }
     }

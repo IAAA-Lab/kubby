@@ -19,8 +19,8 @@ interface EntityRepository : Closeable {
     fun getId(uri: String): EntityId
 
     /**
-     * Get the [Model] describing one resource based on the [id].
+     * Get the [Model] describing one resource based on the [namespace] and the [localId].
      */
-    fun findOne(id: EntityId): Entity
+    fun findOne(namespace: String, localId: String): Entity
 }
 
