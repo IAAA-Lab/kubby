@@ -1,6 +1,5 @@
 package es.iaaa.kubby.repository.source
 
-import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.fixtures.Models.emptyEntity
 import es.iaaa.kubby.fixtures.Models.johnSmith
 import es.iaaa.kubby.fixtures.Models.marySmithAboutJohnSmith
@@ -22,24 +21,19 @@ class MergeEntityRepositoryTest {
     lateinit var johnRepository: EntityRepository
     lateinit var maryRepository: EntityRepository
 
-    val dbpedia = EntityId("http://localhost/resource/", "DBpedia")
-    val dbpediaAlt = EntityId("http://localhost/resource/", "DBpediaAlt")
-    val dbpediaRaw = EntityId(localPart = "http://localhost/resource/DBpedia")
-    val johnSmithId = EntityId("http://source/", "JohnSmith")
-
 
     @BeforeTest
     fun before() {
         dbpediaRepository = mockk()
-        every { dbpediaRepository.getId("http://localhost/resource/DBpedia") } returns dbpedia
+        every { dbpediaRepository.localId("http://localhost/resource/DBpedia") } returns "DBpedia"
 
         dbpediaAltRepository = mockk()
-        every { dbpediaAltRepository.getId("http://localhost/resource/DBpedia") } returns dbpediaAlt
+        every { dbpediaAltRepository.localId("http://localhost/resource/DBpedia") } returns "DBpediaAlt"
 
         emptyRepository = mockk()
         emptyRepository.apply {
-            every { getId("http://localhost/resource/DBpedia") } returns dbpediaRaw
-            every { findOne("http://source/", "JohnSmith") } returns emptyEntity(johnSmithId)
+            every { localId("http://localhost/resource/DBpedia") } returns "http://localhost/resource/DBpedia"
+            every { findOne("http://source/", "JohnSmith") } returns emptyEntity("http://source/JohnSmith")
         }
 
         johnRepository = mockk()
@@ -52,25 +46,25 @@ class MergeEntityRepositoryTest {
     @Test
     fun `converts a string into an EntityId`() {
         val repository = MergeEntityRepository(listOf(dbpediaRepository))
-        assertEquals(dbpedia, repository.getId("http://localhost/resource/DBpedia"))
+        assertEquals("DBpedia", repository.localId("http://localhost/resource/DBpedia"))
     }
 
     @Test
     fun `returns first match that has content`() {
         val repository = MergeEntityRepository(listOf(dbpediaAltRepository, dbpediaRepository))
-        assertEquals(dbpediaAlt, repository.getId("http://localhost/resource/DBpedia"))
+        assertEquals("DBpediaAlt", repository.localId("http://localhost/resource/DBpedia"))
     }
 
     @Test
     fun `empty repository returns an entity without namespace`() {
         val repository = MergeEntityRepository(listOf(emptyRepository))
-        assertEquals(dbpediaRaw, repository.getId("http://localhost/resource/DBpedia"))
+        assertEquals("http://localhost/resource/DBpedia", repository.localId("http://localhost/resource/DBpedia"))
     }
 
     @Test
     fun `empty list returns an entity without namespace`() {
         val repository = MergeEntityRepository(listOf())
-        assertEquals(dbpediaRaw, repository.getId("http://localhost/resource/DBpedia"))
+        assertEquals("http://localhost/resource/DBpedia", repository.localId("http://localhost/resource/DBpedia"))
     }
 
 

@@ -1,8 +1,8 @@
 package es.iaaa.kubby.repository.source
 
 import es.iaaa.kubby.domain.Entity
-import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.repository.EntityRepository
+import es.iaaa.kubby.text.replacePrefix
 
 /**
  * Wraps a dataUri source and applies a rewrite.
@@ -22,10 +22,7 @@ class RewrittenEntityRepository(
     val addSameAs: Boolean
 ) : EntityRepository {
 
-    override fun getId(uri: String) = if (uri.startsWith(prefix))
-        EntityId(prefix, uri.substring(prefix.length))
-    else
-        repository.getId(uri)
+    override fun localId(uri: String) = repository.localId(uri.replacePrefix(prefix, ""))
 
     /**
      * Describe a resource identified by [prefix] and [localId] by querying the [repository] and then retuning

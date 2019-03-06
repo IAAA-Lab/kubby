@@ -1,6 +1,5 @@
 package es.iaaa.kubby.services.impl
 
-import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.repository.EntityRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -20,27 +19,21 @@ class IndexServiceImplTest {
 
     @Test
     fun `index when the index uri has local part`() {
-        every { repository.getId("http://localhost/dbpedia/DBpedia") } returns EntityId(
-            "http://localhost/dbpedia/",
-            "DBpedia"
-        )
+        every { repository.localId("http://localhost/dbpedia/DBpedia") } returns "DBpedia"
         val service = IndexServiceImpl(repository, "http://localhost/dbpedia/DBpedia")
-
         assertEquals("DBpedia", service.indexLocalPart())
     }
 
     @Test
     fun `no index when the index uri is not qualified`() {
-        every { repository.getId("http://localhost/dbpedia/DBpedia") } returns EntityId(localPart = "http://localhost/dbpedia/DBpedia")
+        every { repository.localId("http://localhost/dbpedia/DBpedia") } returns "http://localhost/dbpedia/DBpedia"
         val service = IndexServiceImpl(repository, "http://localhost/dbpedia/DBpedia")
-
         assertNull(service.indexLocalPart())
     }
 
     @Test
     fun `no index when the index is null`() {
         val service = IndexServiceImpl(repository, null)
-
         assertNull(service.indexLocalPart())
     }
 }

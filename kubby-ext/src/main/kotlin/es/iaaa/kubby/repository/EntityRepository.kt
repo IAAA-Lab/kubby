@@ -1,7 +1,6 @@
 package es.iaaa.kubby.repository
 
 import es.iaaa.kubby.domain.Entity
-import es.iaaa.kubby.domain.EntityId
 import org.apache.jena.rdf.model.Model
 import java.io.Closeable
 
@@ -14,12 +13,12 @@ import java.io.Closeable
 interface EntityRepository : Closeable {
 
     /**
-     * Generate the [EntityId] representation for a [uri] in this repository.
+     * Extracts the local identifier from the [uri] in this repository.
      */
-    fun getId(uri: String): EntityId
+    fun localId(uri: String): String
 
     /**
-     * Get the [Model] describing one resource based on the [namespace] and the [localId].
+     * Gets the [Model] describing one resource based on the [namespace] and the [localId].
      */
     fun findOne(namespace: String, localId: String): Entity
 }

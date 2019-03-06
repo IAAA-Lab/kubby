@@ -1,7 +1,6 @@
 package es.iaaa.kubby.fixtures
 
 import es.iaaa.kubby.domain.Entity
-import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.domain.impl.ResourceEntityImpl
 import es.iaaa.kubby.rdf.addNsIfUndefined
 import org.apache.jena.rdf.model.Model
@@ -23,7 +22,7 @@ object Models {
         return model
     }
 
-    fun emptyEntity(id: EntityId) = ResourceEntityImpl(id.uri, ModelFactory.createDefaultModel())
+    fun emptyEntity(uri: String) = ResourceEntityImpl(uri, ModelFactory.createDefaultModel())
 
     fun johnSmith() = ResourceEntityImpl("http://source/JohnSmith", johnSmithModel())
 

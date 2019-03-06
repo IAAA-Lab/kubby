@@ -11,7 +11,8 @@ class IndexServiceImpl(
     uri: String?
 ) : IndexService {
     private val _index = uri?.let {
-        with(repository.getId(it)) { if (qualified) localPart else null }
+        val index = repository.localId(it)
+        if (index != it) index else null
     }
 
     override fun indexLocalPart() = _index

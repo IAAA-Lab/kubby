@@ -1,7 +1,6 @@
 package es.iaaa.kubby.repository.source
 
 import es.iaaa.kubby.domain.Entity
-import es.iaaa.kubby.domain.EntityId
 import es.iaaa.kubby.domain.impl.ResourceEntityImpl
 import es.iaaa.kubby.repository.EntityRepository
 import org.apache.http.conn.ssl.NoopHostnameVerifier
@@ -24,7 +23,7 @@ class SparqlEntityRepository(
     val attribution: String? = null
 ) : EntityRepository {
 
-    override fun getId(uri: String) = EntityId(localPart = uri)
+    override fun localId(uri: String) =  uri
 
     override fun findOne(namespace: String, localId: String): Entity {
         val uri = "$namespace$localId"
