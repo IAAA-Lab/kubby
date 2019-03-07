@@ -57,7 +57,7 @@ class ProjectDescriptionConfigDefaultTest {
 
     @Test
     fun `default index resource is null`() {
-        assertNull(config.toProjectDescription().indexResource)
+        assertNull(config.toProjectDescription().indexLocalPart)
     }
 }
 

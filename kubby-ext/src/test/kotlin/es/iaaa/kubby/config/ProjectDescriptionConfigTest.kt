@@ -66,7 +66,7 @@ class ProjectDescriptionConfigTest {
 
     @Test
     fun `index resource can be configured`() {
-        assertEquals("http://dbpedia.org/resource/DBpedia", config.toProjectDescription().indexResource)
+        assertEquals("DBpedia", config.toProjectDescription().indexLocalPart)
     }
 }
 

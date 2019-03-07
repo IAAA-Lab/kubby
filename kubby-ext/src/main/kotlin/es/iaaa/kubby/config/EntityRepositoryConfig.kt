@@ -28,6 +28,14 @@ fun Config.toEntityRepository(): EntityRepository =
     }
 
 
+fun Config.toPrefixes(): List<String> =
+    getConfigList("kubby.dataset").let {
+        if (it.isNotEmpty())
+            it.map { config -> config.getString("datasetBase") }
+        else
+            throw EntityRepositoryException("Requires at least one datasource")
+    }
+
 /**
  * Exception thrown during the creation of an [EntityRepository].
  */

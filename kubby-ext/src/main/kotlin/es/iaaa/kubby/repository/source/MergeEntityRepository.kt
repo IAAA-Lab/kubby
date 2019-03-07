@@ -12,15 +12,6 @@ class MergeEntityRepository(private val repositories: List<EntityRepository>) :
     EntityRepository {
 
     /**
-     * Finds first candidate to be the local identifier.
-     */
-    override fun localId(uri: String) : String = repositories
-        .asSequence()
-        .map { it.localId(uri) }
-        .find { it != uri }
-        ?: uri
-
-    /**
      * Map and merge the responses from the [repositories].
      */
     override fun findOne(namespace: String, localId: String): Entity = repositories

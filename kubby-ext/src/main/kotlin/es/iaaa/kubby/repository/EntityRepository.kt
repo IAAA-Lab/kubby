@@ -13,11 +13,6 @@ import java.io.Closeable
 interface EntityRepository : Closeable {
 
     /**
-     * Extracts the local identifier from the [uri] in this repository.
-     */
-    fun localId(uri: String): String
-
-    /**
      * Gets the [Model] describing one resource based on the [namespace] and the [localId].
      */
     fun findOne(namespace: String, localId: String): Entity

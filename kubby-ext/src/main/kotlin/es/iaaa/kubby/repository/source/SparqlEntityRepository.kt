@@ -23,8 +23,6 @@ class SparqlEntityRepository(
     val attribution: String? = null
 ) : EntityRepository {
 
-    override fun localId(uri: String) =  uri
-
     override fun findOne(namespace: String, localId: String): Entity {
         val uri = "$namespace$localId"
         val resource = sparqlService(

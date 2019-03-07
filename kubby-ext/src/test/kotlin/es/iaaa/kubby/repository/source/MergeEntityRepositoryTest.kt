@@ -15,8 +15,6 @@ import kotlin.test.assertTrue
 
 class MergeEntityRepositoryTest {
 
-    lateinit var dbpediaRepository: EntityRepository
-    lateinit var dbpediaAltRepository: EntityRepository
     lateinit var emptyRepository: EntityRepository
     lateinit var johnRepository: EntityRepository
     lateinit var maryRepository: EntityRepository
@@ -24,47 +22,14 @@ class MergeEntityRepositoryTest {
 
     @BeforeTest
     fun before() {
-        dbpediaRepository = mockk()
-        every { dbpediaRepository.localId("http://localhost/resource/DBpedia") } returns "DBpedia"
-
-        dbpediaAltRepository = mockk()
-        every { dbpediaAltRepository.localId("http://localhost/resource/DBpedia") } returns "DBpediaAlt"
-
         emptyRepository = mockk()
-        emptyRepository.apply {
-            every { localId("http://localhost/resource/DBpedia") } returns "http://localhost/resource/DBpedia"
-            every { findOne("http://source/", "JohnSmith") } returns emptyEntity("http://source/JohnSmith")
-        }
+        every { emptyRepository.findOne("http://source/", "JohnSmith") } returns emptyEntity("http://source/JohnSmith")
 
         johnRepository = mockk()
         every { johnRepository.findOne("http://source/", "JohnSmith") } returns johnSmith()
 
         maryRepository = mockk()
         every { maryRepository.findOne("http://source/", "JohnSmith") } returns marySmithAboutJohnSmith()
-    }
-
-    @Test
-    fun `converts a string into an EntityId`() {
-        val repository = MergeEntityRepository(listOf(dbpediaRepository))
-        assertEquals("DBpedia", repository.localId("http://localhost/resource/DBpedia"))
-    }
-
-    @Test
-    fun `returns first match that has content`() {
-        val repository = MergeEntityRepository(listOf(dbpediaAltRepository, dbpediaRepository))
-        assertEquals("DBpediaAlt", repository.localId("http://localhost/resource/DBpedia"))
-    }
-
-    @Test
-    fun `empty repository returns an entity without namespace`() {
-        val repository = MergeEntityRepository(listOf(emptyRepository))
-        assertEquals("http://localhost/resource/DBpedia", repository.localId("http://localhost/resource/DBpedia"))
-    }
-
-    @Test
-    fun `empty list returns an entity without namespace`() {
-        val repository = MergeEntityRepository(listOf())
-        assertEquals("http://localhost/resource/DBpedia", repository.localId("http://localhost/resource/DBpedia"))
     }
 
 

@@ -2,6 +2,7 @@ package es.iaaa.kubby.config
 
 import com.typesafe.config.Config
 import es.iaaa.kubby.rest.api.Routes
+import es.iaaa.kubby.text.replacePrefix
 import io.ktor.config.ApplicationConfig
 import io.ktor.config.ApplicationConfigurationException
 import org.apache.jena.rdf.model.ModelFactory
@@ -21,7 +22,7 @@ data class ProjectDescription(
     val softwareName: String,
     val supportedLanguages: List<String>,
     val language: Map<String, Map<String, List<String>>>,
-    val indexResource: String?
+    val indexLocalPart: String?
 ) {
     /**
      * Get a i18n [List] identified by a [key] in the specified [language].
@@ -50,13 +51,18 @@ fun Config.toProjectDescription(): ProjectDescription {
             lang to languageProperties
                 .associate { prop -> prop to node.getStringList("language-data.$lang.$prop") }
         }
+        val indexLocalPart = runCatching { node.getString("indexResource") }.getOrNull()?.let  { uri ->
+            runCatching { toPrefixes().find { uri.startsWith(it) } }.getOrNull()?.let { prefix ->
+                uri.replacePrefix(prefix, "")
+            }
+        }
         node.run {
             return ProjectDescription(
                 projectName = runCatching { getString("projectName") }.getOrNull(),
                 projectHomepage = runCatching { getString("projectHomepage") }.getOrNull(),
                 usePrefixes = usePrefixes,
                 defaultLanguage = getString("defaultLanguage"),
-                indexResource = runCatching { getString("indexResource") }.getOrNull(),
+                indexLocalPart = indexLocalPart,
                 supportedLanguages = getStringList("supported-languages"),
                 labelProperties = getStringList("labelProperty").toProperties(usePrefixes),
                 commentProperties = getStringList("commentProperty").toProperties(usePrefixes),

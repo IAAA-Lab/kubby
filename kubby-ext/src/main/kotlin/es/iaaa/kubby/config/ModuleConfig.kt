@@ -12,7 +12,7 @@ fun module(config: Config): Module {
     return module(createOnStart = false) {
         single { config.toProjectDescription() }
         single { config.toEntityRepository() }
-        single<IndexService> { IndexServiceImpl(get(), get<ProjectDescription>().indexResource) }
+        single<IndexService> { IndexServiceImpl(get<ProjectDescription>().indexLocalPart) }
         single<DescribeEntityService> { DescribeEntityServiceImpl(get(), get<ProjectDescription>().usePrefixes) }
         single { config.toRoutes() }
     }
