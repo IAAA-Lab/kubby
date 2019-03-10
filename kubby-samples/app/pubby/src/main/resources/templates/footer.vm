@@ -1,12 +1,16 @@
 <div id="footer">
     #if (!$attribution.isEmpty())
+    <div>
         #foreach ($attributionLine in $attribution)
             $attributionLine
         #end
+    </div>
     #end
     #if ($rdf_link)
+    <div>
         <a href="$rdf_link?output=ttl">As Turtle</a> |
         <a href="$rdf_link?output=xml">As RDF/XML</a>
+    </div>
     #end
 </div>
 </body>

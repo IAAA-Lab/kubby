@@ -1,8 +1,5 @@
 <table class="description">
-    <colgroup>
-        <col class="property-column" span="1">
-        <col class="value-column" span="1">
-    </colgroup>
+    <tr><th class="property-column">Property</th><th class="value-column">Value</th></tr>
     #foreach ($property in $properties)
         #if ($foreach.count % 2 == 0)
             #set ($class = "even")

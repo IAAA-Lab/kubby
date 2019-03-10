@@ -6,6 +6,7 @@ import es.iaaa.kubby.rdf.prefix
 import org.apache.jena.rdf.model.Literal
 import org.apache.jena.rdf.model.RDFNode
 import org.apache.jena.rdf.model.Resource
+import org.apache.jena.vocabulary.RDF
 
 /**
  * Root mode of Property Value DTO.
@@ -30,10 +31,10 @@ data class ValueResourceDto(
  */
 data class ValueLiteralDto(
     val lexicalForm: String,
-    val datatypeLabel: String,
-    val language: String,
-    val prefix: String?,
-    val hasPrefix: Boolean,
+    val datatypeLabel: String = "",
+    val language: String = "",
+    val prefix: String? = null,
+    val hasPrefix: Boolean = false,
     override val literal: Boolean = true
 ) : PropertyValueDto
 
@@ -50,13 +51,19 @@ fun RDFNode.toPropertyValueDto(): PropertyValueDto =
  */
 fun Literal.toValueLiteralDto(): ValueLiteralDto {
     val dataType = model.createResource(datatypeURI)
-    return ValueLiteralDto(
-        lexicalForm = lexicalForm,
-        language = language,
-        datatypeLabel = dataType.localName(),
-        prefix = dataType.prefix(),
-        hasPrefix = dataType.hasPrefix()
-    )
+    return if (RDF.langString != dataType)
+        ValueLiteralDto(
+            lexicalForm = lexicalForm,
+            datatypeLabel = dataType.localName(),
+            prefix = dataType.prefix(),
+            hasPrefix = dataType.hasPrefix()
+        )
+    else
+        ValueLiteralDto(
+            lexicalForm = lexicalForm,
+            language = language
+        )
+
 }
 
 /**
